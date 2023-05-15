@@ -45,7 +45,7 @@ class Main extends Component {
                 <div className='MainComp'>
                    <Routes>
                         <Route exact path="/login" element={<Login loginCollect={this.props.loginInfoCollect}/>} />
-                        <Route exact path="/student-dashboard" element={<Student userInfo={this.props.LoginInfo}/>} />
+                        <Route exact path="/student-dashboard" element={<Student loginCollect={this.props.loginInfoCollect} userInfo={this.props.LoginInfo}/>} />
                         <Route path="apply-now/:id" element={<ApplyNow />} />
                         <Route exact path="/coordinator-dashboard" element={<Coordinator />} />
                         <Route exact path="/admin-dashboard" element={<Admin />} />

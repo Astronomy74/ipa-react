@@ -62,7 +62,7 @@ function Student(props){
     
     return(
         <div>
-            <NavBar/>
+            <NavBar props={props}/>
             <div className="container not">
             <div className="box-not">
                 <p>
@@ -80,7 +80,7 @@ function Student(props){
             </div>
             <main>
             <section id="dashBoard">
-                <h1>Welcome {props.userInfo.login.firstname} {props.userInfo.login.surname}</h1>
+                <h1>Welcome {props.userInfo.login ? props.userInfo.login.firstname + ' ' + props.userInfo.login.surname : ''}</h1>
                 <div className="dashboard">
                 <div className="container">
                     <div className="box">

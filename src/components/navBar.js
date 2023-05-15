@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
+import Logout from "./logout";
 
 
 
 function NavBar(props){
   
     const pfp = document.getElementById("pfp");
-    
+
     const [pfpActive, pfpToggle] = useState('');
     
     function togglePfp(){
@@ -25,6 +26,7 @@ function NavBar(props){
             bellToggle(false);
         }
     }
+
     
     // const bell = document.getElementById("bell");
     // const bellContainer = document.querySelector(".container.not");
@@ -88,7 +90,7 @@ function NavBar(props){
                     <span id="user-name"></span>
                     <div className="pfp-info">
                     <a id="pfp" onClick={togglePfp}><i className="fa-solid fa-circle-user fa-2x"></i></a>
-                    <span id="pfp-span" className={"pfp-span " + (pfpActive? 'active' : '')}>Logout</span>
+                    <span id="pfp-span" className={"pfp-span " + (pfpActive? 'active' : '')} onClick={() =>Logout(props)}>Logout</span>
                     </div>
                 </div>
                 </div>
