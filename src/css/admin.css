@@ -1,0 +1,14 @@
+body{
+    font-family: "Cairo", sans-serif;
+    background: rgb(240, 230, 235);
+    background: linear-gradient(
+        311deg,
+        rgba(231, 220, 225, 0.393) 37%,
+        rgba(197, 228, 234, 0.353) 64%
+    );
+}
+h1{
+    text-align: center;
+    font-weight: 900;
+    margin-top: 100px;
+}

@@ -1,0 +1,207 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body,
+input,
+textarea {
+    font-family: "Poppins", sans-serif;
+    background: rgb(240, 230, 235);
+    background: linear-gradient(
+        311deg,
+        rgba(231, 220, 225, 0.393) 37%,
+        rgba(197, 228, 234, 0.353) 64%
+    );
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+.container {
+    position: relative;
+    width: 100%;
+    /* height: 500px; */
+    min-height: 100vh;
+    padding: 2rem;
+    /* background-color: #fafafa; */
+    /* overflow: hidden; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.form {
+    display: flex;
+    width: 100%;
+    max-width: 1000px;
+    height: 300px;
+    /* background-color: #ededed;
+    border-radius: 10px;
+    box-shadow: 0 0 20px 1px rgba(0, 0, 0, 0.1); */
+    z-index: 1000;
+    /* overflow: hidden; */
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.comment-box {
+    width: 350px;
+    background-color: white;
+    padding: 20px;
+    margin: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 3px 3px 25px rgba(0, 0, 0, 0.3);
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+}
+.profile-image {
+    width: 70px;
+    height: 70px;
+    box-shadow: 2px 2px 30px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+.profile-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.long-text {
+    line-height: 1.5;
+    float: auto;
+}
+p {
+    font-weight: 100;
+    font-size: small;
+    top: 10px;
+    text-align: center;
+}
+
+.header img {
+    float: left;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+.header h6 {
+    position: relative;
+    top: 18px;
+    left: 10px;
+}
+
+.contact-form {
+    position: relative;
+    justify-content: center;
+}
+.input-container {
+    position: relative;
+    margin: 1rem 0;
+}
+
+.input-container {
+    position: relative;
+    margin: 1rem 0;
+    height: 200px;
+}
+textarea.input {
+    padding: 0.6rem 1.5rem;
+    border-radius: 10px;
+    resize: none;
+    overflow: auto;
+}
+
+.input-container label {
+    position: absolute;
+    left: 15px;
+    transform: translateY(-50%);
+    padding: 0 0.4rem;
+    color: black;
+    font-size: 0.9rem;
+    font-weight: 400;
+    pointer-events: none;
+    z-index: 1000;
+    transition: 0.5s;
+}
+
+.input-container.textarea label {
+    top: 1rem;
+    transform: translateY(0);
+}
+
+.comment-box2 {
+    width: 310px;
+    height: 170px;
+    background-color: white;
+    padding: 20px;
+    margin: 40px;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 3px 3px 25px rgba(0, 0, 0, 0.3);
+}
+.input {
+    width: 250px;
+    height: 50px;
+    outline: none;
+    border: 2px solid white;
+    background: white;
+    padding: 0.6rem 1.2rem;
+    color: black;
+    font-weight: 500;
+    font-size: 0.95rem;
+    border-radius: 10px;
+    transition: 0.3s;
+}
+
+/* Choose File Button */
+
+.file-upload {
+    display: inline-flex;
+    align-items: center;
+    font-size: 15px;
+}
+
+.file-upload__input {
+    display: none;
+}
+
+.file-upload__button {
+    background: #fff;
+    border: 2px solid skyblue;
+    border-radius: 10px;
+    outline: none;
+    padding: 0.5em 0.8em;
+    margin-right: 10px;
+    color: black;
+    font-size: 1em;
+    font-family: "Quicksand", sans-serif;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.file-upload__button:active {
+    background: #1abc9c;
+}
+
+.file-upload__label {
+    max-width: 250px;
+    font-size: 0.95em;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-family: "Quicksand", sans-serif;
+}
+
+/* End of Choose File Button */

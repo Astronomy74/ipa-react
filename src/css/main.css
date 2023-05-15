@@ -1,0 +1,949 @@
+* {
+    padding: 0;
+    margin: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+/*gloabal rules start*/
+html {
+    scroll-behavior: smooth;
+}
+body {
+    font-family: "Cairo", sans-serif;
+    background: rgb(240, 230, 235);
+    background: linear-gradient(
+        311deg,
+        rgba(231, 220, 225, 0.393) 37%,
+        rgba(197, 228, 234, 0.353) 64%
+    );
+}
+
+nav.navbar {
+    z-index: 15;
+    background-color: #255b64;
+}
+
+nav.navbar .navbar-brand img {
+    width: 20%;
+    padding: 5px;
+}
+
+nav.navbar .navbar-nav .nav-item a.nav-link {
+    font-size: 16px;
+    color: #e8e8e8;
+    line-height: 40px;
+    padding: 0 14px;
+    transition: all 0.5s ease;
+}
+
+nav.navbar .navbar-nav .nav-item a.nav-link:hover,
+nav.navbar .navbar-nav .nav-item a.nav-link.active {
+    color: #16aeca;
+}
+
+nav.navbar.noTransparrent .nav-item a.nav-link {
+    color: #16aeca;
+}
+
+nav.navbar.noTransparrent .navbar-nav .nav-item a.nav-link:hover,
+nav.navbar.noTransparrent .navbar-nav .nav-item a.nav-link.active {
+    color: #ffffff;
+}
+
+nav.navbar.noTransparrent {
+    background-color: #255b64;
+}
+
+.nav-link.active {
+    color: rgb(255, 255, 255);
+    border-top: 2px solid #48a3ca;
+    padding-top: 3px;
+}
+
+.nav-link:hover {
+    color: rgb(255, 255, 255);
+}
+
+.msgs {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+#seeMessage {
+    margin-top: 48px;
+}
+
+span.msg {
+    position: absolute;
+    right: 0;
+    width: 150px;
+    text-align: center;
+    color: black;
+    background-color: #c2c2c2;
+    padding: 5px 7px;
+    transform: translateY(10px);
+    border-radius: 3px;
+    display: none;
+}
+
+.msgs.active span.msg {
+    display: inline-block;
+    padding: 10px;
+}
+
+.user-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 1rem;
+    color: white;
+}
+/* .user-info span {
+} */
+
+.user-info span:hover {
+    color: #16aeca;
+}
+
+.user-info i {
+    margin-left: 1rem;
+}
+
+.user-info i::before {
+    content: "\f2bd";
+}
+
+.pfp-info {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.pfp-info span {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 60px;
+    transform: translate(13px, 25px);
+    color: black;
+    background-color: white;
+    padding: 3px 5px;
+    transform: translate(15px, 35px);
+    border-radius: 3px;
+    background-color: #c2c2c2;
+    display: none;
+}
+.pfp-span.active {
+    display: block;
+}
+
+.container.not {
+    max-width: 250px;
+    min-height: 180px;
+    position: fixed;
+    top: 90px;
+    right: 16%;
+    border-radius: 5px;
+    font-size: 11px;
+    color: rgb(13, 13, 13);
+    background-color: #c2c2c2;
+    display: none;
+}
+
+.container.not.active {
+    display: block;
+}
+
+.container.not > .box-not {
+    border-bottom: 1px solid white;
+    padding-top: 10px;
+}
+
+.container.not > .box-not p {
+    color: black;
+}
+
+.container.not a {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    padding: 2rem 0 10px;
+    color: black;
+}
+
+.btns {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.btn {
+    background-image: linear-gradient(
+        to right,
+        #16222a 0%,
+        #45828d96 51%,
+        #16222a 100%
+    );
+    margin: 10px;
+    padding: 10px 5px;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;
+    box-shadow: 0 0 20px #eee;
+    border-radius: 10px;
+    display: block;
+    width: 15%;
+    font-size: 15px;
+}
+
+.btn a{
+    text-decoration: none;
+    color: inherit;
+}
+
+.btn:hover {
+    background-position: right center; /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+}
+.btn:active {
+    position: relative;
+    top: 1px;
+}
+
+.btns .btn i {
+    padding: 0 5px;
+}
+.AnnounceJob-instructor .box-request .btn,
+.openJobs-instructor .box-request .btn {
+    padding: 10px 35px;
+}
+
+.sub {
+    width: 30%;
+    margin: auto;
+    margin-top: 15px;
+}
+.btns {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.btn {
+    background-image: linear-gradient(
+        to right,
+        #16222a 0%,
+        #45828d96 51%,
+        #16222a 100%
+    );
+    margin: 10px;
+    padding: 10px 5px;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;
+    box-shadow: 0 0 20px #eee;
+    border-radius: 10px;
+    display: block;
+    width: 15%;
+    font-size: 15px;
+}
+
+.btn:hover {
+    background-position: right center; /* change the direction of the change here */
+    color: #fff;
+    text-decoration: none;
+}
+.btn:active {
+    position: relative;
+    top: 1px;
+}
+
+.btns .btn i {
+    padding: 0 5px;
+}
+.AnnounceJob-instructor .box-request .btn,
+.openJobs-instructor .box-request .btn {
+    padding: 10px 35px;
+}
+
+.sub {
+    width: 30%;
+    margin: auto;
+    margin-top: 15px;
+}
+
+/**************** Intership **********************/
+.dashboard > .container {
+    padding-inline: 15px;
+    margin-inline: auto;
+}
+
+.dashboard {
+    padding-block: 60px;
+}
+.dashboard > .container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    min-height: calc(100vh - 125px);
+}
+
+.dashboard > .container .box {
+    padding-block: 10px;
+    margin-block: 15px;
+    background-color: #45828d96;
+    border-radius: 10px;
+    min-width: 280px;
+    box-shadow: 2px 2px 2px 2px #b1b0b0;
+    font-size: 12px;
+}
+.dashboard > .container .box > div {
+    padding: 10px;
+    transition: 0.3s;
+}
+.dashboard > .container .box > div:not(.box-title):hover {
+    padding-left: 15px;
+}
+
+.dashboard > .container .box a {
+    color: #ffffff;
+    text-decoration: none;
+}
+.dashboard > .container .box a:visited {
+    color: #ffffff;
+}
+.dashboard > .container .box a:hover {
+    transition: 0.3s;
+    font-size: 1.05em;
+}
+.dashboard > .container .box > div:not(:last-child) {
+    border-bottom: 2px #ffffff solid;
+}
+.dashboard > .container .box .box-title {
+    display: flex;
+    justify-content: space-between;
+    font-size: 18px;
+    color: #ffffff;
+    font-weight: 600;
+}
+.inbox {
+    color: white;
+}
+
+@media (width < 992px) {
+    .navbar-nav {
+        text-align: center;
+    }
+    .navbar-nav.icons {
+        display: none;
+    }
+    a.btn {
+        font-size: 15px;
+        padding: 15px 0;
+    }
+}
+
+@media (width < 768px) {
+    .dashboard > .container {
+        width: 750px;
+        margin-top: 75px;
+    }
+    nav.navbar {
+        background-color: #255b64;
+    }
+    .container > .logo {
+        width: 18rem;
+    }
+    a.btn {
+        font-size: 10px;
+        padding: 15px 0;
+    }
+}
+
+@media (min-width: 768px) {
+    .dashboard > .container {
+        width: 750px;
+        min-height: calc(100vh - 25px);
+    }
+    nav.navbar {
+        background-color: #255b64;
+    }
+}
+
+@media (min-width: 992px) {
+    .dashboard > .container {
+        width: 970px;
+    }
+}
+
+@media (min-width: 1400px) {
+    .dashboard > .container {
+        width: 1200px;
+    }
+}
+
+/******** applyforjob ********/
+.applyforjob > .container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.applyforjob > .container h1 {
+    font-size: 30px;
+    text-align: start;
+    padding-left: 105px;
+}
+
+.applyforjob > .container .boxs-request {
+    max-height: 255px;
+    overflow: hidden;
+    display: inline-block;
+    width: 1000px;
+}
+
+.applyforjob > .container .boxs-request.active {
+    max-height: 100%;
+    transition: all 1s ease-out;
+}
+
+.applyforjob > .container .box-request {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 10px;
+    margin-top: 15px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    /* box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); */
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+.applyforjob > .container h2 {
+    font-size: 20px;
+    width: 60%;
+    text-align: start;
+}
+
+/**************** dashBoard-instructor **********************/
+
+.dashBoard-instructor > .container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.dashBoard-instructor > .container img{
+width: 7%;
+}
+
+.dashBoard-instructor > .container h1 {
+    opacity: 1;
+    font-size: 50px;
+    color: blue;
+    transition: all 1s ease-in;
+    animation: myAnim 3s ease-out .5s 1 normal forwards;}
+    @keyframes myAnim {
+        0%,
+        100% {
+            transform: translateY(0) rotate(0);
+            transform-origin: 50% 50%;
+        }
+
+        15% {
+            transform: translateY(-30px) rotate(-6deg);
+        }
+
+        30% {
+            transform: translateY(15px) rotate(6deg);
+        }
+
+        45% {
+            transform: translateY(-15px) rotate(-3.6deg);
+        }
+
+        60% {
+            transform: translateY(9px) rotate(2.4deg);
+        }
+
+        75% {
+            transform: translateY(-6px) rotate(-1.2deg);
+        }
+        100% {
+            opacity:0;
+        }
+    }
+/******** Requests ********/
+.openJobs-instructor > .container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.openJobs-instructor > .container h1 {
+    font-size: 30px;
+    text-align: start;
+}
+
+.openJobs-instructor > .container .boxs-request {
+    max-height: 300px;
+    overflow: hidden;
+}
+
+.openJobs-instructor > .container .boxs-request.active {
+    max-height: 100%;
+    transition: all 1s ease-in-out;
+}
+
+.openJobs-instructor > .container .box-request {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 10px;
+    margin-top: 15px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    /* box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); */
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+.openJobs-instructor > .container h2 {
+    font-size: 20px;
+    width: 60%;
+    text-align: start;
+    line-height: 2;
+}
+
+/******** File ***************/
+section.file > .container {
+    height: calc(100vh - 100px);
+    width: 100%;
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.pdf-file__wrapper {
+    width: 800px;
+    height: 500px;
+    border: 0.5px solid black;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.pdf-file__wrapper img {
+    height: 70%;
+    width: 35%;
+}
+
+.buttons__wrapper {
+    width: 800px;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+button {
+    height: 40px;
+    width: 220px;
+    border: 0.5px solid #444;
+    border-radius: 5px;
+    font-size: 0.5rem;
+}
+
+.approve_btn {
+    background-color: #444444;
+    color: white;
+}
+
+.card--wrapper {
+    width: 100%;
+    position: fixed;
+    background: rgb(240, 230, 235);
+    background: linear-gradient(
+        332deg,
+        rgb(231 220 225) 37%,
+        rgb(197 228 234) 64%
+    );
+    z-index: 2;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    pointer-events: none;
+    opacity: 0;
+}
+
+.card--wrapper.open {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.card--wrapper textarea {
+    padding: 1rem;
+    border-radius: 5px;
+    border: 0.5px solid #444;
+    width: 800px;
+    height: 150px;
+}
+
+.card--wrapper button {
+    background-color: #444444;
+    color: white;
+}
+
+.card--wrapper h1 {
+    font-weight: 900;
+    font-size: 2rem;
+}
+
+/******** AnnounceJob ********/
+.AnnounceJob-instructor > .container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.AnnounceJob-instructor > .container h1 {
+    font-size: 30px;
+    text-align: start;
+}
+
+.AnnounceJob-instructor > .container .boxs-request {
+    max-height: 300px;
+    overflow: hidden;
+}
+
+.AnnounceJob-instructor > .container .boxs-request.active {
+    max-height: 100%;
+    transition: all 1s ease-out;
+}
+
+.AnnounceJob-instructor > .container .box-request {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 10px;
+    margin-top: 15px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    /* box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); */
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+.AnnounceJob-instructor > .container h2 {
+    font-size: 20px;
+    width: 60%;
+    text-align: start;
+}
+
+@media (width < 1200px) {
+    section.openJobs-instructor > .container .boxs-request,
+    section.AnnounceJob-instructor > .container .boxs-request,
+    section.applyforjob > .container .boxs-request {
+        max-height: 260px;
+    }
+}
+
+
+
+/******** EnterJobInfo ********/
+section.EnterJobInfo-instructor .job-info > .container {
+    /* min-height: 100vh; */
+    /* display: flex; */
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px auto;
+    /* min-width: 600px; */
+}
+
+.job-info h2 {
+    margin-top: 0;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 100;
+}
+
+button[type="submit"] {
+    background-color: #484848;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 10px 20px;
+    transition: background-color 0.2s ease;
+    width: 20%;
+    margin: auto;
+}
+
+button[type="submit"]:hover {
+    background-color: #bbbbbb;
+}
+
+.fa {
+    font-size: 18px;
+}
+
+.fa-envelope:before {
+    content: "\f0e0";
+}
+
+.fa-bell:before {
+    content: "\f0f3";
+}
+
+.form-group input[type="text"] {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    font-size: 14px;
+    padding: 10px;
+    width: 100%;
+    max-width: 500px;
+}
+
+.fa {
+    font-size: 18px;
+}
+
+.fa-envelope:before {
+    content: "\f0e0";
+}
+
+.fa-bell:before {
+    content: "\f0f3";
+}
+
+/* start questions  */
+.container.jop-application,
+.container.student-questions {
+    display: grid;
+    align-items: center;
+    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+    min-height: calc(100vh - 85px);
+    margin-top: 100px;
+}
+
+.internship-info-q {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    align-items: flex-end;
+}
+.internship-info-q > text {
+    display: flex;
+    padding: 10px;
+    align-items: center;
+}
+.internship-info-q text > h2 {
+    font-size: 1rem;
+}
+
+.internship-info-q > .image > img {
+    max-width: 100%;
+}
+.student-questions form {
+    display: flex;
+    flex-direction: column;
+}
+.student-questions form > textarea {
+    min-height: 200px;
+    width: 80%;
+    margin: 20px auto;
+    background-color: #ccc;
+    padding: 10px;
+}
+.student-questions form > input {
+    width: 80%;
+    margin: 20px auto;
+    padding-block: 10px;
+    border-radius: 10px;
+    color: #ededed;
+    background-color: rgb(90 200 94);
+    outline: none;
+    border: none;
+    transition: 0.3s;
+}
+.student-questions form > input:hover {
+    transform: scale(1.05);
+}
+@media (max-width: 767px) {
+    .internship-info-q {
+        justify-content: center;
+    }
+    .internship-info-q .image {
+        max-width: 250px;
+        margin-top: 80px;
+    }
+    .internship-info-q .text {
+        margin-top: 30px;
+    }
+}
+
+/* End questions  */
+
+/* Start job applications  */
+.container.jop-application {
+    min-height: calc(100vh - 82px);
+    margin-top: 85px;
+}
+
+.container.jop-application > .com-info .image {
+    width: 400px;
+    margin-bottom: 40px;
+}
+.container.jop-application .com-info .image > img {
+    max-width: 400px;
+}
+.container.jop-application > form {
+    display: flex;
+    flex-direction: column;
+}
+.container.jop-application > form > .buttons > input,
+.container.jop-application > form input[type="text"],
+.container.jop-application > form input[type="email"] {
+    margin-bottom: 20px;
+    padding: 10px 5px;
+    outline: none;
+    border: none;
+    border-radius: 10px;
+}
+
+.container.jop-application > form > .buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-content: center;
+}
+
+.container.jop-application > form > .buttons > input {
+    flex-basis: 40%;
+    transition: 0.3s;
+    padding: 10px 5px;
+}
+
+.container.jop-application > form > .buttons > input:hover {
+    transform: scale(1.03);
+}
+.apply-file-upload {
+    text-align: center;
+    min-width: 260px;
+    position: relative;
+}
+.apply-file-upload > button {
+    width: 100%;
+}
+.apply-file-upload > span {
+    position: absolute;
+    text-align: start;
+    left: 0;
+    padding: 0 2rem;
+    color: black;
+}
+.apply-file-upload > span:hover {
+    transform: translateX(5px);
+    color: rgba(0, 0, 0, 0.8);
+    transition: 0.5s;
+}
+/* end job applications  */
+
+/* start Apply Details  */
+section.jop-details > .container {
+    min-height: calc(100vh - 82px);
+    margin-top: 85px;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: space-around;
+}
+section.jop-details .image > img {
+    max-width: 70%;
+    margin-bottom: 20px;
+}
+/* end   Apply Details  */
+/* Start See Msg  */
+section.see-msg > .container {
+    min-height: calc(100vh - 82px);
+    margin-top: 85px;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: space-around;
+}
+section.see-msg .boxs-request {
+    max-height: 255px;
+    overflow: hidden;
+}
+
+section.see-msg .boxs-request.active {
+    max-height: 100%;
+    transition: all 1s ease-out;
+}
+
+section.see-msg .box-request {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 10px;
+    margin-top: 15px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    /* box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); */
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+section.see-msg .container h1 {
+    font-size: 20px;
+    width: 60%;
+    text-align: start;
+}
+/* end   See Msg  */
