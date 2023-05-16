@@ -37,19 +37,64 @@ const mapDispatchToProps = (dispatch) => ({
 class Main extends Component {
 
 
-
-
-
     render(){
+            const { LoginInfo, loginInfoCollect } = this.props;
+            const isAuthenticated = Object.keys(LoginInfo).length !== 0;
             return(
                 <div className='MainComp'>
                    <Routes>
-                        <Route exact path="/login" element={<Login loginCollect={this.props.loginInfoCollect}/>} />
-                        <Route exact path="/student-dashboard" element={<Student loginCollect={this.props.loginInfoCollect} userInfo={this.props.LoginInfo}/>} />
-                        <Route path="apply-now/:id" element={<ApplyNow />} />
-                        <Route exact path="/coordinator-dashboard" element={<Coordinator />} />
-                        <Route exact path="/admin-dashboard" element={<Admin />} />
-                        <Route exact path="/career-dashboard" element={<Career />} />
+                        <Route exact path="/login" element={<Login loginCollect={loginInfoCollect}/>} />
+                        <Route
+                            exact path="/student-dashboard"
+                            element={
+                            isAuthenticated ? (
+                                <Student loginCollect={loginInfoCollect} userInfo={LoginInfo} />
+                            ) : (
+                                <Navigate to="/login" replace />
+                            )
+                            }
+                        />
+                        
+                        <Route 
+                            exact path="apply-now/:id"
+                            element={
+                                isAuthenticated ? (
+                                    <ApplyNow loginCollect={loginInfoCollect}/>
+                                ) : (
+                                    <Navigate to="/login" replace />
+                                )
+                            }
+                        />
+                        <Route 
+                            exact path="/coordinator-dashboard" 
+                            element={
+                                isAuthenticated ? (
+                                    <Coordinator />
+                                ) : (
+                                    <Navigate to="/login" replace />
+                                )
+                            }
+                        />
+                        <Route 
+                            exact path="/admin-dashboard"
+                            element={
+                                isAuthenticated ? (
+                                    <Admin />
+                                ) : (
+                                    <Navigate to="/login" replace />
+                                )
+                            } 
+                        />
+                        <Route 
+                            exact path="/career-dashboard" 
+                            element={
+                                isAuthenticated ? (
+                                    <Career />
+                                ) : (
+                                    <Navigate to="/login" replace />
+                                )
+                            } 
+                        />
                         <Route
                             path="*"
                             element={<Navigate to="/login" replace />}

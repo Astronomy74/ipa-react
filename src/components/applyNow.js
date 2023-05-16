@@ -6,7 +6,7 @@ function ApplyNow(props){
     console.log(jobId);
     return(
         <div>
-            <NavBar/>
+            <NavBar props={props}/>
             <main className="container jop-application">
             <div className="com-info">
                 <div class="image">
