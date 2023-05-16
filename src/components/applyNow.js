@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import NavBar from "./navBar";
+import UploadButton from "./uploadButton";
 
 function ApplyNow(props){
     const jobId = localStorage.getItem("JobId");
@@ -7,6 +8,7 @@ function ApplyNow(props){
     return(
         <div>
             <NavBar props={props}/>
+            <UploadButton />
             <main className="container jop-application">
             <section className="jop-details">
                 <div className="container">
@@ -57,12 +59,7 @@ function ApplyNow(props){
                             <input type="email" required placeholder="Email" />
                             <input type="text" required placeholder="Phone Number" />
                             <div className="buttons">
-                                <div className="apply-file-upload">
-                                    <input className="file-upload__input" type="file" name="myFile[]" id="myFile" multiple style={{display: 'none'}} />
-                                    <button className="file-upload__button btn" type="button">Choose File(s)</button>
-                                    <span className="file-upload__label">
-                                    </span>
-                                </div>
+                                <UploadButton/>
                                 <input type="submit" value="Send" className="btn" />
                             </div>
                         </form>
