@@ -1,20 +1,29 @@
-import React, { useState, useEffect } from "react";
-import { getFirestore, collection, getDocs, query } from "firebase/firestore";
+import React, { useRef, useState } from "react";
 
 
-function UploadButton(){
 
-    const FileUploadButton = () => {
+
+function UploadButton(props){
+
+  const [fileName, setfileName] = useState("No file(s) selected");
+
+  
+  const fileInputRef = useRef(null);
     const handleFileUpload = (event) => {
     const file = event.target.files[0];
-    // Do something with the selected file, such as upload it to a server
-    console.log('Selected file:', file);
+    props.filePass(file);
+    setfileName(file.name);
   };
+
+  const handleButtonClick = () => {
+    fileInputRef.current.click();
+  };
+
 
   return (
     <div className="apply-file-upload">
-        asdadwd
       <input
+        ref={fileInputRef}
         className="file-upload__input"
         type="file"
         name="myFile[]"
@@ -23,13 +32,14 @@ function UploadButton(){
         style={{ display: 'none' }}
         onChange={handleFileUpload}
       />
-      <button className="file-upload__button btn" type="button">Choose File(s)</button>
+      <button onClick={handleButtonClick} className="file-upload__button btn" type="button">Choose File(s)</button>
       <span className="file-upload__label">
-        </span>
+        {fileName}
+      </span>
     </div>
   );
   
-};
+
 
 // Array.prototype.forEach.call(
 //     document.querySelectorAll(".file-upload__button"),

@@ -1,14 +1,43 @@
 import React, { useState, useEffect } from "react";
 import NavBar from "./navBar";
 import UploadButton from "./uploadButton";
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import { storage } from "./fireStorage";
+
 
 function ApplyNow(props){
     const jobId = localStorage.getItem("JobId");
-    console.log(jobId);
+    const [UploadedFile, UploadedFileHandle] = useState('');
+    const [progress, setProgress] = useState(0);
+
+    function GetFile(file){
+        UploadedFileHandle(file);
+        console.log(file)
+    }
+
+    function HandleSubmit(){
+        const sotrageRef = ref(storage, `images/${UploadedFile.name}`);
+        const uploadTask = uploadBytesResumable(sotrageRef, UploadedFile)
+        uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+              const prog = Math.round(
+                (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+              );
+              setProgress(prog);
+            },
+            (error) => console.log(error),
+            () => {
+              getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                console.log("File available at", downloadURL);
+              });
+            }
+          );
+    }
+    
     return(
         <div>
             <NavBar props={props}/>
-            <UploadButton />
             <main className="container jop-application">
             <section className="jop-details">
                 <div className="container">
@@ -59,8 +88,8 @@ function ApplyNow(props){
                             <input type="email" required placeholder="Email" />
                             <input type="text" required placeholder="Phone Number" />
                             <div className="buttons">
-                                <UploadButton/>
-                                <input type="submit" value="Send" className="btn" />
+                                <UploadButton filePass={GetFile}/>
+                                <input onClick={HandleSubmit} type="submit" value="Send" className="btn" />
                             </div>
                         </form>
                     </div>
