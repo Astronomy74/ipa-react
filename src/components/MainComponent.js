@@ -8,20 +8,8 @@ import Career from './career';
 import { Routes, Route, Navigate, withRouter } from 'react-router-dom';
 import { collectUserInfo } from '../redux/ActionCreators';
 import { connect } from 'react-redux';
-import { initializeApp } from "firebase/app";
+import fireApp from './fireStorage';
 
-// setup connection to firebase
-const firebaseConfig = {
-  apiKey: "AIzaSyAu_8oVSaXp2ZsWEquyfCjCJd6qkSZoJDs",
-  authDomain: "test-931b4.firebaseapp.com",
-  projectId: "test-931b4",
-  storageBucket: "test-931b4.appspot.com",
-  messagingSenderId: "504567285553",
-  appId: "1:504567285553:web:a0d8ce97ca278942a45210"
-};
-  
-  // init firebase
-  initializeApp(firebaseConfig);
 
 const mapStateToProps = state => {
     return {
@@ -105,6 +93,5 @@ class Main extends Component {
         }
         
     }
-
 
     export default (connect(mapStateToProps, mapDispatchToProps)(Main));
