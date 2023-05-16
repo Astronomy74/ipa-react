@@ -70,6 +70,7 @@ function Login(props){
         e.preventDefault();
         setIsEmailValid(true);
         setisPasswordValid(true);
+        setauthFailed(false);
 
         // Validate form basic
         if (!validateEmail(email) || !validatePassword(password)) {
@@ -102,8 +103,6 @@ function Login(props){
                 firstname: firstname,
                 surname: surname
             };
-
-            setauthFailed(false);
            
 
             props.loginCollect(userInformation); // save it in local storage
@@ -174,7 +173,7 @@ function Login(props){
                             {!isPasswordValid && <div className="invalid-feedback">Enter a valid password</div>}
                             {authFailed && <div className="invalid-feedback">Incorrect email or password</div>}
                         </div>
-                        <a className="reset" href="#">Reset Password</a>
+            
                         <button type="submit" className="btn">Login</button>
                         </form>
                     </div>

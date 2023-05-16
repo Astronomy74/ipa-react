@@ -45,7 +45,7 @@ function NavBar(props){
             <div className="container">
                 <div className="logo">
                 <a className="navbar-brand" href="#">
-                    <img src="images/Uskudar_Universitesi_logo.png" alt="logo" />
+                    <img src="../images/Uskudar_Universitesi_logo.png" alt="logo" />
                 </a>
                 </div>
                 <button

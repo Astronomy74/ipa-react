@@ -56,7 +56,7 @@ class Main extends Component {
                         />
                         
                         <Route 
-                            exact path="apply-now/:id"
+                            exact path="/apply-now/:id"
                             element={
                                 isAuthenticated ? (
                                     <ApplyNow loginCollect={loginInfoCollect}/>

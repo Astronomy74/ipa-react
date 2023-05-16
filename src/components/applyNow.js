@@ -8,41 +8,13 @@ function ApplyNow(props){
         <div>
             <NavBar props={props}/>
             <main className="container jop-application">
-            <div className="com-info">
-                <div class="image">
-                    <img src="images/Teknosa_Logo.png" alt="" />
-                </div>
-                <div className="text">
-                    <p>For Senior Student</p>
-                    <p>Required Languages: <span>Turkih, English</span></p>
-                    <p>Duration: <span>6 months</span></p>
-                    <p>Required Languages: <span>React.js, Angular</span></p>
-                </div>
-            </div>
-            <form action="POST ">
-                <input type="text" required placeholder="First Name" />
-                <input type="text" required placeholder="Last Name" />
-                <input type="text" required placeholder="Age" />
-                <input type="text" required placeholder="Country" />
-                <input type="email" required placeholder="Email" />
-                <input type="text" required placeholder="Phone Number" />
-                <div className="buttons">
-                    <div className="apply-file-upload">
-                        <input className="file-upload__input" type="file" name="myFile[]" id="myFile" multiple style={{display: 'none'}} />
-                        <button className="file-upload__button btn" type="button">Choose File(s)</button>
-                        <span className="file-upload__label">
-                        </span>
-                    </div>
-                    <input type="submit" value="Send" class="btn" />
-                </div>
-            </form>
             <section className="jop-details">
                 <div className="container">
                     <div className="row">
                         <div className="col-md-7">
                             <div className="com-info">
                                 <div className="image">
-                                    <img id="jobImg" src="images/Teknosa_Logo.png" alt="" />
+                                    <img id="jobImg" src="../images/Teknosa_Logo.png" alt="" />
                                 </div>
                                 <div className="text">
                                     <p id="forWho">For Senior Students</p>
@@ -76,6 +48,24 @@ function ApplyNow(props){
                                 
                             </div>
                         </div>
+
+                        <form action="POST ">
+                            <input type="text" required placeholder="First Name" />
+                            <input type="text" required placeholder="Last Name" />
+                            <input type="text" required placeholder="Age" />
+                            <input type="text" required placeholder="Country" />
+                            <input type="email" required placeholder="Email" />
+                            <input type="text" required placeholder="Phone Number" />
+                            <div className="buttons">
+                                <div className="apply-file-upload">
+                                    <input className="file-upload__input" type="file" name="myFile[]" id="myFile" multiple style={{display: 'none'}} />
+                                    <button className="file-upload__button btn" type="button">Choose File(s)</button>
+                                    <span className="file-upload__label">
+                                    </span>
+                                </div>
+                                <input type="submit" value="Send" className="btn" />
+                            </div>
+                        </form>
                     </div>
                 </div>
             </section>
