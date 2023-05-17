@@ -3,6 +3,9 @@ import NavBar from "./navBar";
 import { getFirestore, collection, getDocs, query } from "firebase/firestore";
 import { Link } from 'react-router-dom';
 
+//include Main Css & sCss file
+import "../css/main.css";
+import "../sass/main.scss";
 
 function Student(props){
     
@@ -40,7 +43,7 @@ function Student(props){
             <h2 id="jobOffer1">
                 {doc.description}
             </h2>
-            <Link to={`/apply-now/${doc.id}`}><button onClick={() => storeJobId(doc.id)} className="btn apply-now" href="apply-now.html" data-doc-id="">Apply now!</button></Link>
+            <Link to={`/apply-now/${doc.id}`}><button onClick={() => storeJobId(doc.id)} className="custom-btn apply-now" href="apply-now.html" data-doc-id="">Apply now!</button></Link>
             </div>
             
         );

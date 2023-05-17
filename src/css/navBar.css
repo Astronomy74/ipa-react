@@ -1,0 +1,159 @@
+nav.navbar {
+  z-index: 15;
+  background-color: #255b64;
+}
+
+nav.navbar .navbar-brand img {
+  width: 20%;
+  padding: 5px;
+}
+
+nav.navbar .navbar-nav .nav-item a.nav-link {
+  font-size: 16px;
+  color: #e8e8e8;
+  line-height: 40px;
+  padding: 0 14px;
+  transition: all 0.5s ease;
+}
+
+nav.navbar .navbar-nav .nav-item a.nav-link:hover,
+nav.navbar .navbar-nav .nav-item a.nav-link.active {
+  color: #16aeca;
+}
+
+nav.navbar.noTransparrent .nav-item a.nav-link {
+  color: #16aeca;
+}
+
+nav.navbar.noTransparrent .navbar-nav .nav-item a.nav-link:hover,
+nav.navbar.noTransparrent .navbar-nav .nav-item a.nav-link.active {
+  color: #ffffff;
+}
+
+nav.navbar.noTransparrent {
+  background-color: #255b64;
+}
+
+.nav-link.active {
+  color: rgb(255, 255, 255);
+  border-top: 2px solid #48a3ca;
+  padding-top: 3px;
+}
+
+.nav-link:hover {
+  color: rgb(255, 255, 255);
+}
+
+.msgs {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+#seeMessage {
+  margin-top: 48px;
+}
+
+span.msg {
+  position: absolute;
+  right: 0;
+  width: 150px;
+  text-align: center;
+  color: black;
+  background-color: #c2c2c2;
+  padding: 5px 7px;
+  transform: translateY(10px);
+  border-radius: 3px;
+  display: none;
+}
+
+.msgs.active span.msg {
+  display: inline-block;
+  padding: 10px;
+}
+
+.user-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 1rem;
+  color: white;
+}
+/* .user-info span {
+} */
+
+.user-info span:hover {
+  color: #16aeca;
+}
+
+.user-info i {
+  margin-left: 1rem;
+}
+
+.user-info i::before {
+  content: "\f2bd";
+}
+
+.pfp-info {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.pfp-info span {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 60px;
+  transform: translate(13px, 25px);
+  color: black;
+  background-color: white;
+  padding: 3px 5px;
+  transform: translate(15px, 35px);
+  border-radius: 3px;
+  background-color: #c2c2c2;
+  display: none;
+}
+.pfp-span.active {
+  display: block;
+}
+
+.container.not {
+  max-width: 250px;
+  min-height: 180px;
+  position: fixed;
+  top: 90px;
+  right: 16%;
+  border-radius: 5px;
+  font-size: 11px;
+  color: rgb(13, 13, 13);
+  background-color: #c2c2c2;
+  display: none;
+}
+
+.container.not.active {
+  display: block;
+}
+
+.container.not > .box-not {
+  border-bottom: 1px solid white;
+  padding-top: 10px;
+}
+
+.container.not > .box-not p {
+  color: black;
+}
+
+.container.not a {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  padding: 2rem 0 10px;
+  color: black;
+}
