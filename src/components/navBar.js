@@ -6,11 +6,15 @@ import { faBell } from "@fortawesome/free-solid-svg-icons";
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 
-// NavBar style 
-import '../css/navBar.css'
+// NavBar style
+import "../css/navBar.css";
 
 function NavBar(props) {
-  const pfp = document.getElementById("pfp");
+  const msgsRef = useRef(null); // define a useRef hook for the msgs element
+
+  function handleClick() {
+    msgsRef.current.classList.toggle("active"); // use the msgsRef to toggle the active class
+  }
 
   const [pfpActive, pfpToggle] = useState("");
 
@@ -56,7 +60,7 @@ function NavBar(props) {
             aria-expanded="false"
             aria-label="Toggle navigation"
           >
-             <FontAwesomeIcon icon={faBars} />
+            <FontAwesomeIcon icon={faBars} />
           </button>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <div className="pages m-auto">
@@ -80,9 +84,11 @@ function NavBar(props) {
             <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
               <li className="nav-item">
                 <a className="nav-link" id="envelope">
-                <FontAwesomeIcon icon={faEnvelope} />
+                  <FontAwesomeIcon icon={faEnvelope} />
                 </a>
-                <div className="msgs">
+                <div className="msgs" ref={msgsRef}>
+                  {" "}
+                  {/* pass the msgsRef to the ref attribute */}
                   <a href="new-msg.html">
                     <span className="msg" id="sendMessage">
                       Send Message
@@ -96,8 +102,8 @@ function NavBar(props) {
                 </div>
               </li>
               <li className="nav-item bell" id="bell">
-                <a className="nav-link">
-                <FontAwesomeIcon icon={faBell} />
+                <a className="nav-link" onClick={handleClick}>
+                  <FontAwesomeIcon icon={faBell} />
                 </a>
               </li>
             </ul>
@@ -106,8 +112,8 @@ function NavBar(props) {
               <span id="user-name"></span>
               <div className="pfp-info">
                 <a id="pfp" onClick={togglePfp}>
-                <FontAwesomeIcon icon={faCircleUser} size="2xl" />        
-                        </a>
+                  <FontAwesomeIcon icon={faCircleUser} size="2xl" />
+                </a>
                 <span
                   id="pfp-span"
                   className={"pfp-span " + (pfpActive ? "active" : "")}
@@ -132,7 +138,4 @@ export default NavBar;
 // const msgs = document.querySelector(".msgs");
 // bell.addEventListener("click", () => {
 //     bellContainer.classList.toggle("active");
-// });
-// envelope.addEventListener("click", () => {
-//     msgs.classList.toggle("active");
 // });
