@@ -59,39 +59,21 @@ function Student(props){
             SeeHideToggle("See All Form Submissions")
         }
     }
-    
-    return(
-        <div>
-            <NavBar props={props}/>
-            <div className="container not">
-            <div className="box-not">
-                <p>
-                Internship Coordinator " Dr. Kristin Abdo" has approved your
-                internship request
-                </p>
-            </div>
-            <div className="box-not">
-                <p>
-                Internship Coordinator " Dr. Kristin Abdo" has approved your
-                internship request
-                </p>
-            </div>
-            <a href="see-msg.html" className="" id="seemore">See More</a>
-            </div>
-            <main>
-            <section id="dashBoard">
-                <h1>Welcome {props.userInfo.login ? props.userInfo.login.firstname + ' ' + props.userInfo.login.surname : ''}</h1>
-                <div className="dashboard">
-                <div className="container">
+
+    function InternshipBox(){
+        return(
+            <div className="container">
                     <div className="box">
                     <div className="box-title">
-                        <a
-                        className="internshipLink"
-                        href="stats.html"
-                        target="_blank"
-                        data-json="../data/internship.json"
-                        >
-                        Internship 1</a>
+                        <Link to={`/student-dashboard/stats`} target="_blank">
+                            <span 
+                            className="internshipLink"
+                            data-json="data/internship.json"
+                            >
+                            Internship 1
+                            </span>
+                        </Link>
+                        
                         <a
                         className="internshipLink"
                         href="stats.html"
@@ -176,6 +158,17 @@ function Student(props){
                     </div>
                     </div>
                 </div>
+        );
+    }
+    
+    return(
+        <div>
+            <NavBar props={props}/>
+            <main>
+            <section id="dashBoard">
+                <h1>Welcome {props.userInfo.login ? props.userInfo.login.firstname + ' ' + props.userInfo.login.surname : ''}</h1>
+                <div className="dashboard">
+                <InternshipBox />
                 </div>
             </section>
             <section className="applyforjob" id="applyForJob">
