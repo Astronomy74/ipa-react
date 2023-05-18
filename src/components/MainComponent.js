@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import Login from './login';
 import Student from './student';
+import JobOffers from './jobOffers';
 import StudentStats from './stats';
-import ApplyNow from './applyNow';
+import Details from './details';
 import Coordinator from './coordinator';
 import Admin from './admin';
 import Career from './career';
@@ -25,13 +26,22 @@ const mapDispatchToProps = (dispatch) => ({
 
 
 class Main extends Component {
-   
+    constructor(props) {
+        super(props);
+
+
+        this.state = {
+            eventTarget: null,
+        };
+        
+    }
+
 
     render(){
             const { LoginInfo, loginInfoCollect } = this.props;
             const isAuthenticated = Object.keys(LoginInfo).length !== 0;
             return(
-                <div className='MainComp'>
+                <div className='MainComp' onMouseDown={(e) => this.setState({eventTarget : e.target})}>
                    <Routes>
                         <Route 
                             exact path="/login" 
@@ -48,7 +58,22 @@ class Main extends Component {
                             element={
                                 isAuthenticated && LoginInfo.login ? (
                                     LoginInfo.login.userType === "student" ? (
-                                      <Student loginCollect={loginInfoCollect} userInfo={LoginInfo} />
+                                      <Student loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
+                                    ) : (
+                                        <Navigate to={`/${LoginInfo.login.userType}-dashboard`} replace />
+
+                                    )
+                                  ) : (
+                                    <Navigate to="/login" replace />
+                                  )
+                            }
+                        />
+                        <Route
+                            exact path="/job-offers"
+                            element={
+                                isAuthenticated && LoginInfo.login ? (
+                                    LoginInfo.login.userType === "student" ? (
+                                      <JobOffers loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
                                     ) : (
                                         <Navigate to={`/${LoginInfo.login.userType}-dashboard`} replace />
 
@@ -74,11 +99,11 @@ class Main extends Component {
                             }
                         />
                         <Route
-                            exact path="/apply-now/:id"
+                            exact path="/details/:id"
                             element={
                                 isAuthenticated && LoginInfo.login ? (
                                     LoginInfo.login.userType === "student" ? (
-                                        <ApplyNow loginCollect={loginInfoCollect}/>
+                                        <Details loginCollect={loginInfoCollect} userInfo={LoginInfo}/>
                                     ) : (
                                         <Navigate to={`/${LoginInfo.login.userType}-dashboard`} replace />
 

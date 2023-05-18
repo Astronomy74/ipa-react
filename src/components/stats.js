@@ -8,7 +8,7 @@ import '../sass/stas.scss'
 function StudentStats(props){
     return(
         <main>
-            <NavBar props={props}/>
+            <NavBar props={props} NavLocation={'dashboard'}/>
             <h1>Welcome {props.userInfo.login ? props.userInfo.login.firstname + ' ' + props.userInfo.login.surname : ''}</h1>
             <div className="statsContainer text-center">
               <div className="card">
@@ -69,3 +69,61 @@ function StudentStats(props){
 }
 
 export default StudentStats;
+
+
+
+// const [UploadedFile, UploadedFileHandle] = useState("");
+//   const [progress, setProgress] = useState(0);
+
+//   function GetFile(file) {
+//     UploadedFileHandle(file);
+//     console.log(file);
+//   }
+
+//   function HandleSubmit() {
+//     const sotrageRef = ref(storage, `images/${UploadedFile.name}`);
+//     const uploadTask = uploadBytesResumable(sotrageRef, UploadedFile);
+//     uploadTask.on(
+//       "state_changed",
+//       (snapshot) => {
+//         const prog = Math.round(
+//           (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+//         );
+//         setProgress(prog);
+//       },
+//       (error) => console.log(error),
+//       () => {
+//         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+//           console.log("File available at", downloadURL);
+//         });
+//       }
+//     );
+//   }
+
+
+
+{/* <section className="apply-form" style={{ display: "block" }}>
+            <div className="row">
+              <div className=".col-md-12">
+                <div className="formContainer">
+                  <form action="POST ">
+                    <input type="text" required placeholder="First Name" />
+                    <input type="text" required placeholder="Last Name" />
+                    <input type="text" required placeholder="Age" />
+                    <input type="text" required placeholder="Country" />
+                    <input type="email" required placeholder="Email" />
+                    <input type="text" required placeholder="Phone Number" />
+                    <div className="ControlButtons">
+                      <UploadButton filePass={GetFile} />
+                      <input
+                        onClick={HandleSubmit}
+                        type="submit"
+                        value="Send"
+                        className="btn"
+                      />
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </section> */}
