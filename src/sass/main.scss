@@ -1,0 +1,162 @@
+@import "./variables";
+@import "./mixins";
+
+//Main
+body {
+  @include scrollbars(0.5rem, 0.625rem, $secondary-color, $light-gray-color);
+}
+
+/* Internship-dashboard Section */
+.dashboard {
+  > .container {
+    padding-inline: 0.9375rem;
+    margin-inline: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    min-height: calc(100vh - 7.8125rem);
+    .box {
+      padding-block: 0.625rem;
+      margin-block: 0.9375rem;
+      background-color: $background-color_1;
+      border-radius: 0.625rem;
+      min-width: 17.5rem;
+      box-shadow: 0.125rem 0.125rem 0.125rem 0.125rem #b1b0b0;
+      font-size: 0.75rem;
+      > div {
+        padding: 0.625rem;
+        transition: 0.3s;
+        &:not(.box-title) {
+          &:hover {
+            padding-left: 0.9375rem;
+          }
+        }
+        &:not(:last-child) {
+          border-bottom: 0.125rem #ffffff solid;
+        }
+      }
+      a {
+        color: $white-color;
+        text-decoration: none;
+        &:visited {
+          color: $light-gray-color;
+        }
+        &:hover {
+          transition: 0.3s;
+          font-size: 1.05em;
+        }
+      }
+      .box-title {
+        display: flex;
+        justify-content: space-between;
+        font-size: 1.125rem;
+        color: $white-color;
+        font-weight: 600;
+      }
+    }
+  }
+  padding-block: 3.75rem;
+}
+.inbox {
+  color: $white-color;
+}
+@media (width < 62rem) {
+  .navbar-nav {
+    text-align: center;
+  }
+  .navbar-nav.icons {
+    display: none;
+  }
+  a.btn {
+    font-size: 0.9375rem;
+    padding: 0.9375rem 0;
+  }
+}
+@media (width < 48rem) {
+  .dashboard {
+    > .container {
+      width: 46.875rem;
+      margin-top: 4.6875rem;
+    }
+  }
+  nav.navbar {
+    background-color: $background-color_2;
+  }
+  .container {
+    > .logo {
+      width: 18rem;
+    }
+  }
+  a.btn {
+    font-size: 0.625rem;
+    padding: 0.9375rem 0;
+  }
+}
+@media (min-width: 48rem) {
+  .dashboard {
+    > .container {
+      width: 46.875rem;
+      min-height: calc(100vh - 1.5625rem);
+    }
+  }
+  nav.navbar {
+    background-color: $background-color_2;
+  }
+}
+@media (min-width: 62rem) {
+  .dashboard {
+    > .container {
+      width: 60.625rem;
+    }
+  }
+}
+@media (min-width: 87.5rem) {
+  .dashboard {
+    > .container {
+      width: 75rem;
+    }
+  }
+}
+
+/* Internship-dashboard Section */
+.applyforjob {
+  > .container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    h1 {
+      color: $text-color;
+      font-size: 1.875rem;
+      text-align: start;
+    }.row{
+      align-content: center;
+      .col-12 {
+        height: fit-content;
+      }
+    }
+    .boxs-request {
+      max-height: 15.9375rem;
+      max-width: 1500px;
+      overflow: hidden;
+      button.custom-btn {
+        @include button($main-color, $secondary-color, $light-gray-color);
+        cursor: pointer;
+        width: 130px;
+      }
+      &.active {
+        max-height: 100% ;
+        transition: all 1s ease-out;
+      }
+    }
+  }
+  .box-request {
+    @include box-request($main-color, $background-color_boxRequest);
+  }
+  h2 {
+    font-size: 1.25rem;
+    width: 60%;
+    text-align: start;
+  }
+}

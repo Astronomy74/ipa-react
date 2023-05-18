@@ -1,140 +1,129 @@
 * {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
-:root {
-    /* --main-color: #e9e9e9; */
-    --main-color: rgba(0, 0, 0, 0.903);
-    --secondary-color: #5ac7e0;
-    /* --black-color: black; */
-    --black-color: white;
-    /* --white-color: white; */
-    --white-color: rgb(0, 0, 0);
-}
-
-body {
-    font-family: "Cairo", sans-serif;
-    /* background-color: var(--main-color); */
-    background: rgb(120, 120, 120);
-    background: linear-gradient(
-        90deg,
-        rgba(120, 120, 120, 1) 30%,
-        rgba(15, 88, 97, 1) 70%
-    );
+main {
+  font-family: "Cairo", sans-serif;
+  background: rgb(240, 230, 235);
+  background: linear-gradient(
+      311deg,
+      rgba(231, 220, 225, 0.393) 37%,
+      rgba(197, 228, 234, 0.353) 64%
+  );
 }
 
 /* ===============  OVERLAY =============== */
 .overlay {
-    position: absolute;
-    width: 100%;
-    height: 100vh;
-    background: rgb(34, 34, 34);
-    background: linear-gradient(
-        315deg,
-        rgba(34, 34, 34, 1) 40%,
-        rgba(48, 100, 101, 1) 60%
-    );
-    top: 0%;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: #eee;
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  background: rgb(34, 34, 34);
+  background: linear-gradient(
+    315deg,
+    rgba(34, 34, 34, 1) 40%,
+    rgba(48, 100, 101, 1) 60%
+  );
+  top: 0%;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #eee;
 }
 .overlay h1 {
-    font-size: 40px;
-    letter-spacing: 10px;
-    margin-top: 40px;
+  font-size: 2.5rem;
+  letter-spacing: 0.625rem;
+  margin-top: 2.5rem;
 }
 .overlay span {
-    font-size: 50px;
-    letter-spacing: 3px;
-    text-transform: capitalize;
+  font-size: 3.125rem;
+  letter-spacing: 0.1875rem;
+  text-transform: capitalize;
 }
 
 /* ===============  MAIN =============== */
-main .container .row {
-    min-height: 100vh;
+main .container .row.align-content-center {
+  min-height: 100vh;
 }
 .container .row .login img {
-    width: 150px;
+  width: 9.375rem;
 }
 .container .row .login h1 {
-    margin-top: 10px;
-    margin-bottom: 30px;
-    font-weight: 500;
-    color: var(--black-color);
+  margin-top: 0.625rem;
+  margin-bottom: 1.875rem;
+  font-weight: 500;
+  color: var(--black-color);
 }
-.container .row .login  a,
+.container .row .login a,
 .container .row .login button {
-    background-color: rgba(255, 255, 255, 0);
-    border-color: #00B1AD;
-    color: var(--black-color);
-    width: 100%;
-    border-width: 3px;
-    margin-top: 15px;
-    padding: 16px;
-    border-radius: 15px;
-    font-size: 20px;
-    font-weight: 600;
+  background-color: rgba(255, 255, 255, 0);
+  border-color: #00b1ad;
+  color: var(--black-color);
+  width: 100%;
+  border-width: 0.1875rem;
+  margin-top: 0.9375rem;
+  padding: 1rem;
+  border-radius: 0.9375rem;
+  font-size: 1.25rem;
+  font-weight: 600;
 }
-.btns-container{
-    display: flex;
-    flex-wrap: nowrap;
-    flex-direction: column;
-    align-content: center;
-    justify-content: center;
-    align-items: center;
+.btns-container {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
 }
 .container .row .login a.half-width {
-    width: 40% ;
+  width: 40%;
 }
 .container .row .login .form-control {
-    /* background-color: var(--main-color); */
-    text-align: left;
-    border-radius: 10px;
+  /* background-color: var(--main-color); */
+  text-align: left;
+  border-radius: 0.625rem;
 }
 
-form {
-    width: 35%;
-    margin: auto;
+form.login-form {
+  width: 35%;
+  margin: auto;
+}
+form button.send-btn {
+  border-style: solid;
+  height: 3.75rem;
 }
 
-.login-form{
-    width: 100%;
+.container .row .login form a.reset {
+  display: block;
+  cursor: pointer;
+  padding: 0 0.625rem;
+  margin: auto;
+  text-decoration: none;
+  color: whitesmoke;
+  text-align: start;
+}
+.container .row .login form a.reset:hover {
+  color: var(--secondary-color);
 }
 
-.container .row .login form a.reset{
-    display: block;
-    cursor: pointer;
-    padding: 0 10px;
-    margin: auto;
-    text-decoration: none;
-    color: whitesmoke;
-    text-align: start;
-}
-.container .row .login form a.reset:hover{
-    color: var(--secondary-color);
-}
-
-@media (width < 475px) {
-    .overlay img {
-        width: 130px;
-    }
-    .overlay h1 {
-        font-size: 25px;
-    }
-    .overlay span {
-        font-size: 30px;
-    }
-    .overlay h1,
-    .overlay span {
-        padding: 5px;
-    }
-    .container .row .login button {
-        padding: 3px 5px;
-    }
+@media (width < 29.6875rem) {
+  .overlay img {
+    width: 8.125rem;
+  }
+  .overlay h1 {
+    font-size: 1.5625rem;
+  }
+  .overlay span {
+    font-size: 1.875rem;
+  }
+  .overlay h1,
+  .overlay span {
+    padding: 0.3125rem;
+  }
+  .container .row .login button {
+    padding: 0.1875rem 0.3125rem;
+  }
 }
