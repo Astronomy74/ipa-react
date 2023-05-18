@@ -5,36 +5,60 @@ import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { Link } from 'react-router-dom';
 
 // NavBar style
 import "../css/navBar.css";
 
 function NavBar(props) {
+  
   const msgsRef = useRef(null); // define a useRef hook for the msgs element
+  const logoutRef = useRef(null);
+  const bellRef = useRef(null);
+  
 
-  function handleClick() {
-    msgsRef.current.classList.toggle("active"); // use the msgsRef to toggle the active class
-  }
 
   const [pfpActive, pfpToggle] = useState("");
-
-  function togglePfp() {
-    if (!pfpActive) {
-      pfpToggle(true);
-    } else {
-      pfpToggle(false);
-    }
-  }
-
   const [bellActive, bellToggle] = useState("");
 
   function toggleBell() {
-    if (!pfpActive) {
+    if (!bellActive) {
       bellToggle(true);
     } else {
       bellToggle(false);
     }
   }
+
+  
+  function togglePfp(){
+    if (!pfpActive) {
+        pfpToggle(true);
+      } else {
+        pfpToggle(false);
+    }
+  }
+
+  
+  useEffect(() => {
+  if(props.props.clickTarget){
+    
+    if(!logoutRef.current.contains(props.props.clickTarget)){
+      pfpToggle(false);
+    }
+
+    if(!bellRef.current.contains(props.props.clickTarget)){
+      bellToggle(false);
+    }
+
+  }
+}, [props.props.clickTarget]);
+
+  useEffect(() => {
+  console.log(window.location.pathname)
+  });
+
+
+
 
   return (
     <div>
@@ -66,18 +90,20 @@ function NavBar(props) {
             <div className="pages m-auto">
               <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li className="nav-item">
-                  <a
-                    className="nav-link active"
-                    aria-current="page"
-                    href="#dashBoard"
+                  <Link
+                    className={"nav-link " + (props.NavLocation == 'dashboard'? "active" : "")}
+                    to="/student-dashboard"
                   >
                     Dashboard
-                  </a>
+                  </Link>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="#applyForJob">
-                    OpenJobs
-                  </a>
+                  <Link 
+                    className={"nav-link " + (props.NavLocation == 'jobs'? "active" : "")}
+                    to="/job-offers"
+                  >
+                    Available Jobs
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -86,7 +112,7 @@ function NavBar(props) {
                 <a className="nav-link" id="envelope">
                   <FontAwesomeIcon icon={faEnvelope} />
                 </a>
-                <div className="msgs" ref={msgsRef}>
+                <div className={"msgs  " + (bellActive ? "active" : "")}>
                   {" "}
                   {/* pass the msgsRef to the ref attribute */}
                   <a href="new-msg.html">
@@ -101,17 +127,17 @@ function NavBar(props) {
                   </a>
                 </div>
               </li>
-              <li className="nav-item bell" id="bell">
-                <a className="nav-link" onClick={handleClick}>
+              <li className="nav-item bell" id="bell" ref={bellRef}>
+                <a className="nav-link" onClick={toggleBell}>
                   <FontAwesomeIcon icon={faBell} />
                 </a>
               </li>
             </ul>
 
-            <div className="user-info">
-              <span id="user-name"></span>
+            <div className="user-info" ref={logoutRef} onClick={togglePfp}>
+              <span id="user-name">{props.props.userInfo.login ? props.props.userInfo.login.firstname + ' ' + props.props.userInfo.login.surname : ''}</span>
               <div className="pfp-info">
-                <a id="pfp" onClick={togglePfp}>
+                <a id="pfp">
                   <FontAwesomeIcon icon={faCircleUser} size="2xl" />
                 </a>
                 <span

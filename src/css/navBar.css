@@ -16,18 +16,18 @@ nav.navbar .navbar-nav .nav-item a.nav-link {
   transition: all 0.5s ease;
 }
 
-nav.navbar .navbar-nav .nav-item a.nav-link:hover,
-nav.navbar .navbar-nav .nav-item a.nav-link.active {
-  color: #16aeca;
-}
-
 nav.navbar.noTransparrent .nav-item a.nav-link {
   color: #16aeca;
 }
 
-nav.navbar.noTransparrent .navbar-nav .nav-item a.nav-link:hover,
-nav.navbar.noTransparrent .navbar-nav .nav-item a.nav-link.active {
+nav.navbar.noTransparrent .navbar-nav .nav-item,
+nav.navbar.noTransparrent .navbar-nav .nav-item a.nav-link {
   color: #ffffff;
+}
+
+nav.navbar .navbar-nav .nav-item a.nav-link:hover,
+nav.navbar .navbar-nav .nav-item a.nav-link.active {
+  color: #16aeca;
 }
 
 nav.navbar.noTransparrent {
@@ -120,6 +120,7 @@ span.msg {
 }
 .pfp-span.active {
   display: block;
+  cursor: pointer;
 }
 
 .container.not {
