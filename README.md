@@ -10,3 +10,5 @@ To push to the repository please use a pull request method as follows:
 4) Use `git checkout <branch-name>` to switch to your branch then commit and push.
 5) In the branch create a pull request and check that all changes in it are as intended and nothing has gone wrong.
 6) Merge the commit into the repository.
+
+

@@ -4,9 +4,8 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { getFirestore, collection, getDocs, query, where } from "firebase/firestore";
 import { useNavigate } from 'react-router-dom';
 
-
-
-
+//include style Css file
+import "../css/style.css";
 
 function Login(props){
     const navigate = useNavigate();
@@ -103,7 +102,7 @@ function Login(props){
                 firstname: firstname,
                 surname: surname
             };
-           
+
 
             props.loginCollect(userInformation); // save it in local storage
 
@@ -144,7 +143,7 @@ function Login(props){
     }
 
      // Password validation function
-     function validatePassword(password) {
+    function validatePassword(password) {
       const passwordLength = 6;
       return password.length >= passwordLength;
     }
@@ -173,8 +172,8 @@ function Login(props){
                             {!isPasswordValid && <div className="invalid-feedback">Enter a valid password</div>}
                             {authFailed && <div className="invalid-feedback">Incorrect email or password</div>}
                         </div>
-            
-                        <button type="submit" className="btn">Login</button>
+                    
+                        <button type="submit" className="send-btn">Login</button>
                         </form>
                     </div>
                 </div>

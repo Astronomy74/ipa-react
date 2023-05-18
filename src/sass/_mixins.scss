@@ -1,0 +1,70 @@
+@mixin button($color, $background-color, $border-color) {
+  color: $color;
+  border: 1px solid $border-color;
+  background-color: $background-color;
+  width: 130px;
+  margin: 10px;
+  padding: 0px 5px;
+  text-align: center;
+  text-transform: uppercase;
+  transition: 0.5s;
+  color: white;
+  border-radius: 10px;
+  display: block;
+  width: 15%;
+  font-size: 15px;
+  &:hover {
+    background-color: $color;
+    color: $background-color;
+  }
+  &:active {
+  }
+}
+
+@mixin box-request($color, $background-color) {
+  max-height: 15.9375rem;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 20px 10px;
+  margin-top: 15px;
+  border-radius: 16px;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  &:hover {
+    transition: all 0.5s;
+    // color: $background-color;
+    // background-color: $color;
+  }
+}
+
+@mixin scrollbars(
+  $size,
+  $radius,
+  $foreground-color,
+  $background-color: mix($foreground-color, white, 50%)
+) {
+  // For Google Chrome
+  &::-webkit-scrollbar {
+    width: $size;
+    height: $size;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $foreground-color;
+    border-radius: $radius;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $background-color;
+  }
+
+  // For Internet Explorer
+  & {
+    scrollbar-face-color: $foreground-color;
+    scrollbar-track-color: $background-color;
+  }
+}

@@ -1,0 +1,167 @@
+@import "./variables";
+@import "./mixins";
+
+.container.jop-application {
+  margin-top: 85px;
+  min-height: calc(100vh - 85px);
+  background-color: transparent;
+  .com-info {
+    .image {
+      width: 400px;
+      margin-bottom: 40px;
+      > img {
+        max-width: 400px;
+      }
+    }
+    .text {
+      margin-top: 20px;
+      p {
+        font-size: 5.5rem;
+      }
+    }
+  }
+}
+
+.applyNowContainer {
+  min-height: calc(100vh - 100px);
+  max-width: 1300px;
+  margin: auto;
+}
+
+/* start Apply Details  */
+section.jop-details {
+  > .container {
+    margin-top: 85px;
+    display: flex;
+    flex-wrap: nowrap;
+    align-content: center;
+    justify-content: space-between;
+    background: transparent;
+  }
+  .image {
+    > img {
+      max-width: 70%;
+      margin-bottom: 20px;
+    }
+  }
+}
+
+$color_1: #ededed;
+$background-color_1: #ccc;
+$background-color_2: rgb(90 200 94);
+
+.container.jop-application {
+  min-height: calc(100vh - 85px);
+}
+.container.student-questions {
+  display: grid;
+  align-items: center;
+  grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+  min-height: calc(100vh - 85px);
+  margin-top: 100px;
+}
+.internship-info-q {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  > text {
+    display: flex;
+    padding: 10px;
+    align-items: center;
+  }
+  text {
+    > h2 {
+      font-size: 1.5rem;
+    }
+  }
+  > .image {
+    > img {
+      max-width: 100%;
+    }
+  }
+}
+
+  form {
+    display: flex;
+    flex-direction: column;
+    > textarea {
+      min-height: 200px;
+      width: 80%;
+      margin: 20px auto;
+      background-color: $background-color_1;
+      padding: 10px;
+    }
+    > input {
+      width: 80%;
+      margin: 20px auto;
+      padding-block: 10px;
+      border-radius: 10px;
+      color: $color_1;
+      background-color: $light-gray-color;
+      outline: none;
+      border: none;
+      transition: 0.3s;
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+  }
+
+
+.apply-file-upload {
+  text-align: center;
+  min-width: 260px;
+  position: relative;
+  > button {
+    width: 100%;
+  }
+  > span {
+    position: absolute;
+    text-align: start;
+    left: 0;
+    padding: 0 2rem;
+    color: rgba(0, 0, 0, 0.9019607843);
+    bottom: 0;
+    display: none;
+    &:hover {
+      transform: translateX(5px);
+      color: $main-color;
+      transition: 0.5s;
+    }
+  }
+}
+
+section {
+  &.apply-form {
+    form {
+      [type="text"] {
+        margin-bottom: 20px;
+				padding: 10px 5px;
+				outline: none;
+				border: none;
+				border-radius: 10px;
+        color: black;
+			}
+		}
+    .ControlButtons{
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: space-around;
+      align-items: center;
+    }
+	}
+}
+@media (max-width: 767px) {
+  .internship-info-q {
+    justify-content: center;
+    .image {
+      max-width: 250px;
+      margin-top: 80px;
+    }
+    .text {
+      margin-top: 30px;
+    }
+  }
+}

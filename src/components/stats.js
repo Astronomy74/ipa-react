@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import NavBar from "./navBar";
 
+//stats sCss
+import '../sass/stas.scss'
 
 
 function StudentStats(props){
@@ -8,7 +10,7 @@ function StudentStats(props){
         <main>
             <NavBar props={props}/>
             <h1>Welcome {props.userInfo.login ? props.userInfo.login.firstname + ' ' + props.userInfo.login.surname : ''}</h1>
-            <div className="container text-center">
+            <div className="statsContainer text-center">
               <div className="card">
                 <div className="card-header">
                   Hint <i className="fa-solid fa-lightbulb"></i>
@@ -17,7 +19,7 @@ function StudentStats(props){
                   <p>Press <code>Spacebar</code> to change between internships.</p>
                 </div>
               </div>
-                <div className="row">
+                <div className="row g-0">
                     <div className="col-12">
                         <div className="app">
                             <h1>Application Process</h1>
@@ -55,10 +57,10 @@ function StudentStats(props){
             </div>
                     <div className="col-md-12">
                         <div className="btns">
-                            <a className="btn" href="pdf/templatepdf.pdf" download>Download Form<i className="fa-solid fa-upload"></i></a>
-                            <a className="btn">Send Form <i className="fa-solid fa-paper-plane"></i></a>
-                            <a className="btn">Request Official Letter<i className="fa-solid fa-upload"></i></a>
-                            <a className="btn">Upload Transcript<i className="fa-solid fa-download"></i></a>
+                            <a className="statsBtn" href="pdf/templatepdf.pdf" download>Download Form<i className="fa-solid fa-upload"></i></a>
+                            <a className="statsBtn">Send Form <i className="fa-solid fa-paper-plane"></i></a>
+                            <a className="statsBtn">Request Official Letter<i className="fa-solid fa-upload"></i></a>
+                            <a className="statsBtn">Upload Transcript<i className="fa-solid fa-download"></i></a>
                         </div>
                     </div>
                 </div>
