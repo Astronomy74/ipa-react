@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import NavBar from "./navBar";
-import { getFirestore, collection, getDocs, query } from "firebase/firestore";
 import { Link } from 'react-router-dom';
 
 //include Main Css & sCss file
@@ -8,62 +7,18 @@ import "../css/main.css";
 import "../sass/main.scss";
 
 function Student(props){
-    
-    // const db = getFirestore();
-    // // get reference to jobOffers collection
-    // const jobOffersRef = collection(db, 'jobOffers');
-    // const [docsArray, setdocsArray] = useState([]);
-    // useEffect(() => {
-    //     // loop through all documents in the collection
-    //     const qJobs = query(jobOffersRef);
-    //     getDocs(qJobs).then((querySnapshot) => {
-    //       let TempList = [];
-    //       querySnapshot.forEach((doc, index) => {
-    //         const description = doc.data().description;
-    //         const docId = doc.id;
-    //         let docObj = {
-    //           description: description,
-    //           id: docId
-    //         };
-    //         TempList.push(docObj);
-    //       });
-    //       setdocsArray(TempList);
-    //     });
-    //   }, []);
-    
 
-    const BoxesArray = [
-        {
-            title: 'Internship1',
-            year: '2024/2025',
-            company: 'Teknosa',
-            jobTitle: 'Intern',
-            duration: '3 Months',
-            status: 'Done'
-        },
-        {
-            title: 'Internship1',
-            year: '2024/2025',
-            company: 'Teknosa',
-            jobTitle: 'Intern',
-            duration: '3 Months',
-            status: 'Done'
-        },
-        {
-            title: 'Internship1',
-            year: '2024/2025',
-            company: 'Teknosa',
-            jobTitle: 'Intern',
-            duration: '3 Months',
-            status: 'Done'
-        },
-    ]
+    useEffect(() => {
+        props.internshipCollect(props.userInfo.login);
+    }, []);
 
-    const renderBoxes = BoxesArray.map((box) => {
+
+
+    const renderBoxes = props.internshipInfo.internshipList.map((box, index) => {
         return(
-            <div className="box">
+            <div className="box" key={index}>
                     <div className="box-title">
-                        <Link to={`/student-dashboard/stats`}>
+                        <Link to={`/student-dashboard/stats/${box.title.replace(/\s/g, "-")}`}>
                             <span 
                             className="internshipLink"
                             data-json="data/internship.json"
@@ -79,7 +34,7 @@ function Student(props){
                         <span className="inbox">company: {box.company}</span>
                     </div>
                     <div className="job-title">
-                        <span className="inbox">Job-Title: {box.jobTitle}</span>
+                        <span className="inbox">Job-Title: {box.jobtitle}</span>
                     </div>
                     <div className="duration">
                         <span className="inbox">Duration: {box.duration}</span>

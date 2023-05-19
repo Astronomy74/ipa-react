@@ -66,9 +66,11 @@ function NavBar(props) {
       >
         <div className="container">
           <div className="logo">
-            <a className="navbar-brand" href="#">
-              <img src="../images/Uskudar_Universitesi_logo.png" alt="logo" />
+            <Link to={`/${props.props.userInfo.login.userType}-dashboard`}>
+            <a className="navbar-brand">
+              <img src="../../images/Uskudar_Universitesi_logo.png" alt="logo" />
             </a>
+            </Link>
           </div>
           <button
             className="navbar-toggler"
