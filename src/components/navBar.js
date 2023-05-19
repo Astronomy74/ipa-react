@@ -53,11 +53,6 @@ function NavBar(props) {
   }
 }, [props.props.clickTarget]);
 
-  useEffect(() => {
-  console.log(window.location.pathname)
-  });
-
-
 
 
   return (

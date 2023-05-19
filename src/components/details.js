@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import NavBar from "./navBar";
-import UploadButton from "./uploadButton";
-import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
-import { storage } from "./fireStorage";
+
 
 // applyNow sCss
 import "../sass/applyNow.scss";

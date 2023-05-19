@@ -2,42 +2,66 @@ import React, { useRef, useState } from "react";
 
 
 
-
 function UploadButton(props){
 
-  const [fileName, setfileName] = useState("No file(s) selected");
-
-  
   const fileInputRef = useRef(null);
-    const handleFileUpload = (event) => {
-    const file = event.target.files[0];
+
+  function handleFileUpload() {
+    const file = fileInputRef.current.files[0];
     props.filePass(file);
-    setfileName(file.name);
   };
-
-  const handleButtonClick = () => {
-    fileInputRef.current.click();
-  };
-
 
   return (
-    <div className="apply-file-upload">
+    <span>
       <input
         ref={fileInputRef}
         className="file-upload__input"
         type="file"
-        name="myFile[]"
-        id="myFile"
         multiple 
         style={{ display: 'none' }}
         onChange={handleFileUpload}
       />
-      <button onClick={handleButtonClick} className="file-upload__button btn" type="button">Choose File(s)</button>
-      <span className="file-upload__label">
-        {fileName}
-      </span>
-    </div>
+      <a className={props.passedClass} onClick={() => fileInputRef.current.click()}>{props.buttonText}</a>
+    </span>
   );
+  
+
+
+// function UploadButton(props){
+
+//   const [fileName, setfileName] = useState("No file(s) selected");
+
+  
+//   const fileInputRef = useRef(null);
+//     const handleFileUpload = (event) => {
+//     const file = event.target.files[0];
+//     props.filePass(file);
+//     setfileName(file.name);
+//   };
+
+//   const handleButtonClick = () => {
+//     fileInputRef.current.click();
+//   };
+
+
+//   return (
+//     <div className="apply-file-upload">
+//       <input
+//         ref={fileInputRef}
+//         className="file-upload__input"
+//         type="file"
+//         name="myFile[]"
+//         id="myFile"
+//         multiple 
+//         style={{ display: 'none' }}
+//         onChange={handleFileUpload}
+//       />
+//       <button onClick={handleButtonClick} className="file-upload__button btn" type="button">Choose File(s)</button>
+//       <span className="file-upload__label">
+//         {fileName}
+//       </span>
+//     </div>
+//   );
   
 
 
