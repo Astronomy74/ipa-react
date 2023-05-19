@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from 'react-router-dom';
 import NavBar from "./navBar";
 import UploadButton from "./uploadButton";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
@@ -10,14 +11,30 @@ import '../sass/stas.scss'
 
 function StudentStats(props){
 
-
+  const lastItem = useLocation().pathname.split("/").pop();
+  const [InternShip, getInternShip] = useState("");
   const [UploadedFile, UploadedFileHandle] = useState("");
   const [progress, setProgress] = useState(0);
 
   function GetFile(file) {
     UploadedFileHandle(file);
-    console.log(file);
   }
+
+  useEffect(() => {
+    props.internshipCollect(props.userInfo.login);
+    let internshipTemp;
+    for(let i = 0; i < props.internshipInfo.internshipList.length; i++){
+      let internship = props.internshipInfo.internshipList[i];
+      if(internship.title === lastItem.replace(/-/g, " ")){
+        internshipTemp = internship;
+      }
+    }
+    getInternShip(internshipTemp);
+  }, []);
+
+  
+  
+
 
   function HandleSubmit() {
     const sotrageRef = ref(storage, `images/${UploadedFile.name}`);
@@ -68,23 +85,23 @@ function StudentStats(props){
                   </div>
                   <div className="col-12 boxs">
                       <div className="box" id="yearApp" style={{order: 4}}>
-                          <h2>Year</h2>
+                          <h2>{InternShip.year}</h2>
                           <p></p>
                       </div>
                       <div className="box" id="companyApp" style={{order: 2}}>
-                          <h2>Company</h2>
+                          <h2>{InternShip.company}</h2>
                           <p></p>
                       </div>
                       <div className="box" id="statusApp" style={{order: 5}}>
-                          <h2>Status</h2>
+                          <h2>{InternShip.status}</h2>
                           <p></p>
                       </div>
                       <div className="box" id="durationApp" style={{order: 3}}>
-                          <h2>Duration</h2>
+                          <h2>{InternShip.duration}</h2>
                           <p></p>
                       </div>
                       <div className="box" id="JobTitleApp">
-                          <h2>Job title</h2>
+                          <h2>{InternShip.jobtitle}</h2>
                           <p></p>
                       </div>
               </div>

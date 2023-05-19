@@ -1,5 +1,6 @@
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import { LoginReducer } from "./loginReducer";
+import { InternshipReducer } from "./internshipReducer";
 import thunk from 'redux-thunk';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
@@ -11,6 +12,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
 StoreLogin: LoginReducer,
+StoreInternship: InternshipReducer,
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

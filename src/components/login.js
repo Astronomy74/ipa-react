@@ -95,6 +95,7 @@ function Login(props){
             const firstname = querySnapshot.docs[0].data().name;
             const surname = querySnapshot.docs[0].data().surname;
             const email = querySnapshot.docs[0].data().email;
+            let department;
 
             const userInformation = { // collect all info (this variable is temp)
                 email: email,
@@ -102,6 +103,11 @@ function Login(props){
                 firstname: firstname,
                 surname: surname
             };
+
+            if (userType === "student" || userType === "coordinator"){
+              department = querySnapshot.docs[0].data().department;
+              userInformation.department = department;
+            }
 
 
             props.loginCollect(userInformation); // save it in local storage
@@ -165,12 +171,12 @@ function Login(props){
                         <form className="login-form needs-validation" noValidate onSubmit={handleSubmit}>
                         <div className="mb-3">
                             <input type="email" name="email" className="form-control" id="studentID" aria-describedby="Student ID" placeholder="Email" required  onChange={(e) => setEmail(e.target.value)} />
-                            {!isEmailValid && <div className="invalid-feedback">Enter a valid Email</div>}
+                            {!isEmailValid && <span>Enter a valid Email</span>}
                         </div>
                         <div className="mb-3">
                             <input type="password" name="password" className="form-control" id="Password" placeholder="Password" required  onChange={(e) => setPassword(e.target.value)} />
-                            {!isPasswordValid && <div className="invalid-feedback">Enter a valid password</div>}
-                            {authFailed && <div className="invalid-feedback">Incorrect email or password</div>}
+                            {!isPasswordValid && <span>Enter a valid password</span>}
+                            {authFailed && <span>Incorrect email or password</span>}
                         </div>
                     
                         <button type="submit" className="send-btn">Login</button>

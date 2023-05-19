@@ -8,7 +8,7 @@ import Coordinator from './coordinator';
 import Admin from './admin';
 import Career from './career';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { collectUserInfo } from '../redux/ActionCreators';
+import { collectUserInfo, collectInternship } from '../redux/ActionCreators';
 import { connect } from 'react-redux';
 import fireApp from './fireStorage';
 
@@ -16,11 +16,13 @@ import fireApp from './fireStorage';
 const mapStateToProps = state => {
     return {
       LoginInfo: state.StoreLogin,
+      InternshipInfo: state.StoreInternship,
     }
 }
 
 const mapDispatchToProps = (dispatch) => ({
     loginInfoCollect: (login) => dispatch(collectUserInfo(login)),
+    internshipCollect: (login) => dispatch(collectInternship(login)),
 });
 
 
@@ -38,7 +40,7 @@ class Main extends Component {
 
 
     render(){
-            const { LoginInfo, loginInfoCollect } = this.props;
+            const { LoginInfo, loginInfoCollect, internshipCollect, InternshipInfo} = this.props;
             const isAuthenticated = Object.keys(LoginInfo).length !== 0;
             return(
                 <div className='MainComp' onMouseDown={(e) => this.setState({eventTarget : e.target})}>
@@ -58,7 +60,7 @@ class Main extends Component {
                             element={
                                 isAuthenticated && LoginInfo.login ? (
                                     LoginInfo.login.userType === "student" ? (
-                                      <Student loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
+                                      <Student loginCollect={loginInfoCollect} internshipCollect={internshipCollect} internshipInfo={InternshipInfo} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
                                     ) : (
                                         <Navigate to={`/${LoginInfo.login.userType}-dashboard`} replace />
 
@@ -84,11 +86,11 @@ class Main extends Component {
                             }
                         />
                         <Route
-                            exact path="/student-dashboard/stats"
+                            exact path="/student-dashboard/stats/:title"
                             element={
                                 isAuthenticated && LoginInfo.login ? (
                                     LoginInfo.login.userType === "student" ? (
-                                      <StudentStats loginCollect={loginInfoCollect} userInfo={LoginInfo} />
+                                      <StudentStats loginCollect={loginInfoCollect} userInfo={LoginInfo} internshipCollect={internshipCollect} internshipInfo={InternshipInfo} />
                                     ) : (
                                         <Navigate to={`/${LoginInfo.login.userType}-dashboard`} replace />
 
