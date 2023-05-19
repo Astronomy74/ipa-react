@@ -118,7 +118,7 @@ class Main extends Component {
                             element={
                                 isAuthenticated && LoginInfo.login ? (
                                     LoginInfo.login.userType === "coordinator" ? (
-                                        <Coordinator loginCollect={loginInfoCollect}/>
+                                        <Coordinator loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
                                     ) : (
                                         <Navigate to={`/${LoginInfo.login.userType}-dashboard`} replace />
 
@@ -133,7 +133,7 @@ class Main extends Component {
                             element={
                                 isAuthenticated && LoginInfo.login ? (
                                     LoginInfo.login.userType === "admin" ? (
-                                        <Admin loginCollect={loginInfoCollect}/>
+                                        <Admin loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
                                     ) : (
                                         <Navigate to={`/${LoginInfo.login.userType}-dashboard`} replace />
 
@@ -148,7 +148,7 @@ class Main extends Component {
                             element={
                                 isAuthenticated && LoginInfo.login ? (
                                     LoginInfo.login.userType === "career" ? (
-                                        <Career loginCollect={loginInfoCollect}/>
+                                        <Career loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
                                     ) : (
                                         <Navigate to={`/${LoginInfo.login.userType}-dashboard`} replace />
 
