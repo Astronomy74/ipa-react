@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useLocation } from 'react-router-dom';
 import NavBar from "./navBar";
 import UploadButton from "./uploadButton";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { storage } from "./fireStorage";
+import { Link, useNavigate } from 'react-router-dom';
 
 //stats sCss
 import '../sass/stas.scss'
@@ -13,12 +14,21 @@ function StudentStats(props){
 
   const lastItem = useLocation().pathname.split("/").pop();
   const [InternShip, getInternShip] = useState("");
-  const [UploadedFile, UploadedFileHandle] = useState("");
+  const [UploadedForm, UploadedFromHandle] = useState("");
+  const [UploadedTranscript, UploadedTranscriptHandle] = useState("");
   const [progress, setProgress] = useState(0);
+  const compRef = useRef(null);
+  
 
-  function GetFile(file) {
-    UploadedFileHandle(file);
+  function GetForm(file) {
+    UploadedFromHandle(file);
   }
+
+  function GetTranscript(file) {
+    UploadedTranscriptHandle(file);
+  }
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     props.internshipCollect(props.userInfo.login);
@@ -30,35 +40,69 @@ function StudentStats(props){
       }
     }
     getInternShip(internshipTemp);
-  }, []);
+    UploadedFromHandle("");
+    UploadedTranscriptHandle("");
+    
 
-  
-  
-
-
-  function HandleSubmit() {
-    const sotrageRef = ref(storage, `images/${UploadedFile.name}`);
-    const uploadTask = uploadBytesResumable(sotrageRef, UploadedFile);
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const prog = Math.round(
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        );
-        setProgress(prog);
-      },
-      (error) => console.log(error),
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          console.log("File available at", downloadURL);
-        });
+    const handleKeyDown = (event) => {
+      if (event.key === ' ') {
+        // Spacebar is pressed
+        event.preventDefault();
+        if(lastItem == 'Internship-1'){
+          navigate('/student-dashboard/stats/Internship-2');
+        } else {
+          navigate('/student-dashboard/stats/Internship-1');
+        }
       }
-    );
-  }
+    };
+
+    const element = compRef.current;
+    element.setAttribute("tabindex", "0"); // Make the element focusable
+    element.focus();
+    element.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      element.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [lastItem]);
+
+  
+
+ 
+
+
+  // function HandleSubmit() {
+  //   const sotrageRef = ref(storage, `images/${UploadedFile.name}`);
+  //   const uploadTask = uploadBytesResumable(sotrageRef, UploadedFile);
+  //   uploadTask.on(
+  //     "state_changed",
+  //     (snapshot) => {
+  //       const prog = Math.round(
+  //         (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+  //       );
+  //       setProgress(prog);
+  //     },
+  //     (error) => console.log(error),
+  //     () => {
+  //       getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+  //         console.log("File available at", downloadURL);
+  //       });
+  //     }
+  //   );
+  // }
+
+
+  const internshipBtns = props.internshipInfo.internshipList.map((btn, index) => {
+    return(
+      <div className="btns-top text" key={index}>
+          <Link to={`/student-dashboard/stats/${btn.title.replace(/\s/g, "-")}`}><span className={"intern-btn " + (InternShip.title == btn.title ? 'active' : '')} id="button1" data-json="../data/internship.json">{btn.title}</span></Link>
+      </div>
+    )
+  });
 
 
   return(
-      <main>
+      <main ref={compRef} tabIndex={0}>
           <NavBar props={props} NavLocation={'dashboard'}/>
           <h1>Welcome {props.userInfo.login ? props.userInfo.login.firstname + ' ' + props.userInfo.login.surname : ''}</h1>
           <div className="statsContainer text-center">
@@ -76,11 +120,7 @@ function StudentStats(props){
                           <h1>Application Process</h1>
                       </div>
                       <div className="intern-btns">
-                          <div className="btns-top text">
-                              <a className="intern-btn active" id="button1" data-json="../data/internship.json">Internship 1</a>
-                              <a className="intern-btn"        id="button2" data-json="../data/InternshipTwo.json">Internship 2</a>
-                              <a className="intern-btn"        id="button3" data-json="../data/InternshipThree.json">Internship 3</a>
-                          </div>
+                          {internshipBtns}
                       </div>
                   </div>
                   <div className="col-12 boxs">
@@ -110,9 +150,9 @@ function StudentStats(props){
                       <div className="btns">
                           <a className="statsBtn">Download​ Form Temp​late<i className="fa-solid fa-upload"></i></a>
                           {/* <a className="statsBtn">Upload Form<i className="fa-solid fa-paper-plane"></i></a> */}
-                          <UploadButton passedClass={"statsBtn"} buttonText={"Upload Form"} filePass={GetFile} />
+                          <UploadButton passedClass={"statsBtn"} buttonText={"Upload Form"} filePass={GetForm} />
                           <a className="statsBtn">Request​ Official Letter<i className="fa-solid fa-upload"></i></a>
-                          <a className="statsBtn">Upload Transcript<i className="fa-solid fa-download"></i></a>
+                          <UploadButton passedClass={"statsBtn"} buttonText={"Upload Transcript"} filePass={GetTranscript} />
                       </div>
                   </div>
               </div>
