@@ -105,6 +105,7 @@ function NavBar(props) {
               </ul>
             </div>
             <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+              <Link to={`/message`}>
               <li className="nav-item">
                 <a className="nav-link" id="envelope">
                   <FontAwesomeIcon icon={faEnvelope} />
@@ -112,18 +113,15 @@ function NavBar(props) {
                 <div className={"msgs  " + (bellActive ? "active" : "")}>
                   {" "}
                   {/* pass the msgsRef to the ref attribute */}
-                  <a href="new-msg.html">
+                  
+                  <div>
                     <span className="msg" id="sendMessage">
                       Send Message
                     </span>
-                  </a>
-                  <a href="incoming-message.html">
-                    <span className="msg" id="seeMessage">
-                      See Message
-                    </span>
-                  </a>
+                  </div>
                 </div>
               </li>
+              </Link>
               <li className="nav-item bell" id="bell" ref={bellRef}>
                 <a className="nav-link" onClick={toggleBell}>
                   <FontAwesomeIcon icon={faBell} />

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useLocation } from 'react-router-dom';
 import NavBar from "./navBar";
 import UploadButton from "./uploadButton";
-import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
+import { ref, getDownloadURL, uploadBytesResumable, deleteObject } from "firebase/storage";
 import { storage } from "./fireStorage";
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -14,10 +14,11 @@ function StudentStats(props){
 
   const lastItem = useLocation().pathname.split("/").pop();
   const [InternShip, getInternShip] = useState("");
-  const [UploadedForm, UploadedFromHandle] = useState("");
-  const [UploadedTranscript, UploadedTranscriptHandle] = useState("");
+  const [form, UploadedFromHandle] = useState("");
+  const [transcript, UploadedTranscriptHandle] = useState("");
   const [progress, setProgress] = useState(0);
   const compRef = useRef(null);
+  
   
 
   function GetForm(file) {
@@ -71,25 +72,79 @@ function StudentStats(props){
  
 
 
-  // function HandleSubmit() {
-  //   const sotrageRef = ref(storage, `images/${UploadedFile.name}`);
-  //   const uploadTask = uploadBytesResumable(sotrageRef, UploadedFile);
-  //   uploadTask.on(
-  //     "state_changed",
-  //     (snapshot) => {
-  //       const prog = Math.round(
-  //         (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-  //       );
-  //       setProgress(prog);
-  //     },
-  //     (error) => console.log(error),
-  //     () => {
-  //       getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-  //         console.log("File available at", downloadURL);
-  //       });
-  //     }
-  //   );
-  // }
+  function HandleFileSubmit(filename) {
+    if(transcript || form){
+      const storageRef = ref(storage, `internship/${filename}/${props.userInfo.login.email}-${lastItem}-${filename}`);
+      const uploadTask = uploadBytesResumable(storageRef, eval(filename));
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const prog = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+          setProgress(prog);
+        },
+        (error) => console.log(error),
+        () => {
+          UploadedFromHandle("");
+          UploadedTranscriptHandle("");
+        }
+      );
+    }
+  }
+
+
+  function HandleFileDelete(filename) {
+    
+      const storageRef = ref(
+        storage,
+        `internship/${filename}/${props.userInfo.login.email}-${lastItem}-${filename}`
+      );
+  
+      deleteObject(storageRef)
+        .then(() => {
+          console.log('File deleted successfully');
+        })
+        .catch((error) => {
+          console.log('Error deleting file:', error);
+        });
+    
+  }
+
+
+  const handleDownload = () => {
+    const storageRef = ref(storage, 'internship/template/form-template.pdf');
+  
+    getDownloadURL(storageRef)
+      .then((downloadURL) => {
+        // Fetch the file using a GET request with responseType: 'blob'
+        fetch(downloadURL, { method: 'GET', mode: 'no-cors', responseType: 'blob' })
+          .then((response) => {
+            // Create a blob URL from the response
+            const blob = new Blob([response.data], { type: 'application/pdf' });
+            const url = window.URL.createObjectURL(blob);
+  
+            // Create a link element
+            const link = document.createElement('a');
+            link.href = url;
+            link.target = '_blank';
+            link.download = 'form-template.pdf';
+  
+            // Simulate a click on the link to trigger the download
+            link.click();
+  
+            // Clean up the blob URL
+            URL.revokeObjectURL(url);
+          })
+          .catch((error) => {
+            console.log('Error fetching file:', error);
+          });
+      })
+      .catch((error) => {
+        console.log('Error getting download URL:', error);
+      });
+  };
+  
 
 
   const internshipBtns = props.internshipInfo.internshipList.map((btn, index) => {
@@ -148,11 +203,31 @@ function StudentStats(props){
           </div>
                   <div className="col-md-12">
                       <div className="btns">
-                          <a className="statsBtn">Download​ Form Temp​late<i className="fa-solid fa-upload"></i></a>
+                          <a onClick={handleDownload} className="statsBtn">Download​ Form Temp​late<i className="fa-solid fa-upload"></i></a>
                           {/* <a className="statsBtn">Upload Form<i className="fa-solid fa-paper-plane"></i></a> */}
                           <UploadButton passedClass={"statsBtn"} buttonText={"Upload Form"} filePass={GetForm} />
+                          <button onClick={() => {
+                            HandleFileSubmit("form");
+                          }}>
+                            send
+                          </button>
+                          <button onClick={() => {
+                            HandleFileDelete("form");
+                          }}>
+                            Delete
+                          </button>
                           <a className="statsBtn">Request​ Official Letter<i className="fa-solid fa-upload"></i></a>
                           <UploadButton passedClass={"statsBtn"} buttonText={"Upload Transcript"} filePass={GetTranscript} />
+                          <button onClick={() => {
+                            HandleFileSubmit("transcript");
+                          }}>
+                            send
+                          </button>
+                          <button onClick={() => {
+                            HandleFileDelete("transcript");
+                          }}>
+                            Delete
+                          </button>
                       </div>
                   </div>
               </div>
