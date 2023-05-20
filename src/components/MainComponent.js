@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Login from './login';
 import Student from './student';
+import Messages from './message';
 import JobOffers from './jobOffers';
 import StudentStats from './stats';
 import Details from './details';
@@ -151,6 +152,21 @@ class Main extends Component {
                                 isAuthenticated && LoginInfo.login ? (
                                     LoginInfo.login.userType === "career" ? (
                                         <Career loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
+                                    ) : (
+                                        <Navigate to={`/${LoginInfo.login.userType}-dashboard`} replace />
+
+                                    )
+                                  ) : (
+                                    <Navigate to="/login" replace />
+                                  )
+                            }
+                        />
+                        <Route
+                            exact path="/message" 
+                            element={
+                                isAuthenticated && LoginInfo.login ? (
+                                    LoginInfo.login.userType === "student" ? (
+                                        <Messages loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
                                     ) : (
                                         <Navigate to={`/${LoginInfo.login.userType}-dashboard`} replace />
 
