@@ -19,47 +19,47 @@ function Career(props){
                                     Student "Mahmoud Abdelkerim" Form was
                                     approved
                                 </h2>
-                                <a className="btn" href="#">Send to SGK</a>
+                                <span className="btn" href="#">Send to SGK</span>
                             </div>
                             <div className="box-request">
                                 <h2>
                                     Student "Mahmoud Abdelkerim" Form was
                                     approved
                                 </h2>
-                                <a className="btn" href="#">Send to SGK </a>
+                                <span className="btn" href="#">Send to SGK </span>
                             </div>
                             <div className="box-request">
                                 <h2>
                                     Student "Mahmoud Abdelkerim" Form was
                                     approved
                                 </h2>
-                                <a className="btn" href="#">Send to SGK </a>
+                                <span className="btn" href="#">Send to SGK </span>
                             </div>
                             <div className="box-request">
                                 <h2>
                                     Student "Mahmoud Abdelkerim" Form was
                                     approved
                                 </h2>
-                                <a className="btn" href="#">Send to SGK </a>
+                                <span className="btn" href="#">Send to SGK </span>
                             </div>
                             <div className="box-request">
                                 <h2>
                                     Student "Mahmoud Abdelkerim" Form was
                                     approved
                                 </h2>
-                                <a className="btn" href="#">Send to SGK </a>
+                                <span className="btn" href="#">Send to SGK </span>
                             </div>
                             <div className="box-request">
                                 <h2>
                                     Student "Mahmoud Abdelkerim" Form was
                                     approved
                                 </h2>
-                                <a className="btn" href="#">Send to SGK </a>
+                                <span className="btn" href="#">Send to SGK </span>
                             </div>
                         </div>
                     </div>
-                    <a className="btn sub" id="seeAll2"
-                        >See All Form Submissions</a>
+                    <span className="btn sub" id="seeAll2"
+                        >See All Form Submissions</span>
                 </div>
             </div>
         </section>

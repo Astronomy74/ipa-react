@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import Login from './login';
 import Student from './student';
-import Messages from './message';
+import Messages from './messages';
+import Conversation from './conversation';
 import JobOffers from './jobOffers';
 import StudentStats from './stats';
 import Details from './details';
@@ -162,11 +163,26 @@ class Main extends Component {
                             }
                         />
                         <Route
-                            exact path="/message" 
+                            exact path="/messages" 
                             element={
                                 isAuthenticated && LoginInfo.login ? (
                                     LoginInfo.login.userType === "student" ? (
                                         <Messages loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
+                                    ) : (
+                                        <Navigate to={`/${LoginInfo.login.userType}-dashboard`} replace />
+
+                                    )
+                                  ) : (
+                                    <Navigate to="/login" replace />
+                                  )
+                            }
+                        />
+                        <Route
+                            exact path="/conversation/:subject" 
+                            element={
+                                isAuthenticated && LoginInfo.login ? (
+                                    LoginInfo.login.userType === "student" ? (
+                                        <Conversation loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
                                     ) : (
                                         <Navigate to={`/${LoginInfo.login.userType}-dashboard`} replace />
 

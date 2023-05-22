@@ -77,7 +77,7 @@ function JobOffers(props){
                         {renderjobs}
                     </div>
                     </div>
-                    <a className="btn sub" id="seeAll" onClick={seeAllToggler}>{seeHide}</a>
+                    <span className="btn sub" id="seeAll" onClick={seeAllToggler}>{seeHide}</span>
                 </div>
                 </div>
             </section>

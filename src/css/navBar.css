@@ -8,7 +8,7 @@ nav.navbar .navbar-brand img {
   padding: 5px;
 }
 
-nav.navbar .navbar-nav .nav-item a.nav-link {
+nav.navbar .navbar-nav .nav-item .nav-link {
   font-size: 16px;
   color: #e8e8e8;
   line-height: 40px;
@@ -16,17 +16,17 @@ nav.navbar .navbar-nav .nav-item a.nav-link {
   transition: all 0.5s ease;
 }
 
-nav.navbar.noTransparrent .nav-item a.nav-link {
+nav.navbar.noTransparrent .nav-item .nav-link {
   color: #16aeca;
 }
 
 nav.navbar.noTransparrent .navbar-nav .nav-item,
-nav.navbar.noTransparrent .navbar-nav .nav-item a.nav-link {
+nav.navbar.noTransparrent .navbar-nav .nav-item .nav-link {
   color: #ffffff;
 }
 
-nav.navbar .navbar-nav .nav-item a.nav-link:hover,
-nav.navbar .navbar-nav .nav-item a.nav-link.active {
+nav.navbar .navbar-nav .nav-item .nav-link:hover,
+nav.navbar .navbar-nav .nav-item .nav-link.active {
   color: #16aeca;
 }
 
