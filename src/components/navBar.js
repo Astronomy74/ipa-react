@@ -105,11 +105,11 @@ function NavBar(props) {
               </ul>
             </div>
             <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-              <Link to={`/message`}>
+              <Link to={`/messages`}>
               <li className="nav-item">
-                <a className="nav-link" id="envelope">
+                <span className="nav-link" id="envelope">
                   <FontAwesomeIcon icon={faEnvelope} />
-                </a>
+                </span>
                 <div className={"msgs  " + (bellActive ? "active" : "")}>
                   {" "}
                   {/* pass the msgsRef to the ref attribute */}
@@ -123,18 +123,18 @@ function NavBar(props) {
               </li>
               </Link>
               <li className="nav-item bell" id="bell" ref={bellRef}>
-                <a className="nav-link" onClick={toggleBell}>
+                <span className="nav-link" onClick={toggleBell}>
                   <FontAwesomeIcon icon={faBell} />
-                </a>
+                </span>
               </li>
             </ul>
 
             <div className="user-info" ref={logoutRef} onClick={togglePfp}>
               <span id="user-name">{props.props.userInfo.login ? props.props.userInfo.login.firstname + ' ' + props.props.userInfo.login.surname : ''}</span>
               <div className="pfp-info">
-                <a id="pfp">
+                <span id="pfp">
                   <FontAwesomeIcon icon={faCircleUser} size="2xl" />
-                </a>
+                </span>
                 <span
                   id="pfp-span"
                   className={"pfp-span " + (pfpActive ? "active" : "")}

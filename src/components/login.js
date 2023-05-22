@@ -166,7 +166,7 @@ function Login(props){
             <div className="row align-content-center">
                 <div className="col-md-12">
                     <div className="login">
-                        <a><img src="images/Uskudar_Universitesi_logo.png" alt="logo" /></a>
+                        <span><img src="images/Uskudar_Universitesi_logo.png" alt="logo" /></span>
                         <h1>Üsküdar Login</h1>
                         <form className="login-form needs-validation" noValidate onSubmit={handleSubmit}>
                         <div className="mb-3">

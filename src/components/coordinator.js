@@ -21,7 +21,7 @@ function Coordinator(props){
                     internship request
                 </p>
             </div>
-            <a href="#" className="" id="seemore">See More</a>
+            <span href="#" className="" id="seemore">See More</span>
         </div>
 
         <main>
@@ -38,9 +38,9 @@ function Coordinator(props){
                             </h1>
                         </div>
                         <div className="col-md-12 btns">
-                            <a href="#fileUpload" className="btn">Upload Form</a>
-                            <a href="#openJobsInstructor" className="btn"
-                                >see all requests</a>
+                            <span href="#fileUpload" className="btn">Upload Form</span>
+                            <span href="#openJobsInstructor" className="btn"
+                                >see all requests</span>
                         </div>
                     </div>
                 </div>
@@ -56,53 +56,53 @@ function Coordinator(props){
                                         Student "Mahmoud Abdelkerim" has sent
                                         their internship form.
                                     </h2>
-                                    <a className="btn" href="#">Generate Letter</a>
-                                    <a className="btn" href="#">Evaluate Form</a>
+                                    <span className="btn" href="#">Generate Letter</span>
+                                    <span className="btn" href="#">Evaluate Form</span>
                                 </div>
                                 <div className="box-request">
                                     <h2>
                                         Student "Mahmoud Abdelkerim" has sent
                                         their internship form.
                                     </h2>
-                                    <a className="btn" href="#">Generate Letter </a>
-                                    <a className="btn" href="#">Evaluate Form </a>
+                                    <span className="btn" href="#">Generate Letter </span>
+                                    <span className="btn" href="#">Evaluate Form </span>
                                 </div>
                                 <div className="box-request">
                                     <h2>
                                         Student "Mahmoud Abdelkerim" has sent
                                         their internship form.
                                     </h2>
-                                    <a className="btn" href="#">Generate Letter </a>
-                                    <a className="btn" href="#">Evaluate Form </a>
+                                    <span className="btn" href="#">Generate Letter </span>
+                                    <span className="btn" href="#">Evaluate Form </span>
                                 </div>
                                 <div className="box-request">
                                     <h2>
                                         Student "Mahmoud Abdelkerim" has sent
                                         their internship form.
                                     </h2>
-                                    <a className="btn" href="#">Generate Letter </a>
-                                    <a className="btn" href="#">Evaluate Form </a>
+                                    <span className="btn" href="#">Generate Letter </span>
+                                    <span className="btn" href="#">Evaluate Form </span>
                                 </div>
                                 <div className="box-request">
                                     <h2>
                                         Student "Mahmoud Abdelkerim" has sent
                                         their internship form.
                                     </h2>
-                                    <a className="btn" href="#">Generate Letter </a>
-                                    <a className="btn" href="#">Evaluate Form </a>
+                                    <span className="btn" href="#">Generate Letter </span>
+                                    <span className="btn" href="#">Evaluate Form </span>
                                 </div>
                                 <div className="box-request">
                                     <h2>
                                         Student "Mahmoud Abdelkerim" has sent
                                         their internship form.
                                     </h2>
-                                    <a className="btn" href="#">Generate Letter </a>
-                                    <a className="btn" href="#">Evaluate Form </a>
+                                    <span className="btn" href="#">Generate Letter </span>
+                                    <span className="btn" href="#">Evaluate Form </span>
                                 </div>
                             </div>
                         </div>
-                        <a className="btn sub" id="seeAll"
-                            >See All Form Submissions</a>
+                        <span className="btn sub" id="seeAll"
+                            >See All Form Submissions</span>
                     </div>
                 </div>
             </section>
