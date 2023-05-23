@@ -146,93 +146,95 @@ function StudentStats(props){
   };
   
 
-
-  const internshipBtns = props.internshipInfo.internshipList.map((btn, index) => {
+  if(props.internshipInfo.internshipList){
+    const internshipBtns = props.internshipInfo.internshipList.map((btn, index) => {
+      return(
+        <div className="btns-top text" key={index}>
+            <Link to={`/student-dashboard/stats/${btn.title.replace(/\s/g, "-")}`}><span className={"intern-btn " + (InternShip.title == btn.title ? 'active' : '')} id="button1" data-json="../data/internship.json">{btn.title}</span></Link>
+        </div>
+      )
+    });
+  
+  
     return(
-      <div className="btns-top text" key={index}>
-          <Link to={`/student-dashboard/stats/${btn.title.replace(/\s/g, "-")}`}><span className={"intern-btn " + (InternShip.title == btn.title ? 'active' : '')} id="button1" data-json="../data/internship.json">{btn.title}</span></Link>
-      </div>
-    )
-  });
-
-
-  return(
-      <main ref={compRef} tabIndex={0}>
-          <NavBar props={props} NavLocation={'dashboard'}/>
-          <h1>Welcome {props.userInfo.login ? props.userInfo.login.firstname + ' ' + props.userInfo.login.surname : ''}</h1>
-          <div className="statsContainer text-center">
-            <div className="card">
-              <div className="card-header">
-                Hint <i className="fa-solid fa-lightbulb"></i>
+        <main ref={compRef} tabIndex={0}>
+            <NavBar props={props} NavLocation={'dashboard'}/>
+            <h1>Welcome {props.userInfo.login ? props.userInfo.login.firstname + ' ' + props.userInfo.login.surname : ''}</h1>
+            <div className="statsContainer text-center">
+              <div className="card">
+                <div className="card-header">
+                  Hint <i className="fa-solid fa-lightbulb"></i>
+                </div>
+                <div className="card-body">
+                  <p>Press <code>Spacebar</code> to change between internships.</p>
+                </div>
               </div>
-              <div className="card-body">
-                <p>Press <code>Spacebar</code> to change between internships.</p>
-              </div>
+                <div className="row g-0">
+                    <div className="col-12">
+                        <div className="app">
+                            <h1>Application Process</h1>
+                        </div>
+                        <div className="intern-btns">
+                            {internshipBtns}
+                        </div>
+                    </div>
+                    <div className="col-12 boxs">
+                        <div className="box" id="yearApp" style={{order: 4}}>
+                            <h2>{InternShip.year}</h2>
+                            <p></p>
+                        </div>
+                        <div className="box" id="companyApp" style={{order: 2}}>
+                            <h2>{InternShip.company}</h2>
+                            <p></p>
+                        </div>
+                        <div className="box" id="statusApp" style={{order: 5}}>
+                            <h2>{InternShip.status}</h2>
+                            <p></p>
+                        </div>
+                        <div className="box" id="durationApp" style={{order: 3}}>
+                            <h2>{InternShip.duration}</h2>
+                            <p></p>
+                        </div>
+                        <div className="box" id="JobTitleApp">
+                            <h2>{InternShip.jobtitle}</h2>
+                            <p></p>
+                        </div>
+                </div>
             </div>
-              <div className="row g-0">
-                  <div className="col-12">
-                      <div className="app">
-                          <h1>Application Process</h1>
-                      </div>
-                      <div className="intern-btns">
-                          {internshipBtns}
-                      </div>
-                  </div>
-                  <div className="col-12 boxs">
-                      <div className="box" id="yearApp" style={{order: 4}}>
-                          <h2>{InternShip.year}</h2>
-                          <p></p>
-                      </div>
-                      <div className="box" id="companyApp" style={{order: 2}}>
-                          <h2>{InternShip.company}</h2>
-                          <p></p>
-                      </div>
-                      <div className="box" id="statusApp" style={{order: 5}}>
-                          <h2>{InternShip.status}</h2>
-                          <p></p>
-                      </div>
-                      <div className="box" id="durationApp" style={{order: 3}}>
-                          <h2>{InternShip.duration}</h2>
-                          <p></p>
-                      </div>
-                      <div className="box" id="JobTitleApp">
-                          <h2>{InternShip.jobtitle}</h2>
-                          <p></p>
-                      </div>
-              </div>
-          </div>
-                  <div className="col-md-12">
-                      <div className="btns">
-                          <a onClick={downloadFile} className="statsBtn">Download​ Form Temp​late<i className="fa-solid fa-upload"></i></a>
-                          {/* <a className="statsBtn">Upload Form<i className="fa-solid fa-paper-plane"></i></a> */}
-                          <UploadButton passedClass={"statsBtn"} buttonText={"Upload Form"} filePass={GetForm} />
-                          <button onClick={() => {
-                            HandleFileSubmit("form");
-                          }}>
-                            send
-                          </button>
-                          <button onClick={() => {
-                            HandleFileDelete("form");
-                          }}>
-                            Delete
-                          </button>
-                          <a className="statsBtn">Request​ Official Letter<i className="fa-solid fa-upload"></i></a>
-                          <UploadButton passedClass={"statsBtn"} buttonText={"Upload Transcript"} filePass={GetTranscript} />
-                          <button onClick={() => {
-                            HandleFileSubmit("transcript");
-                          }}>
-                            send
-                          </button>
-                          <button onClick={() => {
-                            HandleFileDelete("transcript");
-                          }}>
-                            Delete
-                          </button>
-                      </div>
-                  </div>
-              </div>
-      </main>
-  );
+                    <div className="col-md-12">
+                        <div className="btns">
+                            <a onClick={downloadFile} className="statsBtn">Download​ Form Temp​late<i className="fa-solid fa-upload"></i></a>
+                            {/* <a className="statsBtn">Upload Form<i className="fa-solid fa-paper-plane"></i></a> */}
+                            <UploadButton passedClass={"statsBtn"} buttonText={"Upload Form"} filePass={GetForm} />
+                            <button onClick={() => {
+                              HandleFileSubmit("form");
+                            }}>
+                              send
+                            </button>
+                            <button onClick={() => {
+                              HandleFileDelete("form");
+                            }}>
+                              Delete
+                            </button>
+                            <a className="statsBtn">Request​ Official Letter<i className="fa-solid fa-upload"></i></a>
+                            <UploadButton passedClass={"statsBtn"} buttonText={"Upload Transcript"} filePass={GetTranscript} />
+                            <button onClick={() => {
+                              HandleFileSubmit("transcript");
+                            }}>
+                              send
+                            </button>
+                            <button onClick={() => {
+                              HandleFileDelete("transcript");
+                            }}>
+                              Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+        </main>
+    );
+  }
+  
 }
 
 export default StudentStats;

@@ -201,131 +201,133 @@ function Conversation(props){
       }
       }, [UpdateDetect]);
   
-  
-  
-      const renderConversations = conversation.sort((a, b) => a.timestamp.toDate() - b.timestamp.toDate()) // Sort by timestamp
-      .map((entry) => {
-        const msgDate = entry.timestamp.toDate();
-        const formattedDate = msgDate.toLocaleDateString(); // Format the date
-        const formattedTime = msgDate.toLocaleTimeString(); // Format the time
-        
+      if(conversation){
+        const renderConversations = conversation.sort((a, b) => a.timestamp.toDate() - b.timestamp.toDate()) // Sort by timestamp
+          .map((entry) => {
+            const msgDate = entry.timestamp.toDate();
+            const formattedDate = msgDate.toLocaleDateString(); // Format the date
+            const formattedTime = msgDate.toLocaleTimeString(); // Format the time
+            
 
-        function downloadFile(event) {
-          event.preventDefault();
-        
-          let anchor = event.target;
-          
-          let url = anchor.getAttribute("href");
-        
-          const xhr = new XMLHttpRequest();
-          xhr.responseType = "blob";
-          xhr.onload = function(event){
-            const blob = xhr.response;
-            const blobUrl = window.URL.createObjectURL(blob);
-        
-            const a = document.createElement('a');
-            a.href = blobUrl;
-            a.download = anchor.getAttribute("download");
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-        
-            window.URL.revokeObjectURL(blobUrl);
-          };
-          xhr.open("GET", url);
-          xhr.send();
-        }
-        
-        
+            function downloadFile(event) {
+              event.preventDefault();
+            
+              let anchor = event.target;
+              
+              let url = anchor.getAttribute("href");
+            
+              const xhr = new XMLHttpRequest();
+              xhr.responseType = "blob";
+              xhr.onload = function(event){
+                const blob = xhr.response;
+                const blobUrl = window.URL.createObjectURL(blob);
+            
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = anchor.getAttribute("download");
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            
+                window.URL.revokeObjectURL(blobUrl);
+              };
+              xhr.open("GET", url);
+              xhr.send();
+            }
+            
+            
 
-        return(
-            <div className="box" key={msgDate}>
-                <div className="box-title">
-                    {/* <Link to={`/student-dashboard/stats/${box.title.replace(/\s/g, "-")}`}>
-                        <span 
-                        className="internshipLink"
-                        data-json="data/internship.json"
-                        >
-                        {box.title}
-                        </span>
-                    </Link> */}
-                    <span>{entry.sender}</span>
-                    <span>{formattedDate} {formattedTime}</span>
-                    <div>
-                      <div>
-                      {entry.message}
-                      </div>
-                      <div>
-                      <a href={entry.attachmentLink} download={entry.attachmentName} onClick={downloadFile}>{entry.attachmentName}</a>
-                      </div>
+            return(
+                <div className="box" key={msgDate}>
+                    <div className="box-title">
+                        {/* <Link to={`/student-dashboard/stats/${box.title.replace(/\s/g, "-")}`}>
+                            <span 
+                            className="internshipLink"
+                            data-json="data/internship.json"
+                            >
+                            {box.title}
+                            </span>
+                        </Link> */}
+                        <span>{entry.sender}</span>
+                        <span>{formattedDate} {formattedTime}</span>
+                        <div>
+                          <div>
+                          {entry.message}
+                          </div>
+                          <div>
+                          <a href={entry.attachmentLink} download={entry.attachmentName} onClick={downloadFile}>{entry.attachmentName}</a>
+                          </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        );
-        });
-   
-    
-  
+            );
+            });
+      
+        
+      
 
 
 
-  return(
-      <main>
-          <NavBar props={props}/>
-          <div className="container text-center">
-            <div className="row align-content-center">
-                <div className="col-md-12">
-                    <div className="login">
-                        <h1>Message</h1>
-                        {renderConversations}
-                        <form className="login-form needs-validation" noValidate onSubmit={handleSubmit}>
-                          {lastItem === 'new' ? (
+      return(
+          <main>
+              <NavBar props={props}/>
+              <div className="container text-center">
+                <div className="row align-content-center">
+                    <div className="col-md-12">
+                        <div className="login">
+                            <h1>Message</h1>
+                            {renderConversations}
+                            <form className="login-form needs-validation" noValidate onSubmit={handleSubmit}>
+                              {lastItem === 'new' ? (
+                                  <div className="mb-3">
+                                  <input
+                                    type="text"
+                                    name="subject"
+                                    className="form-control"
+                                    id="subject"
+                                    aria-describedby="Subject"
+                                    placeholder="Subject"
+                                    required
+                                    value={Subject}
+                                    onChange={(e) => setSubject(e.target.value)}
+                                  />
+                                  Subject
+                                  </div>
+                                ) : (
+                                  <div></div>
+                                )}
                               <div className="mb-3">
-                              <input
-                                type="text"
-                                name="subject"
-                                className="form-control"
-                                id="subject"
-                                aria-describedby="Subject"
-                                placeholder="Subject"
-                                required
-                                value={Subject}
-                                onChange={(e) => setSubject(e.target.value)}
-                              />
-                              Subject
+                                <input
+                                  type="text"
+                                  name="message"
+                                  className="form-control"
+                                  id="message"
+                                  placeholder="Message"
+                                  required
+                                  value={Message}
+                                  onChange={(e) => setMessage(e.target.value)}
+                                />
+                                Message
                               </div>
-                            ) : (
-                              <div></div>
-                            )}
-                          <div className="mb-3">
-                            <input
-                              type="text"
-                              name="message"
-                              className="form-control"
-                              id="message"
-                              placeholder="Message"
-                              required
-                              value={Message}
-                              onChange={(e) => setMessage(e.target.value)}
-                            />
-                            Message
-                          </div>
-                          {/* Your other JSX code */}
-                          <div className="btns">
-                          <UploadButton passedClass={"statsBtn"} buttonText={"Upload Attachment"} filePass={GetAttachment} />
-                          {Attachment && <span>{Attachment.name}</span>}
-                          <button type="submit" className="send-btn">
-                            Send Message
-                          </button>
-                          </div>
-                        </form>
-                        </div>
-                        </div>
-                    
+                              {/* Your other JSX code */}
+                              <div className="btns">
+                              <UploadButton passedClass={"statsBtn"} buttonText={"Upload Attachment"} filePass={GetAttachment} />
+                              {Attachment && <span>{Attachment.name}</span>}
+                              <button type="submit" className="send-btn">
+                                Send Message
+                              </button>
+                              </div>
+                            </form>
+                            </div>
+                            </div>
+                        
+                      </div>
                   </div>
-              </div>
-      </main>
-  );
+          </main>
+      );
+      }
+  
+      
 }
 
 export default Conversation;
