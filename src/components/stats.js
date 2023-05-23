@@ -112,33 +112,33 @@ function StudentStats(props){
   }
 
 
-  const handleDownload = () => {
+  const downloadFile = (event) => {
     const storageRef = ref(storage, 'internship/template/form-template.pdf');
-  
+    event.preventDefault();
     getDownloadURL(storageRef)
       .then((downloadURL) => {
         // Fetch the file using a GET request with responseType: 'blob'
-        fetch(downloadURL, { method: 'GET', mode: 'no-cors', responseType: 'blob' })
-          .then((response) => {
-            // Create a blob URL from the response
-            const blob = new Blob([response.data], { type: 'application/pdf' });
-            const url = window.URL.createObjectURL(blob);
-  
-            // Create a link element
-            const link = document.createElement('a');
-            link.href = url;
-            link.target = '_blank';
-            link.download = 'form-template.pdf';
-  
-            // Simulate a click on the link to trigger the download
-            link.click();
-  
-            // Clean up the blob URL
-            URL.revokeObjectURL(url);
-          })
-          .catch((error) => {
-            console.log('Error fetching file:', error);
-          });
+          
+          let url = downloadURL;
+        
+          const xhr = new XMLHttpRequest();
+          xhr.responseType = "blob";
+          xhr.onload = function(event){
+            const blob = xhr.response;
+            const blobUrl = window.URL.createObjectURL(blob);
+        
+            const a = document.createElement('a');
+            a.href = blobUrl;
+            a.download = "form-template.pdf";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        
+            window.URL.revokeObjectURL(blobUrl);
+          };
+          xhr.open("GET", url);
+          xhr.send();
+        
       })
       .catch((error) => {
         console.log('Error getting download URL:', error);
@@ -203,7 +203,7 @@ function StudentStats(props){
           </div>
                   <div className="col-md-12">
                       <div className="btns">
-                          <a onClick={handleDownload} className="statsBtn">Download​ Form Temp​late<i className="fa-solid fa-upload"></i></a>
+                          <a onClick={downloadFile} className="statsBtn">Download​ Form Temp​late<i className="fa-solid fa-upload"></i></a>
                           {/* <a className="statsBtn">Upload Form<i className="fa-solid fa-paper-plane"></i></a> */}
                           <UploadButton passedClass={"statsBtn"} buttonText={"Upload Form"} filePass={GetForm} />
                           <button onClick={() => {
@@ -237,29 +237,3 @@ function StudentStats(props){
 
 export default StudentStats;
 
-
-{/* <section className="apply-form" style={{ display: "block" }}>
-            <div className="row">
-              <div className=".col-md-12">
-                <div className="formContainer">
-                  <form action="POST ">
-                    <input type="text" required placeholder="First Name" />
-                    <input type="text" required placeholder="Last Name" />
-                    <input type="text" required placeholder="Age" />
-                    <input type="text" required placeholder="Country" />
-                    <input type="email" required placeholder="Email" />
-                    <input type="text" required placeholder="Phone Number" />
-                    <div className="ControlButtons">
-                      <UploadButton filePass={GetFile} />
-                      <input
-                        onClick={HandleSubmit}
-                        type="submit"
-                        value="Send"
-                        className="btn"
-                      />
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </section> */}
