@@ -31,60 +31,64 @@ function JobOffers(props){
         });
       }, []);
 
-    const renderjobs = docsArray.map((doc) => {
-        return (
-            <div className="box-request" key={doc.id}>
-            <h2 id="jobOffer1">
-                {doc.description}
-            </h2>
-            <Link to={`/details/${doc.id}`}><button onClick={() => storeJobId(doc.id)} className="custom-btn apply-now" data-doc-id="">See Details</button></Link>
-            </div>
-            
-        );
-    });
-
-    function storeJobId(docId){
-        localStorage.setItem("JobId", docId); // save it in local storage
-    }
-
-  
-
     const [seeAll, seeAllToggle] = useState('');
     const [seeHide, SeeHideToggle] = useState("See All Form Submissions")
+    if(docsArray){
+        const renderjobs = docsArray.map((doc) => {
+            return (
+                <div className="box-request" key={doc.id}>
+                <h2 id="jobOffer1">
+                    {doc.description}
+                </h2>
+                <Link to={`/details/${doc.id}`}><button onClick={() => storeJobId(doc.id)} className="custom-btn apply-now" data-doc-id="">See Details</button></Link>
+                </div>
+                
+            );
+        });
     
-    function seeAllToggler(){
-        if(!seeAll){
-            seeAllToggle(true);
-            SeeHideToggle("Hide Form Submissions")
-        }else {
-            seeAllToggle(false);
-            SeeHideToggle("See All Form Submissions")
+        function storeJobId(docId){
+            localStorage.setItem("JobId", docId); // save it in local storage
         }
-    }
-
     
-    return(
-        <div>
-            <NavBar props={props} NavLocation={'jobs'}/>
-            <main>
-            <section id="dashBoard">
-            <section className="applyforjob" id="applyForJob">
-                <div className="container text-center">
-                <div className="row">
-                    <div className="col-12">
-                    <h1>Available Job Offers</h1>
-                    <div className={"boxs-request " + (seeAll? 'active' : '')} id="boxsRequest">
-                        {renderjobs}
+      
+    
+        
+        
+        function seeAllToggler(){
+            if(!seeAll){
+                seeAllToggle(true);
+                SeeHideToggle("Hide Form Submissions")
+            }else {
+                seeAllToggle(false);
+                SeeHideToggle("See All Form Submissions")
+            }
+        }
+    
+        
+        return(
+            <div>
+                <NavBar props={props} NavLocation={'jobs'}/>
+                <main>
+                <section id="dashBoard">
+                <section className="applyforjob" id="applyForJob">
+                    <div className="container text-center">
+                    <div className="row">
+                        <div className="col-12">
+                        <h1>Available Job Offers</h1>
+                        <div className={"boxs-request " + (seeAll? 'active' : '')} id="boxsRequest">
+                            {renderjobs}
+                        </div>
+                        </div>
+                        <span className="btn sub" id="seeAll" onClick={seeAllToggler}>{seeHide}</span>
                     </div>
                     </div>
-                    <span className="btn sub" id="seeAll" onClick={seeAllToggler}>{seeHide}</span>
-                </div>
-                </div>
-            </section>
-            </section>
-            </main>
-        </div>
-    );
+                </section>
+                </section>
+                </main>
+            </div>
+        );
+    }
+    
 
 }
 
