@@ -21,9 +21,25 @@ function JobOffers(props){
           querySnapshot.forEach((doc, index) => {
             const description = doc.data().description;
             const docId = doc.id;
+            const title = doc.data().title;
+            const languages = doc.data().languages;
+            const skills = doc.data().skills;
+            const location = doc.data().location;
+            const duration = doc.data().duration;
+            const paid = doc.data().paid;
+            const maps = doc.data().maps;
+            const logo = doc.data().logo;
             let docObj = {
               description: description,
-              id: docId
+              id: docId,
+              title: title,
+              languages: languages,
+              skills: skills,
+              location: location,
+              duration: duration,
+              paid: paid,
+              maps: maps,
+              logo: logo
             };
             TempList.push(docObj);
           });
@@ -40,14 +56,14 @@ function JobOffers(props){
                 <h2 id="jobOffer1">
                     {doc.description}
                 </h2>
-                <Link to={`/details/${doc.id}`}><button onClick={() => storeJobId(doc.id)} className="custom-btn apply-now" data-doc-id="">See Details</button></Link>
+                <Link to={`/details/${doc.id}`}><button onClick={() => storeJobId(doc)} className="custom-btn apply-now" data-doc-id="">See Details</button></Link>
                 </div>
                 
             );
         });
     
-        function storeJobId(docId){
-            localStorage.setItem("JobId", docId); // save it in local storage
+        function storeJobId(doc){
+            localStorage.setItem("JobDetails", JSON.stringify(doc)); // save it in local storage
         }
     
       

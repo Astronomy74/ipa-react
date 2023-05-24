@@ -5,6 +5,13 @@ import NavBar from "./navBar";
 function Career(props){
 
 
+    function handleClick(event) {
+        if (event.target.id === "announce") {
+          console.log("Announce button clicked");
+        }
+    }
+
+
     return(
         <main>
         <NavBar props={props}/>
@@ -75,9 +82,9 @@ function Career(props){
                             <div className="form-group">
                                 <input
                                     type="text"
-                                    id="company-name"
+                                    id="description"
                                     name="company-name"
-                                    placeholder="Company Name"
+                                    placeholder="Job Description"
                                     required
                                 />
                             </div>
@@ -95,9 +102,9 @@ function Career(props){
                             <div className="form-group">
                                 <input
                                     type="text"
-                                    id="minimum-age"
+                                    id="languages"
                                     name="minimum-age"
-                                    placeholder="Minimum Age"
+                                    placeholder="Required Language(s)"
                                     required
                                 />
                             </div>
@@ -118,12 +125,21 @@ function Career(props){
                                     type="text"
                                     id="duration"
                                     name="duration"
-                                    placeholder="Company Name"
+                                    placeholder="Location"
+                                    required
+                                />
+                            </div>
+                            <div className="form-group">
+                                <input
+                                    type="text"
+                                    id="paid"
+                                    name="duration"
+                                    placeholder="Salary (if job is paid)"
                                     required
                                 />
                             </div>
                         </div>
-                        <button type="submit" className="btn sub">Announce</button>
+                        <button type="submit" className="btn sub" id="announce" onClick={handleClick}>Announce</button>
                     </div>
                 </div>
             </div>
