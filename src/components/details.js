@@ -27,7 +27,7 @@ function Details(props) {
                         id="jobImg"
                         src={jobDetails.logo}
                         width="auto"
-                        height="100"
+                        height="auto"
                         alt=""
                       />
                     </div>
