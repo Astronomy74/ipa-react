@@ -209,24 +209,24 @@ function StudentStats(props){
                             <button onClick={() => {
                               HandleFileSubmit("form");
                             }}>
-                              send
+                              send form
                             </button>
                             <button onClick={() => {
                               HandleFileDelete("form");
                             }}>
-                              Delete
+                              Delete form
                             </button>
                             <a className="statsBtn">Request​ Official Letter<i className="fa-solid fa-upload"></i></a>
                             <UploadButton passedClass={"statsBtn"} buttonText={"Upload Transcript"} filePass={GetTranscript} />
                             <button onClick={() => {
                               HandleFileSubmit("transcript");
                             }}>
-                              send
+                              send transcript
                             </button>
                             <button onClick={() => {
                               HandleFileDelete("transcript");
                             }}>
-                              Delete
+                              Delete transcript
                             </button>
                         </div>
                     </div>

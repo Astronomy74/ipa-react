@@ -1,20 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import NavBar from "./navBar";
+import { getFirestore, collection, getDocs, getDoc, query, setDoc, serverTimestamp, where, addDoc, doc } from "firebase/firestore";
 
 
 function Career(props){
 
 
-    function handleClick(event) {
-        if (event.target.id === "announce") {
-          console.log("Announce button clicked");
-        }
-    }
-
 
     return(
         <main>
-        <NavBar props={props}/>
+        <NavBar props={props} NavLocation={'dashboard'}/>
         <section className="AnnounceJob-instructor" id="AnnounceJobInstructor">
             <div className="container text-center">
                 <div className="row">
@@ -70,80 +65,7 @@ function Career(props){
                 </div>
             </div>
         </section>
-        <section
-            className="EnterJobInfo-instructor"
-            id="EnterJobInfoInstructor"
-        >
-            <div className="job-info">
-                <div className="container text-center">
-                    <div className="row">
-                        <h2>Enter Job Information</h2>
-                        <div className="col-md-6">
-                            <div className="form-group">
-                                <input
-                                    type="text"
-                                    id="description"
-                                    name="company-name"
-                                    placeholder="Job Description"
-                                    required
-                                />
-                            </div>
 
-                            <div className="form-group">
-                                <input
-                                    type="text"
-                                    id="location"
-                                    name="location"
-                                    placeholder="Duration"
-                                    required
-                                />
-                            </div>
-
-                            <div className="form-group">
-                                <input
-                                    type="text"
-                                    id="languages"
-                                    name="minimum-age"
-                                    placeholder="Required Language(s)"
-                                    required
-                                />
-                            </div>
-                        </div>
-                        <div className="col-md-6">
-                            <div className="form-group">
-                                <input
-                                    type="text"
-                                    id="job-title"
-                                    name="job-title"
-                                    placeholder="Job Title"
-                                    required
-                                />
-                            </div>
-
-                            <div className="form-group">
-                                <input
-                                    type="text"
-                                    id="duration"
-                                    name="duration"
-                                    placeholder="Location"
-                                    required
-                                />
-                            </div>
-                            <div className="form-group">
-                                <input
-                                    type="text"
-                                    id="paid"
-                                    name="duration"
-                                    placeholder="Salary (if job is paid)"
-                                    required
-                                />
-                            </div>
-                        </div>
-                        <button type="submit" className="btn sub" id="announce" onClick={handleClick}>Announce</button>
-                    </div>
-                </div>
-            </div>
-        </section>
         </main>
     );
 

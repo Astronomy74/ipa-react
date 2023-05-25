@@ -15,6 +15,18 @@ function NavBar(props) {
   const msgsRef = useRef(null); // define a useRef hook for the msgs element
   const logoutRef = useRef(null);
   const bellRef = useRef(null);
+
+  let jobs, toJobs, jobText;
+  if(props.props.userInfo.login.userType === "student"){
+    jobs = 'jobs';
+    toJobs = '/job-offers';
+    jobText = "Available Jobs";
+  }
+  else if(props.props.userInfo.login.userType === "career"){
+    jobs = 'jobs';
+    toJobs = '/announceJobs';
+    jobText = "Handle Job Offers"
+  }
   
 
 
@@ -89,7 +101,7 @@ function NavBar(props) {
                 <li className="nav-item">
                   <Link
                     className={"nav-link " + (props.NavLocation == 'dashboard'? "active" : "")}
-                    to="/student-dashboard"
+                    to="/career-dashboard"
                   >
                     Dashboard
                   </Link>
@@ -97,9 +109,9 @@ function NavBar(props) {
                 <li className="nav-item">
                   <Link 
                     className={"nav-link " + (props.NavLocation == 'jobs'? "active" : "")}
-                    to="/job-offers"
+                    to={toJobs}
                   >
-                    Available Jobs
+                    {jobText}
                   </Link>
                 </li>
               </ul>

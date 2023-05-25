@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import NavBar from "./navBar";
-import { getFirestore, collection, getDocs, query } from "firebase/firestore";
+import { getFirestore, collection, getDocs, query, orderBy } from "firebase/firestore";
 import { Link } from 'react-router-dom';
 
 //include Main Css & sCss file
@@ -15,7 +15,7 @@ function JobOffers(props){
     const [docsArray, setdocsArray] = useState([]);
     useEffect(() => {
         // loop through all documents in the collection
-        const qJobs = query(jobOffersRef);
+        const qJobs = query(jobOffersRef, orderBy("timestamp", "desc"));
         getDocs(qJobs).then((querySnapshot) => {
           let TempList = [];
           querySnapshot.forEach((doc, index) => {
@@ -29,6 +29,7 @@ function JobOffers(props){
             const paid = doc.data().paid;
             const maps = doc.data().maps;
             const logo = doc.data().logo;
+            const email = doc.data().email;
             let docObj = {
               description: description,
               id: docId,
@@ -39,7 +40,8 @@ function JobOffers(props){
               duration: duration,
               paid: paid,
               maps: maps,
-              logo: logo
+              logo: logo,
+              email: email
             };
             TempList.push(docObj);
           });
@@ -48,7 +50,7 @@ function JobOffers(props){
       }, []);
 
     const [seeAll, seeAllToggle] = useState('');
-    const [seeHide, SeeHideToggle] = useState("See All Form Submissions")
+    const [seeHide, SeeHideToggle] = useState("See All Job Offers")
     if(docsArray){
         const renderjobs = docsArray.map((doc) => {
             return (
@@ -73,10 +75,10 @@ function JobOffers(props){
         function seeAllToggler(){
             if(!seeAll){
                 seeAllToggle(true);
-                SeeHideToggle("Hide Form Submissions")
+                SeeHideToggle("Hide Job Offers")
             }else {
                 seeAllToggle(false);
-                SeeHideToggle("See All Form Submissions")
+                SeeHideToggle("See All Job Offers")
             }
         }
     
