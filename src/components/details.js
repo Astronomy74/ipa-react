@@ -27,7 +27,7 @@ function Details(props) {
                         id="jobImg"
                         src={jobDetails.logo}
                         width="auto"
-                        height="100"
+                        height="auto"
                         alt=""
                       />
                     </div>
@@ -45,10 +45,13 @@ function Details(props) {
                         Required Skill(s): <span id="requiredSkills">{jobDetails.skills}</span>
                       </p>
                       <p>
-                        Paid: <span id="paidJob">{jobDetails.paid}</span>
+                        Salary: <span id="paidJob">{jobDetails.paid}</span>
                       </p>
                       <p>
                         Location: <span id="address">{jobDetails.location}</span>
+                      </p>
+                      <p>
+                        Application Email: <span id="contactEmail">{jobDetails.email}</span>
                       </p>
                     </div>
                   </div>

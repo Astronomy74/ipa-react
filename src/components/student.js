@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import NavBar from "./navBar";
 import { Link } from 'react-router-dom';
+import { getFirestore, collection, getDocs, query, doc, setDoc } from "firebase/firestore";
 
 //include Main Css & sCss file
 import "../css/main.css";
@@ -12,6 +13,43 @@ function Student(props){
         props.internshipCollect(props.userInfo.login);
     }, []);
 
+    const db = getFirestore();
+    const internshipsRef = collection(db, 'internships')
+    const qInternships = query(internshipsRef);
+    getDocs(qInternships).then((querySnapshot) => {
+        const documents = querySnapshot.docs;
+        const hasLoginEmail = documents.some((doc) => doc.id === props.userInfo.login.email);
+        if (!hasLoginEmail) {
+            const newDocRef = doc(internshipsRef, props.userInfo.login.email);
+            setDoc(newDocRef, {})
+            const subcollectionRef = collection(newDocRef, "all-internships");
+            const doc1Id = "internship1";
+            const doc2Id = "internship2";
+            const doc1Data = {
+                company: "",
+                duration: "",
+                jobtitle: "",
+                letter: "",
+                status: "",
+                title: "Internship 1",
+                year: ""
+            };
+            const doc2Data = {
+                company: "",
+                duration: "",
+                jobtitle: "",
+                letter: "",
+                status: "",
+                title: "Internship 2",
+                year: ""
+            };
+            const doc1Ref = doc(subcollectionRef, doc1Id);
+            const doc2Ref = doc(subcollectionRef, doc2Id);
+            setDoc(doc1Ref, doc1Data)
+            setDoc(doc2Ref, doc2Data)
+
+        }});
+         
 
     if (props.internshipInfo.internshipList){
         const renderBoxes = props.internshipInfo.internshipList.map((box, index) => {
@@ -31,10 +69,10 @@ function Student(props){
                             <span className="inbox">Year: {box.year}</span>
                         </div>
                         <div className="company">
-                            <span className="inbox">company: {box.company}</span>
+                            <span className="inbox">Company: {box.company}</span>
                         </div>
                         <div className="job-title">
-                            <span className="inbox">Job-Title: {box.jobtitle}</span>
+                            <span className="inbox">Job Title: {box.jobtitle}</span>
                         </div>
                         <div className="duration">
                             <span className="inbox">Duration: {box.duration}</span>

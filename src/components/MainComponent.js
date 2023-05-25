@@ -9,6 +9,7 @@ import Details from './details';
 import Coordinator from './coordinator';
 import Admin from './admin';
 import Career from './career';
+import AnnounceJobs from './announceJobs'
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { collectUserInfo, collectInternship } from '../redux/ActionCreators';
 import { connect } from 'react-redux';
@@ -153,6 +154,21 @@ class Main extends Component {
                                 isAuthenticated && LoginInfo.login ? (
                                     LoginInfo.login.userType === "career" ? (
                                         <Career loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
+                                    ) : (
+                                        <Navigate to={`/${LoginInfo.login.userType}-dashboard`} replace />
+
+                                    )
+                                  ) : (
+                                    <Navigate to="/login" replace />
+                                  )
+                            }
+                        />
+                        <Route
+                            exact path="/announceJobs" 
+                            element={
+                                isAuthenticated && LoginInfo.login ? (
+                                    LoginInfo.login.userType === "career" ? (
+                                        <AnnounceJobs loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
                                     ) : (
                                         <Navigate to={`/${LoginInfo.login.userType}-dashboard`} replace />
 
