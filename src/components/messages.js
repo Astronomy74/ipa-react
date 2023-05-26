@@ -8,7 +8,6 @@ import '../sass/stas.scss'
 
 
 function Messages(props){
-
     const [conversations, setConversations] = useState([]);
 
     useEffect(() => {

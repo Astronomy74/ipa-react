@@ -20,8 +20,36 @@ function Conversation(props){
     const [Attachment, UploadedAttachment] = useState("");
     const [progress, setProgress] = useState(0);
     const [UpdateDetect, UpdateDetector] = useState(null);
+    const [coordinatorInfo, setCoordinatorInfo] = useState('');
+
     
+   
     const db = getFirestore();
+    const departmentRequired = props.userInfo.login.department;
+  
+    useEffect(() => {
+    const getEmailFromFirestore = async () => {
+      const q = query(
+        collection(db, 'users'),
+        where('userType', '==', 'coordinator'),
+        where('department', '==', departmentRequired)
+      );
+      try {
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+          const email = doc.data().email;
+          const name = doc.data().name;
+          const surname = doc.data().surname;
+          const info = {email, name, surname};
+          setCoordinatorInfo(info);
+        });
+      } catch (error) {
+        console.log('Error getting documents:', error);
+      }
+    };
+    getEmailFromFirestore();
+    }, []);
+
     const handleSubmit = async (e) => {
       e.preventDefault();
 
@@ -37,17 +65,20 @@ function Conversation(props){
      
       const messageData = { // this is the structure I'm using, a map type field in the database
             sender: props.userInfo.login.email,
-            receiver: 'coordinator@example.com', // replace later with real coordinator email
+            receiver: coordinatorInfo.email, // replace later with real coordinator email
             timestamp: serverTimestamp(), // firebase timestamp function
             isRead: false, // for notifications later
             message: Message, // gets Message from the form box
             attachmentName: attachmentName || '',
             attachmentLink: attachmentLink || '',
-          };
+          };    
   
   
       // every entry will have participants, so we can fetch correctly
-      const Participants = [props.userInfo.login.email, 'coordinator@example.com'];
+      let Participants = []
+      if(coordinatorInfo){
+        Participants = [props.userInfo.login.email, coordinatorInfo.email];
+        }
       
       try {
         const conversationCollectionRef = collection(db, 'conversations');       
@@ -262,11 +293,6 @@ function Conversation(props){
                 </div>
             );
             });
-      
-        
-      
-
-
 
       return(
           <main>
@@ -276,6 +302,7 @@ function Conversation(props){
                     <div className="col-md-12">
                         <div className="login">
                             <h1>Message</h1>
+                            <h2>To: {coordinatorInfo.name} {coordinatorInfo.surname}</h2>
                             {renderConversations}
                             <form className="login-form needs-validation" noValidate onSubmit={handleSubmit}>
                               {lastItem === 'new' ? (
