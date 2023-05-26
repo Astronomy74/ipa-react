@@ -15,6 +15,8 @@ import { collectUserInfo, collectInternship } from '../redux/ActionCreators';
 import { connect } from 'react-redux';
 import fireApp from './fireStorage';
 
+const msgAccess = ["student", "coordinator"]
+
 
 const mapStateToProps = state => {
     return {
@@ -182,7 +184,7 @@ class Main extends Component {
                             exact path="/messages" 
                             element={
                                 isAuthenticated && LoginInfo.login ? (
-                                    LoginInfo.login.userType === "student" ? (
+                                    LoginInfo.login.userType === "student" || LoginInfo.login.userType === "coordinator" ? (
                                         <Messages loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
                                     ) : (
                                         <Navigate to={`/${LoginInfo.login.userType}-dashboard`} replace />
@@ -197,7 +199,7 @@ class Main extends Component {
                             exact path="/conversation/:subject" 
                             element={
                                 isAuthenticated && LoginInfo.login ? (
-                                    LoginInfo.login.userType === "student" ? (
+                                    LoginInfo.login.userType === "student" || LoginInfo.login.userType === "coordinator" ? (
                                         <Conversation loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
                                     ) : (
                                         <Navigate to={`/${LoginInfo.login.userType}-dashboard`} replace />
