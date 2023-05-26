@@ -11,7 +11,7 @@ import Admin from './admin';
 import Career from './career';
 import AnnounceJobs from './announceJobs'
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { collectUserInfo, collectInternship} from '../redux/ActionCreators';
+import { collectUserInfo, collectInternship } from '../redux/ActionCreators';
 import { connect } from 'react-redux';
 
 

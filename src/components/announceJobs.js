@@ -38,9 +38,7 @@ function AnnounceJobs(props){
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log(event)
-
-                
+         
         const maps = extractLinkFromIframe(googleMaps)
         const timestamp = serverTimestamp();
         const jobData = {description, paid, location, languages, title, duration, email, skills, maps, timestamp}
