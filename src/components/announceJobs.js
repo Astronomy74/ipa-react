@@ -18,6 +18,7 @@ function AnnounceJobs(props){
     const [skills, setSkills] = useState("");
     const [googleMaps, setMaps] = useState("");
     const [file, setFile] = useState(null);
+    const [ReRender, setReRender] = useState(null);
 
     function extractLinkFromIframe(iframeCode) {
         const regex = /src="([^"]+)"/i;
@@ -29,91 +30,68 @@ function AnnounceJobs(props){
         return null;
       }
 
-    const handleInputChange = (event) => {
-        const { id, value } = event.target;
-        if (id === "description") {
-            setDescription(value);
-        } else if (id === "location") {
-            setLocation(value);
-        } else if (id === "languages") {
-            setLanguages(value);
-        } else if (id === "title") {
-            setJobtitle(value);
-        } else if (id === "duration") {
-            setDuration(value);
-        } else if (id === "paid") {
-            setPaid(value);
-        } else if (id === "email") {
-            setEmail(value);
-        } else if (id === "skills") {
-            setSkills(value);
-        } else if (id === "googleMaps") {
-            setMaps(value);
-        }
-        
-    }
 
     const handleFileChange = (event) => {
         const selectedFile = event.target.files[0];
         setFile(selectedFile);
       };
 
-    const handleClick = async (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        const form = document.getElementById("jobAnnounceForm");
-        if (event.target.id === "announce") {
-                if (form.checkValidity()) {
-                const maps = extractLinkFromIframe(googleMaps)
-                const timestamp = serverTimestamp();
-                const jobData = {description, paid, location, languages, title, duration, email, skills, maps, timestamp}
-                const docRef = await addDoc(collection(db, "jobOffers"), jobData);
-                console.log("Document added with ID: ", docRef.id);
+        console.log(event)
 
-                if (file) {
-                    const storagePath = `logos/${file.name}`;
-                    const storageReference = ref(storage, storagePath);
-                    await uploadBytes(storageReference, file);
-                    console.log("File uploaded successfully.");
+                
+        const maps = extractLinkFromIframe(googleMaps)
+        const timestamp = serverTimestamp();
+        const jobData = {description, paid, location, languages, title, duration, email, skills, maps, timestamp}
+        const docRef = await addDoc(collection(db, "jobOffers"), jobData);
+        console.log("Document added with ID: ", docRef.id);
 
-                    const downloadURL = await getDownloadURL(storageReference);
-                    await updateDoc(doc(db, "jobOffers", docRef.id), {
-                        logo: downloadURL,
-                      });
-                    console.log("Download URL stored in Firestore.");
-                    const fileInput = document.getElementById("fileInput");
-                    if (fileInput) {
-                      fileInput.value = ""; 
-                    }
-                  }
+        if (file) {
+            const storagePath = `logos/${file.name}`;
+            const storageReference = ref(storage, storagePath);
+            await uploadBytes(storageReference, file);
+            console.log("File uploaded successfully.");
 
-                // addDoc(collection(db, "jobOffers"), 
-                // { description, paid, location, languages, jobtitle, duration, contactEmail, skills })
-                // .then((docRef) => {
-                // console.log("Document added with ID: ", docRef.id);
-                // })
-                // .catch((error) => {
-                // console.error("Error adding document: ", error);
-                // });
-                setDescription("");
-                setLocation("");
-                setLanguages("");
-                setJobtitle("");
-                setDuration("");
-                setPaid("");
-                setEmail("");
-                setSkills("");
-                setMaps("");
-                setFile(null); 
+            const downloadURL = await getDownloadURL(storageReference);
+            await updateDoc(doc(db, "jobOffers", docRef.id), {
+                logo: downloadURL,
+                });
+            console.log("Download URL stored in Firestore.");
+            const fileInput = document.getElementById("fileInput");
+            if (fileInput) {
+                fileInput.value = ""; 
             }
-            else {
-                form.reportValidity();
             }
-        }
+
+        // addDoc(collection(db, "jobOffers"), 
+        // { description, paid, location, languages, jobtitle, duration, contactEmail, skills })
+        // .then((docRef) => {
+        // console.log("Document added with ID: ", docRef.id);
+        // })
+        // .catch((error) => {
+        // console.error("Error adding document: ", error);
+        // });
+        event.target.reset();
+        setDescription("");
+        setLocation("");
+        setLanguages("");
+        setJobtitle("");
+        setDuration("");
+        setPaid("");
+        setEmail("");
+        setSkills("");
+        setMaps("");
+        setFile(null);
+        setReRender("");
+             
+        
     }
         // get reference to jobOffers collection
         const jobOffersRef = collection(db, 'jobOffers');
         const [docsArray, setdocsArray] = useState([]);
         useEffect(() => {
+            setReRender(null);
             // loop through all documents in the collection
             const qJobs = query(jobOffersRef, orderBy("timestamp", "desc"));
             getDocs(qJobs).then((querySnapshot) => {
@@ -129,7 +107,7 @@ function AnnounceJobs(props){
               });
               setdocsArray(TempList);
             });
-          }, []);
+          }, [ReRender]);
     
         const [seeAll, seeAllToggle] = useState('');
         const [seeHide, SeeHideToggle] = useState("See All Job Offers")
@@ -138,6 +116,7 @@ function AnnounceJobs(props){
             deleteDoc(doc(db, "jobOffers", docId))
             .then(() => {
             console.log("Document successfully deleted!");
+            setReRender("");
             })
             .catch((error) => {
             console.error("Error removing document: ", error);
@@ -179,7 +158,7 @@ return(
             className="EnterJobInfo-instructor"
             id="EnterJobInfoInstructor"
         >
-            <form id="jobAnnounceForm">
+            <form id="jobAnnounceForm" onSubmit={handleSubmit}>
             <div className="job-info">
                 <div className="container text-center">
                     <div className="row">
@@ -189,10 +168,9 @@ return(
                                 <input
                                     type="text"
                                     id="description"
-                                    value={description}
-                                    onChange={handleInputChange} 
                                     name="company-name"
                                     placeholder="Job Description"
+                                    onChange={(e) => setDescription(e.target.value)} 
                                     required
                                 />
                             </div>
@@ -201,10 +179,9 @@ return(
                                 <input
                                     type="text"
                                     id="location"
-                                    value={location}
-                                    onChange={handleInputChange}
                                     name="location"
                                     placeholder="Location"
+                                    onChange={(e) => setLocation(e.target.value)} 
                                     required
                                 />
                             </div>
@@ -212,11 +189,10 @@ return(
                             <div className="form-group">
                                 <input
                                     type="text"
-                                    value={languages}
-                                    onChange={handleInputChange}
                                     id="languages"
                                     name="minimum-age"
                                     placeholder="Required Language(s)"
+                                    onChange={(e) => setLanguages(e.target.value)} 
                                     required
                                 />
                             </div>
@@ -225,11 +201,10 @@ return(
                             <div className="form-group">
                                 <input
                                     type="text"
-                                    value={title}
-                                    onChange={handleInputChange}
                                     id="title"
                                     name="title"
                                     placeholder="Job Title"
+                                    onChange={(e) => setJobtitle(e.target.value)} 
                                     required
                                 />
                             </div>
@@ -237,22 +212,20 @@ return(
                             <div className="form-group">
                                 <input
                                     type="text"
-                                    value={duration}
-                                    onChange={handleInputChange}
                                     id="duration"
                                     name="duration"
                                     placeholder="Duration"
+                                    onChange={(e) => setDuration(e.target.value)} 
                                     required
                                 />
                             </div>
                             <div className="form-group">
                                 <input
                                     type="text"
-                                    value={paid}
-                                    onChange={handleInputChange}
                                     id="paid"
                                     name="paid"
                                     placeholder="Salary (if job is paid)"
+                                    onChange={(e) => setPaid(e.target.value)} 
                                     required
                                 />
                             </div>
@@ -260,10 +233,9 @@ return(
                                 <input
                                     type="text"
                                     id="email"
-                                    value={email}
-                                    onChange={handleInputChange}
                                     name="email"
                                     placeholder="Contact Email"
+                                    onChange={(e) => setEmail(e.target.value)} 
                                     required
                                 />
                             </div>
@@ -271,10 +243,9 @@ return(
                                 <input
                                     type="text"
                                     id="skills"
-                                    value={skills}
-                                    onChange={handleInputChange}
                                     name="skills"
                                     placeholder="Required Skills"
+                                    onChange={(e) => setSkills(e.target.value)} 
                                     required
                                 />
                             </div>
@@ -282,10 +253,9 @@ return(
                                 <input
                                     type="text"
                                     id="googleMaps"
-                                    value={googleMaps}
-                                    onChange={handleInputChange}
                                     name="googleMaps"
                                     placeholder='Google Maps (press "Share", then "Embed a map" then "Copy HTML")'
+                                    onChange={(e) => setMaps(e.target.value)}
                                     required
                                 />
                             </div>
@@ -300,10 +270,10 @@ return(
                             </div>
                             
                         </div>
-                        <button type="submit" className="btn sub" id="announce" onClick={handleClick}>Announce</button>
                     </div>
                 </div>
             </div>
+            <button type="submit" className="btn sub" id="announce">Announce</button>
             </form>
         </section>
         <section className="applyforjob" id="applyForJob">
