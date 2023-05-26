@@ -15,57 +15,104 @@ import '../sass/stas.scss'
 function Conversation(props){
     const lastItem = useLocation().pathname.split("/").pop();
     
+    const [Contact, setContact] = useState('');
     const [Subject, setSubject] = useState('');
     const [Message, setMessage] = useState('');
     const [Attachment, UploadedAttachment] = useState("");
     const [progress, setProgress] = useState(0);
     const [UpdateDetect, UpdateDetector] = useState(null);
     const [coordinatorInfo, setCoordinatorInfo] = useState('');
+    const [StudentsInfo, setStudents] = useState([]);
+    const [Recipient, getRecipient] = useState([]);
+    const [NewMsgContact, setNewMsgContact] = useState("Contact");
 
-    
-   
+
     const db = getFirestore();
     const departmentRequired = props.userInfo.login.department;
   
     useEffect(() => {
+      
     const getEmailFromFirestore = async () => {
-      const q = query(
-        collection(db, 'users'),
-        where('userType', '==', 'coordinator'),
-        where('department', '==', departmentRequired)
-      );
-      try {
-        const querySnapshot = await getDocs(q);
-        querySnapshot.forEach((doc) => {
-          const email = doc.data().email;
-          const name = doc.data().name;
-          const surname = doc.data().surname;
-          const info = {email, name, surname};
-          setCoordinatorInfo(info);
-        });
-      } catch (error) {
-        console.log('Error getting documents:', error);
+
+      if(props.userInfo.login.userType === "student"){
+
+        const q = query(
+          collection(db, 'users'),
+          where('userType', '==', 'coordinator'),
+          where('department', '==', departmentRequired)
+        );
+        try {
+          const querySnapshot = await getDocs(q);
+          querySnapshot.forEach((doc) => {
+            const email = doc.data().email;
+            const name = doc.data().name;
+            const surname = doc.data().surname;
+            const info = {email, name, surname};
+            setCoordinatorInfo(info);
+            setNewMsgContact(email);
+          });
+        } catch (error) {
+          console.log('Error getting documents:', error);
+        }
+        
+      }else{
+        const q = query(
+          collection(db, 'users'),
+          where('userType', '==', 'student'),
+          where('department', '==', departmentRequired)
+        );
+        try {
+          const querySnapshot = await getDocs(q);
+          let info = [];
+          querySnapshot.forEach((doc) => {
+            const email = doc.data().email;
+            const name = doc.data().name;
+            const surname = doc.data().surname;
+            const userInfo = {
+              email: email,
+              name: name,
+              surname: surname,
+            }
+            info.push(userInfo);
+          });
+          setStudents(info);
+        } catch (error) {
+          console.log('Error getting documents:', error);
+        }
       }
-    };
-    getEmailFromFirestore();
+
+      if(lastItem !== "new"){
+        const conversationCollectionRef = collection(db, 'conversations');
+        const conversationDocRef = doc(conversationCollectionRef, lastItem);
+        const querySnapshot = await getDoc(query(conversationDocRef));
+        const conversationData = querySnapshot.data();
+
+        const recepient = conversationData.participants.find(email => email !== props.userInfo.login.email);
+        
+        
+        getRecipient(recepient);
+      }
+
+      };
+      getEmailFromFirestore();
     }, []);
+
+
 
     const handleSubmit = async (e) => {
       e.preventDefault();
-
+      
     
     const timestamp = new Date(); // Get current timestamp
     const formattedDate = timestamp.toISOString(); // Format timestamp as a string
 
     
-
+   
     ///////////// Handle Message Submit /////////////
 
     const submitMessage = async (folderName ,attachmentLink, attachmentName) => {
      
       const messageData = { // this is the structure I'm using, a map type field in the database
-            sender: props.userInfo.login.email,
-            receiver: coordinatorInfo.email, // replace later with real coordinator email
             timestamp: serverTimestamp(), // firebase timestamp function
             isRead: false, // for notifications later
             message: Message, // gets Message from the form box
@@ -73,16 +120,18 @@ function Conversation(props){
             attachmentLink: attachmentLink || '',
           };    
   
-  
-      // every entry will have participants, so we can fetch correctly
-      let Participants = []
-      if(coordinatorInfo){
-        Participants = [props.userInfo.login.email, coordinatorInfo.email];
-        }
       
       try {
-        const conversationCollectionRef = collection(db, 'conversations');       
-
+        const conversationCollectionRef = collection(db, 'conversations');
+        // every entry will have participants, so we can fetch correctly
+        let Participants;
+        if(props.userInfo.login.userType === "student"){
+          Participants = [props.userInfo.login.email, coordinatorInfo.email];
+        }else{
+          Participants = [props.userInfo.login.email, Contact];
+        }
+        console.log(Participants)   
+        
         // If it's a new message
         if(lastItem === 'new'){
 
@@ -302,9 +351,40 @@ function Conversation(props){
                     <div className="col-md-12">
                         <div className="login">
                             <h1>Message</h1>
-                            <h2>To: {coordinatorInfo.name} {coordinatorInfo.surname}</h2>
-                            {renderConversations}
+                           
                             <form className="login-form needs-validation" noValidate onSubmit={handleSubmit}>
+                            {lastItem !== 'new' ? (
+                                <h2>Reply
+                                <select
+                                   aria-label="Default select example"
+                                   name="contactType"
+                                   className="form-control"
+                                   required
+                                 >
+                                   <option value="">{Recipient}</option>
+                                 </select>
+                                 </h2>
+                                ) : (
+                                  <h2>Send To
+                                  <select
+                                    aria-label="Default select example"
+                                    name="contactType"
+                                    className="form-control"
+                                    onChange={(e) => setContact(e.target.value)}
+                                    required
+                                  >
+                                    <option value="">{NewMsgContact}</option>
+                                    {StudentsInfo.map((student, index) => (
+                                      <option key={index} value={student.email}>
+                                        {student.email}
+                                      </option>
+                                    ))}
+                                  </select>
+                                  </h2>
+                                )}
+ 
+                            {/* <h2>To: {coordinatorInfo.name} {coordinatorInfo.surname}</h2> */}
+                            {renderConversations}
                               {lastItem === 'new' ? (
                                   <div className="mb-3">
                                   <input
