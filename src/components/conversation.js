@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useHistory } from "react";
 import { useLocation } from 'react-router-dom';
 import NavBar from "./navBar";
 import UploadButton from "./uploadButton";
@@ -118,6 +118,7 @@ function Conversation(props){
             message: Message, // gets Message from the form box
             attachmentName: attachmentName || '',
             attachmentLink: attachmentLink || '',
+            sender: props.userInfo.login.email
           };    
   
       
@@ -127,8 +128,10 @@ function Conversation(props){
         let Participants;
         if(props.userInfo.login.userType === "student"){
           Participants = [props.userInfo.login.email, coordinatorInfo.email];
+          messageData.receiver = coordinatorInfo.email;
         }else{
           Participants = [props.userInfo.login.email, Contact];
+          messageData.receiver = Contact;
         }
         console.log(Participants)   
         
@@ -142,6 +145,7 @@ function Conversation(props){
               subject: Subject,
               [formattedDate]: messageData,
               participants: Participants,
+              lastactivity: serverTimestamp()
             });
           }
           else{
@@ -150,6 +154,7 @@ function Conversation(props){
               subject: Subject,
               [formattedDate]: messageData,
               participants: Participants,
+              lastactivity: serverTimestamp()
             });
           }
         }
@@ -162,6 +167,7 @@ function Conversation(props){
           const updatedConversationData = {
             ...conversationData, // retrieve the items in the conversation
             [formattedDate]: messageData, // and here it adds to the properties
+            lastactivity: serverTimestamp()
           };
       
           await setDoc(conversationDocRef, updatedConversationData);
@@ -176,6 +182,7 @@ function Conversation(props){
       } catch (error) {
         console.error('error submitting message:', error);
       }
+      window.location.href = '/messages';
     }
     
     // Handle Attachment
@@ -253,6 +260,7 @@ function Conversation(props){
   }
 
   const [conversation, setConversation] = useState([]);
+  const [displaySubject, setDisplaySubject] = useState();
 
   
     useEffect(() => {
@@ -266,7 +274,10 @@ function Conversation(props){
           const filteredConv = [];
           Object.keys(conversationsCollect).forEach((key) => {
             const value = conversationsCollect[key];
-            if(key !== 'participants' && key !== 'subject'){
+            if(key === 'subject'){
+              setDisplaySubject(value);
+            }
+            if(key !== 'participants' && key !== 'subject' && key !== 'lastactivity'){
               filteredConv.push(value);
             }
           });
@@ -315,7 +326,6 @@ function Conversation(props){
               xhr.send();
             }
             
-            
 
             return(
                 <div className="box" key={msgDate}>
@@ -328,14 +338,15 @@ function Conversation(props){
                             {box.title}
                             </span>
                         </Link> */}
-                        <span>{entry.sender}</span>
-                        <span>{formattedDate} {formattedTime}</span>
+                        <span>{entry.sender} at </span>
+                        <span>{formattedTime}, {formattedDate}</span>
                         <div>
                           <div>
-                          {entry.message}
+                          Message: {entry.message}
                           </div>
                           <div>
                           <a href={entry.attachmentLink} download={entry.attachmentName} onClick={downloadFile}>{entry.attachmentName}</a>
+                        
                           </div>
                         </div>
                     </div>
@@ -363,7 +374,11 @@ function Conversation(props){
                                  >
                                    <option value="">{Recipient}</option>
                                  </select>
+                                 <h4>
+                                  Subject: {displaySubject}
+                                </h4>
                                  </h2>
+                                 
                                 ) : (
                                   <h2>Send To
                                   <select
@@ -387,6 +402,7 @@ function Conversation(props){
                             {renderConversations}
                               {lastItem === 'new' ? (
                                   <div className="mb-3">
+                                  <span>Enter subject:</span>
                                   <input
                                     type="text"
                                     name="subject"
@@ -398,12 +414,12 @@ function Conversation(props){
                                     value={Subject}
                                     onChange={(e) => setSubject(e.target.value)}
                                   />
-                                  Subject
                                   </div>
                                 ) : (
                                   <div></div>
                                 )}
                               <div className="mb-3">
+                              <span>Enter reply:</span>
                                 <input
                                   type="text"
                                   name="message"
@@ -414,7 +430,6 @@ function Conversation(props){
                                   value={Message}
                                   onChange={(e) => setMessage(e.target.value)}
                                 />
-                                Message
                               </div>
                               {/* Your other JSX code */}
                               <div className="btns">
