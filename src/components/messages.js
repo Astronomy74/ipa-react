@@ -21,12 +21,15 @@ function Messages(props){
         querySnapshot.forEach((doc) => {
             const conversationId = doc.id;
             const conversation = doc.data();
-            const conversationObj = {
-                id: conversationId,
-                msg: conversation,
-            }
+            const lastactivity = doc.data().lastactivity;
+            let conversationObj = {};
+            conversationObj.id = conversationId;
+            conversationObj.msg = conversation;
+            conversationObj.lastactivity = lastactivity;
             conversationList.push(conversationObj);
         });
+        conversationList.sort((a, b) => b.lastactivity - a.lastactivity);
+        console.log(conversationList);
         setConversations(conversationList);
 
     })
@@ -34,7 +37,7 @@ function Messages(props){
         console.log("Error getting documents: ", error); // if fetching documents failed
     });
     }, []);
-       
+
     const renderConversations = conversations.map((entry, index) => {
         let participant;
         for(let i = 0; i < entry.msg.participants.length; i++){
@@ -45,14 +48,7 @@ function Messages(props){
         return(
             <div className="box" key={index}>
                 <div className="box-title">
-                    {/* <Link to={`/student-dashboard/stats/${box.title.replace(/\s/g, "-")}`}>
-                        <span 
-                        className="internshipLink"
-                        data-json="data/internship.json"
-                        >
-                        {box.title}
-                        </span>
-                    </Link> */}
+                    {}
                     <span>{participant}</span>
                 </div>
                 <div className="box-title">
