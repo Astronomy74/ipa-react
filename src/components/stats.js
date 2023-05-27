@@ -4,6 +4,7 @@ import NavBar from "./navBar";
 import UploadButton from "./uploadButton";
 import { ref, getDownloadURL, uploadBytesResumable, deleteObject } from "firebase/storage";
 import { storage } from "./fireStorage";
+import { getFirestore, collection, getDocs, getDoc, query, setDoc, serverTimestamp, where, addDoc, doc } from "firebase/firestore";
 import { Link, useNavigate } from 'react-router-dom';
 
 //stats sCss
@@ -14,15 +15,20 @@ function StudentStats(props){
 
   const lastItem = useLocation().pathname.split("/").pop();
   const [InternShip, getInternShip] = useState("");
-  const [form, UploadedFromHandle] = useState("");
+  const [form, UploadedFormHandle] = useState("");
   const [transcript, UploadedTranscriptHandle] = useState("");
   const [progress, setProgress] = useState(0);
   const compRef = useRef(null);
+  const [coordinatorInfo, setCoordinatorInfo] = useState('');
+  const [Note, setNote] = useState('');
+
+
+  
   
   
 
   function GetForm(file) {
-    UploadedFromHandle(file);
+    UploadedFormHandle(file);
   }
 
   function GetTranscript(file) {
@@ -41,7 +47,7 @@ function StudentStats(props){
       }
     }
     getInternShip(internshipTemp);
-    UploadedFromHandle("");
+    UploadedFormHandle("");
     UploadedTranscriptHandle("");
     
 
@@ -72,11 +78,17 @@ function StudentStats(props){
  
 
 
-  function HandleFileSubmit(filename) {
-    if(transcript || form){
-      const storageRef = ref(storage, `internship/${filename}/${props.userInfo.login.email}-${lastItem}-${filename}`);
-      const uploadTask = uploadBytesResumable(storageRef, eval(filename));
-      uploadTask.on(
+  const HandleFileSubmit = async (e) => {
+    e.preventDefault();
+    if(!form || !transcript){
+      return;
+    }
+  
+      const formRef = ref(storage, `internship/${props.userInfo.login.email}/${lastItem}/${form.name}`);
+      const transcriptRef = ref(storage, `internship/${props.userInfo.login.email}/${lastItem}/${transcript.name}`);
+      const uploadForm = uploadBytesResumable(formRef, eval(form));
+      const uploadTranscript = uploadBytesResumable(transcriptRef, eval(transcript));
+      uploadForm.on(
         "state_changed",
         (snapshot) => {
           const prog = Math.round(
@@ -86,11 +98,27 @@ function StudentStats(props){
         },
         (error) => console.log(error),
         () => {
-          UploadedFromHandle("");
+          UploadedFormHandle("");
+        }
+      );
+      uploadTranscript.on(
+        "state_changed",
+        (snapshot) => {
+          const prog = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+          setProgress(prog);
+        },
+        (error) => console.log(error),
+        () => {
           UploadedTranscriptHandle("");
         }
       );
-    }
+    
+  }
+
+  function requestLetter(reqType){
+
   }
 
 
@@ -204,31 +232,59 @@ function StudentStats(props){
                     <div className="col-md-12">
                         <div className="btns">
                             <a onClick={downloadFile} className="statsBtn">Download​ Form Temp​late<i className="fa-solid fa-upload"></i></a>
-                            {/* <a className="statsBtn">Upload Form<i className="fa-solid fa-paper-plane"></i></a> */}
-                            <UploadButton passedClass={"statsBtn"} buttonText={"Upload Form"} filePass={GetForm} />
-                            <button onClick={() => {
-                              HandleFileSubmit("form");
-                            }}>
-                              send form
+                            <a onClick={() => requestLetter("letter")} className="statsBtn">Request​ Official Letter<i className="fa-solid fa-upload"></i></a>
+                        </div> 
+                        <h2>Submit Application</h2>
+                        <form className="login-form needs-validation" noValidate onSubmit={HandleFileSubmit}>
+                          <div className="mb-3">
+                              <textarea
+                                type="text"
+                                name="note"
+                                className="form-control"
+                                id="note"
+                                aria-describedby="Note"
+                                placeholder="Optional Note"
+                                required
+                                value={Note}
+                                onChange={(e) => setNote(e.target.value)}
+                              />
+                          </div>
+                          <div className="mb-3">
+                            <div className="form-control">
+                              <UploadButton buttonText={"Browse"} filePass={GetForm} />
+                              <input
+                                type="text"
+                                name="uploadForm"
+                                id="uploadForm"
+                                aria-describedby="uploadForm"
+                                placeholder="Upload Form"
+                                readOnly
+                                value={form ? form.name : ""}
+                              />
+                              </div>
+                          </div>
+                          <div className="mb-3">
+                            <div className="form-control">
+                            <UploadButton buttonText={"Browse"} filePass={GetTranscript} />
+                              <input
+                                type="text"
+                                name="uploadTranscript"
+                                id="uploadTranscript"
+                                aria-describedby="uploadTranscript"
+                                placeholder="Upload Transcript"
+                                readOnly
+                                value={transcript ? transcript.name : ""}
+                              />
+                            </div>
+                          </div>
+                          <div className="btns">
+                        
+                            <button type="submit" className="send-btn">
+                                Submit
                             </button>
-                            <button onClick={() => {
-                              HandleFileDelete("form");
-                            }}>
-                              Delete form
-                            </button>
-                            <a className="statsBtn">Request​ Official Letter<i className="fa-solid fa-upload"></i></a>
-                            <UploadButton passedClass={"statsBtn"} buttonText={"Upload Transcript"} filePass={GetTranscript} />
-                            <button onClick={() => {
-                              HandleFileSubmit("transcript");
-                            }}>
-                              send transcript
-                            </button>
-                            <button onClick={() => {
-                              HandleFileDelete("transcript");
-                            }}>
-                              Delete transcript
-                            </button>
-                        </div>
+                          </div>
+                        </form>
+                        
                     </div>
                 </div>
         </main>
