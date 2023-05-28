@@ -1,7 +1,7 @@
 import * as ActionTypes from './ActionTypes';
 
 export const LoginReducer = (state = {
-  login: ""
+  login: {}
 }, action) => {
 switch (action.type) {
   case ActionTypes.LOGIN_INFO:

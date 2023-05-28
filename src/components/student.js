@@ -51,7 +51,8 @@ function Student(props){
         }});
          
 
-    if (props.internshipInfo.internshipList){
+    if (Object.keys(props.internshipInfo.internshipList).length !== 0){
+        
         const renderBoxes = props.internshipInfo.internshipList.map((box, index) => {
             return(
                 <div className="box" key={index}>
