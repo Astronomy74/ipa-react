@@ -7,7 +7,7 @@ function Logout(props){
     const auth = getAuth();
     
     auth.signOut().then(() => {
-    props.props.loginCollect({}); // clear user info 
+    props.props.logout(); // clear user info 
     }).catch((error) => {
     console.error(error);
     });
