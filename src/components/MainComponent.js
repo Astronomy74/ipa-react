@@ -9,7 +9,8 @@ import Details from './details';
 import Coordinator from './coordinator';
 import Admin from './admin';
 import Career from './career';
-import AnnounceJobs from './announceJobs'
+import AnnounceJobs from './announceJobs';
+import Proceed from './proceed';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { collectUserInfo, collectInternship } from '../redux/ActionCreators';
 import { connect } from 'react-redux';
@@ -48,7 +49,7 @@ class Main extends Component {
     render(){
         
             const { LoginInfo, loginInfoCollect, internshipCollect, InternshipInfo} = this.props;
-            console.log(Object.keys(LoginInfo.login).length !== 0)
+            //console.log(Object.keys(LoginInfo.login).length !== 0)
            
             return(
                 <div className='MainComp' onMouseDown={(e) => this.setState({eventTarget : e.target})}>
@@ -56,7 +57,7 @@ class Main extends Component {
                         <Route 
                             exact path="/login" 
                             element={
-                                Object.keys(LoginInfo.login).length === 0 ? (
+                                !LoginInfo.login ? (
                                         <Login loginCollect={loginInfoCollect}/>
                                     ) : (
                                         <Navigate to={`/${LoginInfo.login.userType}-dashboard`} replace />
@@ -129,6 +130,21 @@ class Main extends Component {
                                 Object.keys(LoginInfo.login).length !== 0 ? (
                                     LoginInfo.login.userType === "coordinator" ? (
                                         <Coordinator loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
+                                    ) : (
+                                        <Navigate to={`/${LoginInfo.login.userType}-dashboard`} replace />
+
+                                    )
+                                  ) : (
+                                    <Navigate to="/login" replace />
+                                  )
+                            }
+                        />
+                        <Route
+                            exact path="/proceed" 
+                            element={
+                                Object.keys(LoginInfo.login).length !== 0 ? (
+                                    LoginInfo.login.userType === "coordinator" ? (
+                                        <Proceed loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
                                     ) : (
                                         <Navigate to={`/${LoginInfo.login.userType}-dashboard`} replace />
 

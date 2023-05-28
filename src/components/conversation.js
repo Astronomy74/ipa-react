@@ -14,6 +14,7 @@ import '../sass/stas.scss'
 
 function Conversation(props){
     const lastItem = useLocation().pathname.split("/").pop();
+    const navigate = useNavigate();
     
     const [Contact, setContact] = useState('');
     const [Subject, setSubject] = useState('');
@@ -182,7 +183,7 @@ function Conversation(props){
       } catch (error) {
         console.error('error submitting message:', error);
       }
-      window.location.href = '/messages';
+      navigate('/messages');
     }
     
     // Handle Attachment

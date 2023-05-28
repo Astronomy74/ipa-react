@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import NavBar from "./navBar";
 import { getFirestore, collection, getDocs, getDoc, query, setDoc, orderBy, serverTimestamp, where, addDoc, doc } from "firebase/firestore";
 import { storage } from "./fireStorage";
+import { Link } from 'react-router-dom';
 
 
 function Coordinator(props){
@@ -33,7 +34,8 @@ function Coordinator(props){
                     studentEmail: studentEmail,
                     transcript: transcript,
                     firstname: firstname,
-                    surname: surname
+                    surname: surname,
+                    internship: "Internship-1"
                 }
                 TempList.push(docObj);
                 
@@ -52,7 +54,8 @@ function Coordinator(props){
                     studentEmail: studentEmail,
                     transcript: transcript,
                     firstname: firstname,
-                    surname: surname
+                    surname: surname,
+                    internship: "Internship-2"
                 }
                 TempList.push(docObj);
                 
@@ -74,7 +77,7 @@ function Coordinator(props){
                 <h2 id="jobOffer1">
                 {doc.firstname} {doc.surname} has sent an Internship Form application
                 </h2>
-                <button className="custom-btn apply-now" data-doc-id="">Proceed</button>
+                <Link to={"/proceed"} onClick={() => passProceedObj(doc)}><button className="custom-btn apply-now" data-doc-id="">Proceed</button></Link>
             </div>
                 
             );
@@ -89,6 +92,10 @@ function Coordinator(props){
             seeAllToggle(false);
             SeeHideToggle("See All Requests")
         }
+    }
+
+    function passProceedObj(doc){
+        localStorage.setItem('request', JSON.stringify(doc));
     }
        
     return(
