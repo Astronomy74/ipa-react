@@ -11,7 +11,7 @@ import Admin from './admin';
 import Career from './career';
 import AnnounceJobs from './announceJobs'
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { collectUserInfo, collectInternship } from '../redux/ActionCreators';
+import { collectUserInfo, collectInternship, logoutFunc } from '../redux/ActionCreators';
 import { connect } from 'react-redux';
 
 
@@ -28,6 +28,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) => ({
     loginInfoCollect: (login) => dispatch(collectUserInfo(login)),
     internshipCollect: (login) => dispatch(collectInternship(login)),
+    logout: () => dispatch(logoutFunc()),
 });
 
 
@@ -47,8 +48,8 @@ class Main extends Component {
 
     render(){
         
-            const { LoginInfo, loginInfoCollect, internshipCollect, InternshipInfo} = this.props;
-            console.log(Object.keys(LoginInfo.login).length !== 0)
+            const { LoginInfo, loginInfoCollect, internshipCollect, InternshipInfo, logout} = this.props;
+           
            
             return(
                 <div className='MainComp' onMouseDown={(e) => this.setState({eventTarget : e.target})}>
@@ -68,7 +69,7 @@ class Main extends Component {
                             element={
                                 Object.keys(LoginInfo.login).length !== 0 ? (
                                     LoginInfo.login.userType === "student" ? (
-                                      <Student loginCollect={loginInfoCollect} internshipCollect={internshipCollect} internshipInfo={InternshipInfo} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
+                                      <Student logout={logout} loginCollect={loginInfoCollect} internshipCollect={internshipCollect} internshipInfo={InternshipInfo} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
                                     ) : (
                                         <Navigate to={`/${LoginInfo.login.userType}-dashboard`} replace />
 
@@ -83,7 +84,7 @@ class Main extends Component {
                             element={
                                 Object.keys(LoginInfo.login).length !== 0 ? (
                                     LoginInfo.login.userType === "student" ? (
-                                      <JobOffers loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
+                                      <JobOffers logout={logout} loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
                                     ) : (
                                         <Navigate to={`/${LoginInfo.login.userType}-dashboard`} replace />
 
@@ -98,7 +99,7 @@ class Main extends Component {
                             element={
                                 Object.keys(LoginInfo.login).length !== 0 ? (
                                     LoginInfo.login.userType === "student" ? (
-                                      <StudentStats loginCollect={loginInfoCollect} userInfo={LoginInfo} internshipCollect={internshipCollect} internshipInfo={InternshipInfo} />
+                                      <StudentStats logout={logout} loginCollect={loginInfoCollect} userInfo={LoginInfo} internshipCollect={internshipCollect} internshipInfo={InternshipInfo} />
                                     ) : (
                                         <Navigate to={`/${LoginInfo.login.userType}-dashboard`} replace />
 
@@ -113,7 +114,7 @@ class Main extends Component {
                             element={
                                 Object.keys(LoginInfo.login).length !== 0 ? (
                                     LoginInfo.login.userType === "student" ? (
-                                        <Details loginCollect={loginInfoCollect} userInfo={LoginInfo}/>
+                                        <Details logout={logout} loginCollect={loginInfoCollect} userInfo={LoginInfo}/>
                                     ) : (
                                         <Navigate to={`/${LoginInfo.login.userType}-dashboard`} replace />
 
@@ -128,7 +129,7 @@ class Main extends Component {
                             element={
                                 Object.keys(LoginInfo.login).length !== 0 ? (
                                     LoginInfo.login.userType === "coordinator" ? (
-                                        <Coordinator loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
+                                        <Coordinator logout={logout} loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
                                     ) : (
                                         <Navigate to={`/${LoginInfo.login.userType}-dashboard`} replace />
 
@@ -143,7 +144,7 @@ class Main extends Component {
                             element={
                                 Object.keys(LoginInfo.login).length !== 0 ? (
                                     LoginInfo.login.userType === "admin" ? (
-                                        <Admin loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
+                                        <Admin logout={logout} loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
                                     ) : (
                                         <Navigate to={`/${LoginInfo.login.userType}-dashboard`} replace />
 
@@ -158,7 +159,7 @@ class Main extends Component {
                             element={
                                 Object.keys(LoginInfo.login).length !== 0 ? (
                                     LoginInfo.login.userType === "career" ? (
-                                        <Career loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
+                                        <Career logout={logout} loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
                                     ) : (
                                         <Navigate to={`/${LoginInfo.login.userType}-dashboard`} replace />
 
@@ -173,7 +174,7 @@ class Main extends Component {
                             element={
                                 Object.keys(LoginInfo.login).length !== 0 ? (
                                     LoginInfo.login.userType === "career" ? (
-                                        <AnnounceJobs loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
+                                        <AnnounceJobs logout={logout} loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
                                     ) : (
                                         <Navigate to={`/${LoginInfo.login.userType}-dashboard`} replace />
 
@@ -188,7 +189,7 @@ class Main extends Component {
                             element={
                                 Object.keys(LoginInfo.login).length !== 0 ? (
                                     LoginInfo.login.userType === "student" || LoginInfo.login.userType === "coordinator" ? (
-                                        <Messages loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
+                                        <Messages logout={logout} loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
                                     ) : (
                                         <Navigate to={`/${LoginInfo.login.userType}-dashboard`} replace />
 
@@ -203,7 +204,7 @@ class Main extends Component {
                             element={
                                 Object.keys(LoginInfo.login).length !== 0 ? (
                                     LoginInfo.login.userType === "student" || LoginInfo.login.userType === "coordinator" ? (
-                                        <Conversation loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
+                                        <Conversation logout={logout} loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
                                     ) : (
                                         <Navigate to={`/${LoginInfo.login.userType}-dashboard`} replace />
 

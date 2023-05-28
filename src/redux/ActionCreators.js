@@ -10,6 +10,10 @@ export const loginInfo = (login) => ({
 	payload: login
 });
 
+export const logoutFunc = () => (dispatch) => {
+  dispatch(loginInfo({}));
+}
+
 
 export const collectInternship = (login) => (dispatch) => {
 	const db = getFirestore();
