@@ -374,9 +374,9 @@ function Conversation(props){
                                  >
                                    <option value="">{Recipient}</option>
                                  </select>
-                                 <h4>
+                                 <span>
                                   Subject: {displaySubject}
-                                </h4>
+                                </span>
                                  </h2>
                                  
                                 ) : (

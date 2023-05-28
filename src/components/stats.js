@@ -4,7 +4,7 @@ import NavBar from "./navBar";
 import UploadButton from "./uploadButton";
 import { ref, getDownloadURL, uploadBytesResumable, deleteObject } from "firebase/storage";
 import { storage } from "./fireStorage";
-import { getFirestore, collection, getDocs, getDoc, query, setDoc, serverTimestamp, where, addDoc, doc } from "firebase/firestore";
+import { getFirestore, collection, getDocs, getDoc, query, setDoc, updateDoc, doc, serverTimestamp } from "firebase/firestore";
 import { Link, useNavigate } from 'react-router-dom';
 
 //stats sCss
@@ -21,12 +21,7 @@ function StudentStats(props){
   const compRef = useRef(null);
   const [coordinatorInfo, setCoordinatorInfo] = useState('');
   const [Note, setNote] = useState('');
-
-
   
-  
-  
-
   function GetForm(file) {
     UploadedFormHandle(file);
   }
@@ -75,7 +70,8 @@ function StudentStats(props){
 
   
 
- 
+  const db = getFirestore();
+  const applicationsRef = collection(db, "applications");
 
 
   const HandleFileSubmit = async (e) => {
@@ -83,9 +79,52 @@ function StudentStats(props){
     if(!form || !transcript){
       return;
     }
-  
-      const formRef = ref(storage, `internship/${props.userInfo.login.email}/${lastItem}/${form.name}`);
-      const transcriptRef = ref(storage, `internship/${props.userInfo.login.email}/${lastItem}/${transcript.name}`);
+    async function insertDatabase(formurl, transcripturl){
+      const applicationData = {
+        studentEmail: props.userInfo.login.email,
+        concluded: false,
+        form: formurl,
+        insured: false,
+        status: "pending",
+        transcript: transcripturl,
+        note: Note,
+        firstname: props.userInfo.login.firstname,
+        surname: props.userInfo.login.surname
+      };
+      const docId = props.userInfo.login.email;
+      const docRef = doc(applicationsRef, docId);
+      try {
+        const docSnapshot = await getDoc(docRef);
+    
+        if (docSnapshot.exists()) {
+          // Document already exists, update the existing map object
+          const existingData = docSnapshot.data();
+          const newData = {
+            ...existingData,
+            [lastItem]: applicationData,
+            lastactivity: serverTimestamp()
+          };
+    
+          await setDoc(docRef, newData);
+        } else {
+          // Document doesn't exist, create a new one with the map object
+          const dataToUpdate = {
+            [lastItem]: applicationData,
+            lastactivity: serverTimestamp()
+          };
+    
+          await setDoc(docRef, dataToUpdate);
+        }
+        
+        console.log("Document inserted/updated successfully.");
+      } catch (error) {
+        console.error("Error inserting/updating document:", error);
+      }
+    }
+      const formextention = form.name.split('.').pop().toLowerCase();
+      const transcriptextention = transcript.name.split('.').pop().toLowerCase();
+      const formRef = ref(storage, `internship/${props.userInfo.login.email}/${lastItem}/${props.userInfo.login.email}-${"form"}.${formextention}`);
+      const transcriptRef = ref(storage, `internship/${props.userInfo.login.email}/${lastItem}/${props.userInfo.login.email}-${"transcript"}.${transcriptextention}`);
       const uploadForm = uploadBytesResumable(formRef, eval(form));
       const uploadTranscript = uploadBytesResumable(transcriptRef, eval(transcript));
       uploadForm.on(
@@ -98,47 +137,34 @@ function StudentStats(props){
         },
         (error) => console.log(error),
         () => {
-          UploadedFormHandle("");
-        }
+          uploadTranscript.on(
+            "state_changed",
+            (snapshot) => {
+              const prog = Math.round(
+                (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+              );
+              setProgress(prog);
+            },
+            (error) => console.log(error),
+            () => {
+              getDownloadURL(formRef).then((formurl) => {
+                getDownloadURL(transcriptRef).then((transcripturl) => {
+                  insertDatabase(formurl, transcripturl);
+                  UploadedFormHandle("");
+                  UploadedTranscriptHandle("");
+                  setNote("");
+                });
+              });
+              
+            }
+            );
+       
+      }
       );
-      uploadTranscript.on(
-        "state_changed",
-        (snapshot) => {
-          const prog = Math.round(
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          );
-          setProgress(prog);
-        },
-        (error) => console.log(error),
-        () => {
-          UploadedTranscriptHandle("");
-        }
-      );
-    
   }
-
   function requestLetter(reqType){
 
   }
-
-
-  function HandleFileDelete(filename) {
-    
-      const storageRef = ref(
-        storage,
-        `internship/${filename}/${props.userInfo.login.email}-${lastItem}-${filename}`
-      );
-  
-      deleteObject(storageRef)
-        .then(() => {
-          console.log('File deleted successfully');
-        })
-        .catch((error) => {
-          console.log('Error deleting file:', error);
-        });
-    
-  }
-
 
   const downloadFile = (event) => {
     const storageRef = ref(storage, 'internship/template/form-template.pdf');

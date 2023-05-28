@@ -1,53 +1,125 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import NavBar from "./navBar";
+import { getFirestore, collection, getDocs, getDoc, query, setDoc, orderBy, serverTimestamp, where, addDoc, doc } from "firebase/firestore";
+import { storage } from "./fireStorage";
 
 
 function Coordinator(props){
 
+    const db = getFirestore();
+    // get reference to jobOffers collection
+    const applicationsRef = collection(db, 'applications');
+    const [docsArray, setdocsArray] = useState([]);
+    const [loading, setLoading] = useState(true);
+    useEffect(() => {
+        // loop through all documents in the collection
+        const qApplications = query(applicationsRef, orderBy("lastactivity", "desc"));
+        getDocs(qApplications).then((querySnapshot) => {
+          let TempList = [];
+          querySnapshot.forEach((doc, index) => {
+            const data = doc.data();
+            if(data.hasOwnProperty("Internship-1") && data["Internship-1"].status === "pending"){
+                const internshipData = data["Internship-1"];
+                const form = internshipData.form;
+                const note = internshipData.note;
+                const studentEmail = internshipData.studentEmail;
+                const transcript = internshipData.transcript;
+                const firstname = internshipData.firstname;
+                const surname = internshipData.surname;
+                let docObj = {
+                    form: form,
+                    note: note,
+                    studentEmail: studentEmail,
+                    transcript: transcript,
+                    firstname: firstname,
+                    surname: surname
+                }
+                TempList.push(docObj);
+                
+            }
+            if(data.hasOwnProperty("Internship-2") && data["Internship-2"].status === "pending"){
+                const internshipData = data["Internship-2"];
+                const form = internshipData.form;
+                const note = internshipData.note;
+                const studentEmail = internshipData.studentEmail;
+                const transcript = internshipData.transcript;
+                const firstname = internshipData.firstname;
+                const surname = internshipData.surname;
+                let docObj = {
+                    form: form,
+                    note: note,
+                    studentEmail: studentEmail,
+                    transcript: transcript,
+                    firstname: firstname,
+                    surname: surname
+                }
+                TempList.push(docObj);
+                
+            }
+          });
+          setdocsArray(TempList);
+          setLoading(false);
+        });
+      }, []);
 
+    const [seeAll, seeAllToggle] = useState('');
+    const [seeHide, SeeHideToggle] = useState("See All Requests")
+    // if(docsArray && docsArray.length > 0){
+    //     renderjobs = docsArray.map((doc) => {
+    //         return (
+    //             <div className="box-request">
+    //             <h2 id="internship-1">
+    //                 {doc.studentEmail} has sent an Internship Form application
+    //             </h2>
+    //             {/* <Link to={`/details/${doc.id}`}><button onClick={() => storeJobId(doc)} className="custom-btn apply-now" data-doc-id="">Proceed</button></Link> */}
+    //             </div>
+                
+    //         );
+    //     });
+    // }  
+        
+        
+    function seeAllToggler(){
+        if(!seeAll){
+            seeAllToggle(true);
+            SeeHideToggle("Hide Requests")
+        }else {
+            seeAllToggle(false);
+            SeeHideToggle("See All Requests")
+        }
+    }
+       
     return(
         <div>
         <NavBar props={props} NavLocation={'dashboard'}/>
-        
-
         <main>
-            <section className="dashBoard-instructor" id="dashBoardInstructor">
-                <div className="container text-center">
+            <section id="dashBoard">
+            <section className="applyforjob" id="applyForJob">
+                    <div className="container text-center">
                     <div className="row">
-                        <div className="col-12">
-                            <h1>
-                                Hello Dr Kristin Benli
-                                <img
-                                    src="images/waving-hand-people.png"
-                                    alt=""
-                                />
-                            </h1>
+                    <div className="col-12">
+                    <h1>Pending Student Requests</h1>
+                    <div className={"boxs-request " + (seeAll? 'active' : '')} id="boxsRequest">
+                    {loading ? (
+                        <p>Loading...</p>
+                    ) : (
+                        docsArray.map((doc, index) => (
+                        <div className="box-request" key={index}>
+                            <h2 id="jobOffer1">
+                            {doc.firstname} {doc.surname} has sent an Internship Form application
+                            </h2>
+                            <button className="custom-btn apply-now" data-doc-id="">Proceed</button>
                         </div>
+                    ))
+                    )}                  
                     </div>
-                </div>
-            </section>
-            <section className="openJobs-instructor" id="openJobsInstructor">
-                <div className="container text-center">
-                    <div className="row">
-                        <div className="col-md-12">
-                            <h1>Requests</h1>
-                            <div className="boxs-request" id="boxsRequest">
-                                <div className="box-request">
-                                    <h2>
-                                        Student "Mahmoud Abdelkerim" has sent
-                                        their internship form.
-                                    </h2>
-                                    <span className="btn" href="#">Generate Letter</span>
-                                    <span className="btn" href="#">Evaluate Form</span>
-                                </div>
-                               
-                            </div>
-                        </div>
-                        <span className="btn sub" id="seeAll"
-                            >See All Form Submissions</span>
+                    <span className="btn sub" id="seeAll" onClick={seeAllToggler}>{seeHide}</span>
                     </div>
-                </div>
-            </section>
+                    </div>
+                    </div>
+                </section>
+                </section>
+            {/* </section>
             <section className="file" id="fileUpload">
                 <div className="container">
                     <div className="row">
@@ -82,11 +154,12 @@ function Coordinator(props){
                         </div>
                     </div>
                 </div>
-            </section>
+            </section> */}
         </main>
         </div>
     );
+    }
 
-}
+
 
 export default Coordinator;
