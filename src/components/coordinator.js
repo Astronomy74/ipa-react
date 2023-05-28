@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import NavBar from "./navBar";
 import { getFirestore, collection, getDocs, getDoc, query, setDoc, orderBy, serverTimestamp, where, addDoc, doc } from "firebase/firestore";
 import { storage } from "./fireStorage";
+import { Link } from 'react-router-dom';
 
 
 function Coordinator(props){
@@ -12,6 +13,7 @@ function Coordinator(props){
     const [docsArray, setdocsArray] = useState([]);
     const [loading, setLoading] = useState(true);
     useEffect(() => {
+        const getMaps = async() => {
         // loop through all documents in the collection
         const qApplications = query(applicationsRef, orderBy("lastactivity", "desc"));
         getDocs(qApplications).then((querySnapshot) => {
@@ -32,7 +34,8 @@ function Coordinator(props){
                     studentEmail: studentEmail,
                     transcript: transcript,
                     firstname: firstname,
-                    surname: surname
+                    surname: surname,
+                    internship: "Internship-1"
                 }
                 TempList.push(docObj);
                 
@@ -51,32 +54,34 @@ function Coordinator(props){
                     studentEmail: studentEmail,
                     transcript: transcript,
                     firstname: firstname,
-                    surname: surname
+                    surname: surname,
+                    internship: "Internship-2"
                 }
                 TempList.push(docObj);
                 
             }
           });
           setdocsArray(TempList);
-          setLoading(false);
+        //   setLoading(false);
         });
-      }, []);
+}
+    getMaps();
+}, []);
 
     const [seeAll, seeAllToggle] = useState('');
     const [seeHide, SeeHideToggle] = useState("See All Requests")
-    // if(docsArray && docsArray.length > 0){
-    //     renderjobs = docsArray.map((doc) => {
-    //         return (
-    //             <div className="box-request">
-    //             <h2 id="internship-1">
-    //                 {doc.studentEmail} has sent an Internship Form application
-    //             </h2>
-    //             {/* <Link to={`/details/${doc.id}`}><button onClick={() => storeJobId(doc)} className="custom-btn apply-now" data-doc-id="">Proceed</button></Link> */}
-    //             </div>
+    if(docsArray){
+        const renderjobs = docsArray.map((doc, index) => {
+            return (
+                <div className="box-request" key={index}>
+                <h2 id="jobOffer1">
+                {doc.firstname} {doc.surname} has sent an Internship Form application
+                </h2>
+                <Link to={"/proceed"} onClick={() => passProceedObj(doc)}><button className="custom-btn apply-now" data-doc-id="">Proceed</button></Link>
+            </div>
                 
-    //         );
-    //     });
-    // }  
+            );
+        });  
         
         
     function seeAllToggler(){
@@ -87,6 +92,10 @@ function Coordinator(props){
             seeAllToggle(false);
             SeeHideToggle("See All Requests")
         }
+    }
+
+    function passProceedObj(doc){
+        localStorage.setItem('request', JSON.stringify(doc));
     }
        
     return(
@@ -100,7 +109,8 @@ function Coordinator(props){
                     <div className="col-12">
                     <h1>Pending Student Requests</h1>
                     <div className={"boxs-request " + (seeAll? 'active' : '')} id="boxsRequest">
-                    {loading ? (
+                        {renderjobs}
+                    {/* {loading ? (
                         <p>Loading...</p>
                     ) : (
                         docsArray.map((doc, index) => (
@@ -111,7 +121,7 @@ function Coordinator(props){
                             <button className="custom-btn apply-now" data-doc-id="">Proceed</button>
                         </div>
                     ))
-                    )}                  
+                    )}                   */}
                     </div>
                     <span className="btn sub" id="seeAll" onClick={seeAllToggler}>{seeHide}</span>
                     </div>
@@ -158,7 +168,9 @@ function Coordinator(props){
         </main>
         </div>
     );
+        }
     }
+        
 
 
 
