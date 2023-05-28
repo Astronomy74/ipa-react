@@ -48,14 +48,9 @@ class Main extends Component {
 
 
     render(){
-        
-<<<<<<< HEAD
+
             const { LoginInfo, loginInfoCollect, internshipCollect, InternshipInfo, logout} = this.props;
            
-=======
-            const { LoginInfo, loginInfoCollect, internshipCollect, InternshipInfo} = this.props;
-            //console.log(Object.keys(LoginInfo.login).length !== 0)
->>>>>>> origin/logoutComp
            
             return(
                 <div className='MainComp' onMouseDown={(e) => this.setState({eventTarget : e.target})}>
@@ -63,7 +58,7 @@ class Main extends Component {
                         <Route 
                             exact path="/login" 
                             element={
-                                !LoginInfo.login ? (
+                                Object.keys(LoginInfo.login).length === 0 ? (
                                         <Login loginCollect={loginInfoCollect}/>
                                     ) : (
                                         <Navigate to={`/${LoginInfo.login.userType}-dashboard`} replace />
