@@ -7,22 +7,8 @@ function Coordinator(props){
 
     return(
         <div>
-        <NavBar props={props}/>
-        <div className="container not">
-            <div className="box-not">
-                <p>
-                    Internship Coordinator " Dr. Kristin Abdo" has approved your
-                    internship request
-                </p>
-            </div>
-            <div className="box-not">
-                <p>
-                    Internship Coordinator " Dr. Kristin Abdo" has approved your
-                    internship request
-                </p>
-            </div>
-            <span href="#" className="" id="seemore">See More</span>
-        </div>
+        <NavBar props={props} NavLocation={'dashboard'}/>
+        
 
         <main>
             <section className="dashBoard-instructor" id="dashBoardInstructor">
@@ -36,11 +22,6 @@ function Coordinator(props){
                                     alt=""
                                 />
                             </h1>
-                        </div>
-                        <div className="col-md-12 btns">
-                            <span href="#fileUpload" className="btn">Upload Form</span>
-                            <span href="#openJobsInstructor" className="btn"
-                                >see all requests</span>
                         </div>
                     </div>
                 </div>
@@ -59,46 +40,7 @@ function Coordinator(props){
                                     <span className="btn" href="#">Generate Letter</span>
                                     <span className="btn" href="#">Evaluate Form</span>
                                 </div>
-                                <div className="box-request">
-                                    <h2>
-                                        Student "Mahmoud Abdelkerim" has sent
-                                        their internship form.
-                                    </h2>
-                                    <span className="btn" href="#">Generate Letter </span>
-                                    <span className="btn" href="#">Evaluate Form </span>
-                                </div>
-                                <div className="box-request">
-                                    <h2>
-                                        Student "Mahmoud Abdelkerim" has sent
-                                        their internship form.
-                                    </h2>
-                                    <span className="btn" href="#">Generate Letter </span>
-                                    <span className="btn" href="#">Evaluate Form </span>
-                                </div>
-                                <div className="box-request">
-                                    <h2>
-                                        Student "Mahmoud Abdelkerim" has sent
-                                        their internship form.
-                                    </h2>
-                                    <span className="btn" href="#">Generate Letter </span>
-                                    <span className="btn" href="#">Evaluate Form </span>
-                                </div>
-                                <div className="box-request">
-                                    <h2>
-                                        Student "Mahmoud Abdelkerim" has sent
-                                        their internship form.
-                                    </h2>
-                                    <span className="btn" href="#">Generate Letter </span>
-                                    <span className="btn" href="#">Evaluate Form </span>
-                                </div>
-                                <div className="box-request">
-                                    <h2>
-                                        Student "Mahmoud Abdelkerim" has sent
-                                        their internship form.
-                                    </h2>
-                                    <span className="btn" href="#">Generate Letter </span>
-                                    <span className="btn" href="#">Evaluate Form </span>
-                                </div>
+                               
                             </div>
                         </div>
                         <span className="btn sub" id="seeAll"
