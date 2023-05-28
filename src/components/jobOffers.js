@@ -67,10 +67,6 @@ function JobOffers(props){
         function storeJobId(doc){
             localStorage.setItem("JobDetails", JSON.stringify(doc)); // save it in local storage
         }
-    
-      
-    
-        
         
         function seeAllToggler(){
             if(!seeAll){
