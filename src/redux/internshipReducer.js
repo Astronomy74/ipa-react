@@ -1,7 +1,7 @@
 import * as ActionTypes from './ActionTypes';
 
 export const InternshipReducer = (state = {
-  internshipList: ""
+  internshipList: {}
 }, action) => {
 switch (action.type) {
   case ActionTypes.INTERNSHIP_INFO:

@@ -48,6 +48,14 @@ function StudentStats(props){
 
     const handleKeyDown = (event) => {
       if (event.key === ' ') {
+        const focusedElement = document.activeElement;
+        if (focusedElement.tagName === 'INPUT' || focusedElement.tagName === 'TEXTAREA') {
+          // If the focused element is an input or textarea, do nothing
+          return;
+        }
+        UploadedFormHandle("");
+        UploadedTranscriptHandle("");
+        setNote("");
         // Spacebar is pressed
         event.preventDefault();
         if(lastItem == 'Internship-1'){

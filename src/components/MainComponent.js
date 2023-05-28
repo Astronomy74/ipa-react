@@ -48,6 +48,7 @@ class Main extends Component {
     render(){
         
             const { LoginInfo, loginInfoCollect, internshipCollect, InternshipInfo} = this.props;
+            console.log(Object.keys(LoginInfo.login).length !== 0)
            
             return(
                 <div className='MainComp' onMouseDown={(e) => this.setState({eventTarget : e.target})}>
@@ -55,7 +56,7 @@ class Main extends Component {
                         <Route 
                             exact path="/login" 
                             element={
-                                !LoginInfo.login ? (
+                                Object.keys(LoginInfo.login).length === 0 ? (
                                         <Login loginCollect={loginInfoCollect}/>
                                     ) : (
                                         <Navigate to={`/${LoginInfo.login.userType}-dashboard`} replace />
@@ -65,7 +66,7 @@ class Main extends Component {
                         <Route
                             exact path="/student-dashboard"
                             element={
-                                LoginInfo.login ? (
+                                Object.keys(LoginInfo.login).length !== 0 ? (
                                     LoginInfo.login.userType === "student" ? (
                                       <Student loginCollect={loginInfoCollect} internshipCollect={internshipCollect} internshipInfo={InternshipInfo} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
                                     ) : (
@@ -80,7 +81,7 @@ class Main extends Component {
                         <Route
                             exact path="/job-offers"
                             element={
-                                LoginInfo.login ? (
+                                Object.keys(LoginInfo.login).length !== 0 ? (
                                     LoginInfo.login.userType === "student" ? (
                                       <JobOffers loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
                                     ) : (
@@ -95,7 +96,7 @@ class Main extends Component {
                         <Route
                             exact path="/student-dashboard/stats/:title"
                             element={
-                                LoginInfo.login ? (
+                                Object.keys(LoginInfo.login).length !== 0 ? (
                                     LoginInfo.login.userType === "student" ? (
                                       <StudentStats loginCollect={loginInfoCollect} userInfo={LoginInfo} internshipCollect={internshipCollect} internshipInfo={InternshipInfo} />
                                     ) : (
@@ -110,7 +111,7 @@ class Main extends Component {
                         <Route
                             exact path="/details/:id"
                             element={
-                                LoginInfo.login ? (
+                                Object.keys(LoginInfo.login).length !== 0 ? (
                                     LoginInfo.login.userType === "student" ? (
                                         <Details loginCollect={loginInfoCollect} userInfo={LoginInfo}/>
                                     ) : (
@@ -125,7 +126,7 @@ class Main extends Component {
                         <Route
                             exact path="/coordinator-dashboard" 
                             element={
-                                LoginInfo.login ? (
+                                Object.keys(LoginInfo.login).length !== 0 ? (
                                     LoginInfo.login.userType === "coordinator" ? (
                                         <Coordinator loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
                                     ) : (
@@ -140,7 +141,7 @@ class Main extends Component {
                         <Route
                             exact path="/admin-dashboard" 
                             element={
-                                LoginInfo.login ? (
+                                Object.keys(LoginInfo.login).length !== 0 ? (
                                     LoginInfo.login.userType === "admin" ? (
                                         <Admin loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
                                     ) : (
@@ -155,7 +156,7 @@ class Main extends Component {
                         <Route
                             exact path="/career-dashboard" 
                             element={
-                                LoginInfo.login ? (
+                                Object.keys(LoginInfo.login).length !== 0 ? (
                                     LoginInfo.login.userType === "career" ? (
                                         <Career loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
                                     ) : (
@@ -170,7 +171,7 @@ class Main extends Component {
                         <Route
                             exact path="/announceJobs" 
                             element={
-                                LoginInfo.login ? (
+                                Object.keys(LoginInfo.login).length !== 0 ? (
                                     LoginInfo.login.userType === "career" ? (
                                         <AnnounceJobs loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
                                     ) : (
@@ -185,7 +186,7 @@ class Main extends Component {
                         <Route
                             exact path="/messages" 
                             element={
-                                LoginInfo.login ? (
+                                Object.keys(LoginInfo.login).length !== 0 ? (
                                     LoginInfo.login.userType === "student" || LoginInfo.login.userType === "coordinator" ? (
                                         <Messages loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
                                     ) : (
@@ -200,7 +201,7 @@ class Main extends Component {
                         <Route
                             exact path="/conversation/:subject" 
                             element={
-                                LoginInfo.login ? (
+                                Object.keys(LoginInfo.login).length !== 0 ? (
                                     LoginInfo.login.userType === "student" || LoginInfo.login.userType === "coordinator" ? (
                                         <Conversation loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
                                     ) : (
