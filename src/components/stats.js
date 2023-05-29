@@ -21,6 +21,9 @@ function StudentStats(props){
   const compRef = useRef(null);
   const [coordinatorInfo, setCoordinatorInfo] = useState('');
   const [Note, setNote] = useState('');
+  const [disabled, setDisabled] = useState(false);
+  const [docExist, setDocExist] = useState(false);
+  const [displayText, setDisplayText] = useState("");
   
   function GetForm(file) {
     UploadedFormHandle(file);
@@ -174,38 +177,38 @@ function StudentStats(props){
 
   }
 
-  const downloadFile = (event) => {
-    const storageRef = ref(storage, 'internship/template/form-template.pdf');
-    event.preventDefault();
-    getDownloadURL(storageRef)
-      .then((downloadURL) => {
-        // Fetch the file using a GET request with responseType: 'blob'
+  // const downloadFile = (event) => {
+  //   const storageRef = ref(storage, 'internship/template/form-template.pdf');
+  //   event.preventDefault();
+  //   getDownloadURL(storageRef)
+  //     .then((downloadURL) => {
+  //       // Fetch the file using a GET request with responseType: 'blob'
           
-          let url = downloadURL;
+  //         let url = downloadURL;
         
-          const xhr = new XMLHttpRequest();
-          xhr.responseType = "blob";
-          xhr.onload = function(event){
-            const blob = xhr.response;
-            const blobUrl = window.URL.createObjectURL(blob);
+  //         const xhr = new XMLHttpRequest();
+  //         xhr.responseType = "blob";
+  //         xhr.onload = function(event){
+  //           const blob = xhr.response;
+  //           const blobUrl = window.URL.createObjectURL(blob);
         
-            const a = document.createElement('a');
-            a.href = blobUrl;
-            a.download = "form-template.pdf";
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+  //           const a = document.createElement('a');
+  //           a.href = blobUrl;
+  //           a.download = "form-template.pdf";
+  //           document.body.appendChild(a);
+  //           a.click();
+  //           document.body.removeChild(a);
         
-            window.URL.revokeObjectURL(blobUrl);
-          };
-          xhr.open("GET", url);
-          xhr.send();
+  //           window.URL.revokeObjectURL(blobUrl);
+  //         };
+  //         xhr.open("GET", url);
+  //         xhr.send();
         
-      })
-      .catch((error) => {
-        console.log('Error getting download URL:', error);
-      });
-  };
+  //     })
+  //     .catch((error) => {
+  //       console.log('Error getting download URL:', error);
+  //     });
+  // };
   
 
   if(props.internshipInfo.internshipList){
@@ -216,11 +219,38 @@ function StudentStats(props){
         </div>
       )
     });
+
+    const isDocExist = async () => {
+      const documentRef = doc(applicationsRef, props.userInfo.login.email);
+      const documentSnapshot = await getDoc(documentRef);
+      if (documentSnapshot.exists()) {
+        const documentData = documentSnapshot.data();
+        const mapObject = documentData[lastItem];
+      
+        if (mapObject && (mapObject.status === "processing" || mapObject.status === "pending")) {
+          setDocExist(true);
+          setDisplayText("You already have an application in process");
+        }
+        else if (mapObject && (mapObject.status === "accepted")){
+          setDocExist(true);
+          setDisplayText("Your application is already accepted")
+        }
+      }
+    };
+    
+    const isFormDisabled = () => {
+      isDocExist();
+      if (docExist === true) {
+        return true;
+      }
+      else return false;
+    }
+
   
   
     return(
         <main ref={compRef} tabIndex={0}>
-            <NavBar props={props} NavLocation={'dashboard'}/>
+            <NavBar props={props}/>
             <h1>Welcome {props.userInfo.login ? props.userInfo.login.firstname + ' ' + props.userInfo.login.surname : ''}</h1>
             <div className="statsContainer text-center">
               <div className="card">
@@ -242,31 +272,31 @@ function StudentStats(props){
                     </div>
                     <div className="col-12 boxs">
                         <div className="box" id="yearApp" style={{order: 4}}>
-                            <h2>{InternShip.year}</h2>
-                            <p></p>
+                            <h2>Year</h2>
+                            <p>{InternShip.year}</p>
                         </div>
                         <div className="box" id="companyApp" style={{order: 2}}>
-                            <h2>{InternShip.company}</h2>
-                            <p></p>
+                            <h2>Company</h2>
+                            <p>{InternShip.company}</p>
                         </div>
                         <div className="box" id="statusApp" style={{order: 5}}>
-                            <h2>{InternShip.status}</h2>
-                            <p></p>
+                            <h2>Status</h2>
+                            <p>{InternShip.status}</p>
                         </div>
                         <div className="box" id="durationApp" style={{order: 3}}>
-                            <h2>{InternShip.duration}</h2>
-                            <p></p>
+                            <h2>Duration</h2>
+                            <p>{InternShip.duration}</p>
                         </div>
                         <div className="box" id="JobTitleApp">
-                            <h2>{InternShip.jobtitle}</h2>
-                            <p></p>
+                            <h2>Job Title</h2>
+                            <p>{InternShip.jobtitle}</p>
                         </div>
                 </div>
             </div>
                     <div className="col-md-12">
                         <div className="btns">
-                            <a onClick={downloadFile} className="statsBtn">Download​ Form Temp​late<i className="fa-solid fa-upload"></i></a>
-                            <a onClick={() => requestLetter("letter")} className="statsBtn">Request​ Official Letter<i className="fa-solid fa-upload"></i></a>
+                            {/* <a onClick={downloadFile} className="statsBtn">Download​ Form Temp​late<i className="fa-solid fa-upload"></i></a> */}
+                            {/* <a onClick={() => requestLetter("letter")} className="statsBtn">Request​ Official Letter<i className="fa-solid fa-upload"></i></a> */}
                         </div> 
                         <h2>Submit Application</h2>
                         <form className="login-form needs-validation" noValidate onSubmit={HandleFileSubmit}>
@@ -312,10 +342,11 @@ function StudentStats(props){
                             </div>
                           </div>
                           <div className="btns">
-                        
-                            <button type="submit" className="send-btn">
+                          {isFormDisabled() && <p className="disabled-text">{displayText}</p>}
+                            <button type="submit" className="send-btn" disabled={isFormDisabled() || disabled}>
                                 Submit
                             </button>
+                            
                           </div>
                         </form>
                         

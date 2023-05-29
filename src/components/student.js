@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import NavBar from "./navBar";
 import { Link } from 'react-router-dom';
-import { getFirestore, collection, getDocs, query, doc, setDoc } from "firebase/firestore";
+import UploadButton from "./uploadButton";
+import { ref, getDownloadURL, uploadBytesResumable, deleteObject } from "firebase/storage";
+import { storage } from "./fireStorage";
+import { getFirestore, collection, getDocs, getDoc, query, setDoc, updateDoc, doc, serverTimestamp } from "firebase/firestore";
 
 //include Main Css & sCss file
 import "../css/main.css";
@@ -9,9 +12,15 @@ import "../sass/main.scss";
 
 function Student(props){
 
+    const [Note, setNote] = useState('');
+    const [docExist, setDocExist] = useState(false);
+    const [displayText, setDisplayText] = useState("");
+    const [disabled, setDisabled] = useState(false);
+
     useEffect(() => {
         props.internshipCollect(props.userInfo.login);
     }, []);
+    
 
     const db = getFirestore();
     const internshipsRef = collection(db, 'internships')
@@ -49,6 +58,65 @@ function Student(props){
             setDoc(doc2Ref, doc2Data)
 
         }});
+
+    const downloadFile = (event) => {
+        const storageRef = ref(storage, 'internship/template/form-template.pdf');
+        event.preventDefault();
+        getDownloadURL(storageRef)
+            .then((downloadURL) => {
+            // Fetch the file using a GET request with responseType: 'blob'
+                
+                let url = downloadURL;
+            
+                const xhr = new XMLHttpRequest();
+                xhr.responseType = "blob";
+                xhr.onload = function(event){
+                const blob = xhr.response;
+                const blobUrl = window.URL.createObjectURL(blob);
+            
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = "form-template.pdf";
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            
+                window.URL.revokeObjectURL(blobUrl);
+                };
+                xhr.open("GET", url);
+                xhr.send();
+            
+            })
+            .catch((error) => {
+            console.log('Error getting download URL:', error);
+            });
+        };
+
+          const isDocExist = async () => {
+            // const documentRef = doc(applicationsRef, props.userInfo.login.email);
+            // const documentSnapshot = await getDoc(documentRef);
+            // if (documentSnapshot.exists()) {
+            //   const documentData = documentSnapshot.data();
+            //   const mapObject = documentData[lastItem];
+            
+            //   if (mapObject && (mapObject.status === "processing" || mapObject.status === "pending")) {
+            //     setDocExist(true);
+            //     setDisplayText("You already have an application in process");
+            //   }
+            //   else if (mapObject && (mapObject.status === "accepted")){
+            //     setDocExist(true);
+            //     setDisplayText("Your application is already accepted")
+            //   }
+            // }
+          };
+          
+          const isFormDisabled = () => {
+            // isDocExist();
+            // if (docExist === true) {
+            //   return true;
+            // }
+            // else return false;
+          }
          
 
     if (Object.keys(props.internshipInfo.internshipList).length !== 0){
@@ -91,12 +159,57 @@ function Student(props){
                 <NavBar props={props} NavLocation={'dashboard'}/>
                 <main>
                 <section id="dashBoard">
-                    <h1>Welcome {props.userInfo.login ? props.userInfo.login.firstname + ' ' + props.userInfo.login.surname : ''}</h1>
                     <div className="dashboard">
+                    <h1>Welcome {props.userInfo.login ? props.userInfo.login.firstname + ' ' + props.userInfo.login.surname : ''}</h1>
                     <div className="container">
                         {renderBoxes}
                     </div>
+                    <div className="statsContainer text-center">
+                        <div className="col-md-12">
+                        <div className="btns">
+                            <a onClick={downloadFile} className="statsBtn">Download​ Form Temp​late<i className="fa-solid fa-upload"></i></a>
+                            
+                        </div>
+                        <h2>Submit Application</h2>
+                        <form className="login-form needs-validation" noValidate>
+                          <div className="mb-3">
+                              <textarea
+                                type="text"
+                                name="note"
+                                className="form-control"
+                                id="note"
+                                aria-describedby="Note"
+                                placeholder="Optional Note"
+                                required
+                                value={Note}
+                                onChange={(e) => setNote(e.target.value)}
+                              />
+                          </div>
+                          <div className="mb-3">
+                            <div className="form-control">
+                            <UploadButton buttonText={"Browse"} />
+                              <input
+                                type="text"
+                                name="uploadTranscript"
+                                id="uploadTranscript"
+                                aria-describedby="uploadTranscript"
+                                placeholder="Upload Transcript"
+                                readOnly
+                                
+                              />
+                            </div>
+                          </div>
+                          <div className="btns">
+                          {isFormDisabled() && <p className="disabled-text">{displayText}</p>}
+                            <button type="submit" className="send-btn" disabled={isFormDisabled() || disabled}>
+                                Submit
+                            </button>
+                            
+                          </div>
+                        </form>
+                        </div>
                     </div>
+                </div>
                 </section>
                 </main>
             </div>

@@ -1,74 +1,138 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import NavBar from "./navBar";
-import { getFirestore, collection, getDocs, getDoc, query, setDoc, serverTimestamp, where, addDoc, doc } from "firebase/firestore";
+import { getFirestore, collection, getDocs, getDoc, query, setDoc, orderBy, serverTimestamp, where, addDoc, doc } from "firebase/firestore";
+import { storage } from "./fireStorage";
+import { Link } from 'react-router-dom';
 
 
 function Career(props){
+
+    const db = getFirestore();
+    const applicationsRef = collection(db, 'applications');
+    const [docsArray, setdocsArray] = useState([]);
+
+    useEffect(() => {
+        const getMaps = async() => {
+        // loop through all documents in the collection
+        const qApplications = query(applicationsRef, orderBy("lastactivity", "desc"));
+        getDocs(qApplications).then((querySnapshot) => {
+          let TempList = [];
+          querySnapshot.forEach((doc, index) => {
+            const data = doc.data();
+            if(data.hasOwnProperty("Internship-1") && data["Internship-1"].status === "processing"){
+                const internshipData = data["Internship-1"];
+                const form = internshipData.form;
+                const note = internshipData.note;
+                const studentEmail = internshipData.studentEmail;
+                const transcript = internshipData.transcript;
+                const firstname = internshipData.firstname;
+                const surname = internshipData.surname;
+                let docObj = {
+                    form: form,
+                    note: note,
+                    studentEmail: studentEmail,
+                    transcript: transcript,
+                    firstname: firstname,
+                    surname: surname,
+                    internship: "Internship-1"
+                }
+                TempList.push(docObj);
+                
+            }
+            if(data.hasOwnProperty("Internship-2") && data["Internship-2"].status === "processing"){
+                const internshipData = data["Internship-2"];
+                const form = internshipData.form;
+                const note = internshipData.note;
+                const studentEmail = internshipData.studentEmail;
+                const transcript = internshipData.transcript;
+                const firstname = internshipData.firstname;
+                const surname = internshipData.surname;
+                let docObj = {
+                    form: form,
+                    note: note,
+                    studentEmail: studentEmail,
+                    transcript: transcript,
+                    firstname: firstname,
+                    surname: surname,
+                    internship: "Internship-2"
+                }
+                TempList.push(docObj);
+                
+            }
+          });
+          setdocsArray(TempList);
+        //   setLoading(false);
+        });
+}
+    getMaps();
+}, []);
+
+    const [seeAll, seeAllToggle] = useState('');
+    const [seeHide, SeeHideToggle] = useState("See All Requests")
+    if(docsArray){
+        const renderjobs = docsArray.map((doc, index) => {
+            return (
+                <div className="box-request" key={index}>
+                <h2 id="jobOffer1">
+                {doc.firstname} {doc.surname} has an approved internship application
+                </h2>
+                <Link to={"/careerProceed"} onClick={() => passProceedObj(doc)}><button className="custom-btn apply-now" data-doc-id="">Proceed</button></Link>
+            </div>
+                
+            );
+        });  
+        
+        
+    function seeAllToggler(){
+        if(!seeAll){
+            seeAllToggle(true);
+            SeeHideToggle("Hide Requests")
+        }else {
+            seeAllToggle(false);
+            SeeHideToggle("See All Requests")
+        }
+    }
+
+    function passProceedObj(doc){
+        localStorage.setItem('request', JSON.stringify(doc));
+    }
 
 
 
     return(
         <main>
         <NavBar props={props} NavLocation={'dashboard'}/>
-        <section className="AnnounceJob-instructor" id="AnnounceJobInstructor">
-            <div className="container text-center">
-                <div className="row">
-                    <div className="col-md-12">
-                        <h1>Approved Requests</h1>
-                        <div className="boxs-request" id="boxsRequest2">
-                            <div className="box-request">
-                                <h2>
-                                    Student "Mahmoud Abdelkerim" Form was
-                                    approved
-                                </h2>
-                                <span className="btn" href="#">Send to SGK</span>
-                            </div>
-                            <div className="box-request">
-                                <h2>
-                                    Student "Mahmoud Abdelkerim" Form was
-                                    approved
-                                </h2>
-                                <span className="btn" href="#">Send to SGK </span>
-                            </div>
-                            <div className="box-request">
-                                <h2>
-                                    Student "Mahmoud Abdelkerim" Form was
-                                    approved
-                                </h2>
-                                <span className="btn" href="#">Send to SGK </span>
-                            </div>
-                            <div className="box-request">
-                                <h2>
-                                    Student "Mahmoud Abdelkerim" Form was
-                                    approved
-                                </h2>
-                                <span className="btn" href="#">Send to SGK </span>
-                            </div>
-                            <div className="box-request">
-                                <h2>
-                                    Student "Mahmoud Abdelkerim" Form was
-                                    approved
-                                </h2>
-                                <span className="btn" href="#">Send to SGK </span>
-                            </div>
-                            <div className="box-request">
-                                <h2>
-                                    Student "Mahmoud Abdelkerim" Form was
-                                    approved
-                                </h2>
-                                <span className="btn" href="#">Send to SGK </span>
-                            </div>
+        <section id="dashBoard">
+            <section className="applyforjob" id="applyForJob">
+                    <div className="container text-center">
+                    <div className="row">
+                    <div className="col-12">
+                    <h1>Pending SGK Requests</h1>
+                    <div className={"boxs-request " + (seeAll? 'active' : '')} id="boxsRequest">
+                        {renderjobs}
+                    {/* {loading ? (
+                        <p>Loading...</p>
+                    ) : (
+                        docsArray.map((doc, index) => (
+                        <div className="box-request" key={index}>
+                            <h2 id="jobOffer1">
+                            {doc.firstname} {doc.surname} has sent an Internship Form application
+                            </h2>
+                            <button className="custom-btn apply-now" data-doc-id="">Proceed</button>
                         </div>
+                    ))
+                    )}                   */}
                     </div>
-                    <span className="btn sub" id="seeAll2"
-                        >See All Form Submissions</span>
-                </div>
-            </div>
-        </section>
+                    <span className="btn sub" id="seeAll" onClick={seeAllToggler}>{seeHide}</span>
+                    </div>
+                    </div>
+                    </div>
+                </section>
+                </section>
 
         </main>
     );
-
+    }
 }
 
 export default Career;
