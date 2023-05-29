@@ -17,7 +17,8 @@ function UploadButton(props){
         ref={fileInputRef}
         className="file-upload__input"
         type="file"
-        multiple 
+        multiple
+        accept=".pdf" 
         style={{ display: 'none' }}
         onChange={handleFileUpload}
       />

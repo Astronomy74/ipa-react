@@ -156,7 +156,7 @@ class Main extends Component {
                             element={
                                 Object.keys(LoginInfo.login).length !== 0 ? (
                                     LoginInfo.login.userType === "coordinator" ? (
-                                        <Proceed loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
+                                        <Proceed logout={logout} loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
                                     ) : (
                                         <Navigate to={`/${LoginInfo.login.userType}-dashboard`} replace />
 
