@@ -173,53 +173,10 @@ function StudentStats(props){
       }
       );
   }
-  function requestLetter(reqType){
 
-  }
 
-  // const downloadFile = (event) => {
-  //   const storageRef = ref(storage, 'internship/template/form-template.pdf');
-  //   event.preventDefault();
-  //   getDownloadURL(storageRef)
-  //     .then((downloadURL) => {
-  //       // Fetch the file using a GET request with responseType: 'blob'
-          
-  //         let url = downloadURL;
-        
-  //         const xhr = new XMLHttpRequest();
-  //         xhr.responseType = "blob";
-  //         xhr.onload = function(event){
-  //           const blob = xhr.response;
-  //           const blobUrl = window.URL.createObjectURL(blob);
-        
-  //           const a = document.createElement('a');
-  //           a.href = blobUrl;
-  //           a.download = "form-template.pdf";
-  //           document.body.appendChild(a);
-  //           a.click();
-  //           document.body.removeChild(a);
-        
-  //           window.URL.revokeObjectURL(blobUrl);
-  //         };
-  //         xhr.open("GET", url);
-  //         xhr.send();
-        
-  //     })
-  //     .catch((error) => {
-  //       console.log('Error getting download URL:', error);
-  //     });
-  // };
-  
 
-  if(props.internshipInfo.internshipList){
-    const internshipBtns = props.internshipInfo.internshipList.map((btn, index) => {
-      return(
-        <div className="btns-top text" key={index}>
-            <Link to={`/student-dashboard/stats/${btn.title.replace(/\s/g, "-")}`}><span className={"intern-btn " + (InternShip.title == btn.title ? 'active' : '')} id="button1" data-json="../data/internship.json">{btn.title}</span></Link>
-        </div>
-      )
-    });
-
+  useEffect(() => {
     const isDocExist = async () => {
       const documentRef = doc(applicationsRef, props.userInfo.login.email);
       const documentSnapshot = await getDoc(documentRef);
@@ -234,17 +191,28 @@ function StudentStats(props){
         else if (mapObject && (mapObject.status === "accepted")){
           setDocExist(true);
           setDisplayText("Your application is already accepted")
+        }else {
+          setDocExist(false);
+          setDisplayText("")
         }
       }
     };
+    isDocExist();
+  }, [lastItem]);
+  
+
+  if(props.internshipInfo.internshipList){
+    const internshipBtns = props.internshipInfo.internshipList.map((btn, index) => {
+      return(
+        <div className="btns-top text" key={index}>
+            <Link to={`/student-dashboard/stats/${btn.title.replace(/\s/g, "-")}`}><span className={"intern-btn " + (InternShip.title == btn.title ? 'active' : '')} id="button1" data-json="../data/internship.json">{btn.title}</span></Link>
+        </div>
+      )
+    });
+
+
     
-    const isFormDisabled = () => {
-      isDocExist();
-      if (docExist === true) {
-        return true;
-      }
-      else return false;
-    }
+   
 
   
   
@@ -294,10 +262,7 @@ function StudentStats(props){
                 </div>
             </div>
                     <div className="col-md-12">
-                        <div className="btns">
-                            {/* <a onClick={downloadFile} className="statsBtn">Download​ Form Temp​late<i className="fa-solid fa-upload"></i></a> */}
-                            {/* <a onClick={() => requestLetter("letter")} className="statsBtn">Request​ Official Letter<i className="fa-solid fa-upload"></i></a> */}
-                        </div> 
+                        
                         <h2>Submit Application</h2>
                         <form className="login-form needs-validation" noValidate onSubmit={HandleFileSubmit}>
                           <div className="mb-3">
@@ -342,8 +307,8 @@ function StudentStats(props){
                             </div>
                           </div>
                           <div className="btns">
-                          {isFormDisabled() && <p className="disabled-text">{displayText}</p>}
-                            <button type="submit" className="send-btn" disabled={isFormDisabled() || disabled}>
+                          {docExist && <p className="disabled-text">{displayText}</p>}
+                            <button type="submit" className={`send-btn ${docExist ? 'disabled' : ''}`} disabled={docExist || disabled}>
                                 Submit
                             </button>
                             

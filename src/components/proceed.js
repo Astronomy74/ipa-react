@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import NavBar from "./navBar";
 import FormProcess from "./formProcess";
+import LetterProcess from "./letterProcess";
 
 function Proceed(props) {
     const storedData = localStorage.getItem('request');
@@ -14,7 +15,7 @@ function Proceed(props) {
         {parsedData.internship ? (
             <FormProcess request={parsedData}/>
             ) : (
-                <div></div>
+            <LetterProcess request={parsedData}/>
             )}
         </main>
         </div>

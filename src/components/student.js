@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import UploadButton from "./uploadButton";
 import { ref, getDownloadURL, uploadBytesResumable, deleteObject } from "firebase/storage";
 import { storage } from "./fireStorage";
-import { getFirestore, collection, getDocs, getDoc, query, setDoc, updateDoc, doc, serverTimestamp } from "firebase/firestore";
+import { getFirestore, collection, getDocs, getDoc, query, setDoc, updateDoc, doc, addDoc } from "firebase/firestore";
 
 //include Main Css & sCss file
 import "../css/main.css";
@@ -12,10 +12,8 @@ import "../sass/main.scss";
 
 function Student(props){
 
-    const [Note, setNote] = useState('');
-    const [docExist, setDocExist] = useState(false);
-    const [displayText, setDisplayText] = useState("");
-    const [disabled, setDisabled] = useState(false);
+    
+    const [transcript, UploadedTranscriptHandle] = useState("");
 
     useEffect(() => {
         props.internshipCollect(props.userInfo.login);
@@ -59,6 +57,56 @@ function Student(props){
 
         }});
 
+    const requestsRef = collection(db, 'request')
+
+    const HandleFileSubmit = async (e) => {
+        e.preventDefault();
+        if(!transcript){
+            return;
+        }
+        async function insertDatabase(transcripturl){
+            const LetterData = {
+                studentEmail: props.userInfo.login.email,
+                handled: false,
+                transcript: transcripturl,
+                firstname: props.userInfo.login.firstname,
+                surname: props.userInfo.login.surname
+            };
+            
+            try {
+            
+            await addDoc(requestsRef, LetterData);
+            
+            console.log("Document inserted/updated successfully.");
+            } catch (error) {
+            console.error("Error inserting/updating document:", error);
+            }
+        }
+            const transcriptextention = transcript.name.split('.').pop().toLowerCase();
+            const transcriptRef = ref(storage, `requests/${props.userInfo.login.email}/${props.userInfo.login.email}-${"transcript"}.${transcriptextention}`);
+            const uploadTranscript = uploadBytesResumable(transcriptRef, eval(transcript));
+            
+            uploadTranscript.on(
+            "state_changed",
+            (snapshot) => {
+                
+            },
+            (error) => console.log(error),
+            () => {
+                
+                getDownloadURL(transcriptRef).then((transcripturl) => {
+                    insertDatabase(transcripturl);
+                    UploadedTranscriptHandle("");
+                });
+                
+                
+            }
+            );
+            
+            
+           
+        }
+
     const downloadFile = (event) => {
         const storageRef = ref(storage, 'internship/template/form-template.pdf');
         event.preventDefault();
@@ -92,31 +140,15 @@ function Student(props){
             });
         };
 
-          const isDocExist = async () => {
-            // const documentRef = doc(applicationsRef, props.userInfo.login.email);
-            // const documentSnapshot = await getDoc(documentRef);
-            // if (documentSnapshot.exists()) {
-            //   const documentData = documentSnapshot.data();
-            //   const mapObject = documentData[lastItem];
-            
-            //   if (mapObject && (mapObject.status === "processing" || mapObject.status === "pending")) {
-            //     setDocExist(true);
-            //     setDisplayText("You already have an application in process");
-            //   }
-            //   else if (mapObject && (mapObject.status === "accepted")){
-            //     setDocExist(true);
-            //     setDisplayText("Your application is already accepted")
-            //   }
-            // }
-          };
-          
-          const isFormDisabled = () => {
-            // isDocExist();
-            // if (docExist === true) {
-            //   return true;
-            // }
-            // else return false;
-          }
+
+    
+    function GetTranscript(file) {
+        UploadedTranscriptHandle(file);
+        }
+    
+
+
+    
          
 
     if (Object.keys(props.internshipInfo.internshipList).length !== 0){
@@ -152,6 +184,7 @@ function Student(props){
                         </div>
             );
         });
+
     
     
         return(
@@ -166,47 +199,33 @@ function Student(props){
                     </div>
                     <div className="statsContainer text-center">
                         <div className="col-md-12">
+                       
                         <div className="btns">
                             <a onClick={downloadFile} className="statsBtn">Download​ Form Temp​late<i className="fa-solid fa-upload"></i></a>
+                            <h2>Request​ Official Letter</h2>
+                            <form  className="login-form needs-validation" noValidate onSubmit={HandleFileSubmit}>
+                              <div className="mb-3">
+                                <div className="form-control">
+                                <UploadButton buttonText={"Browse"} filePass={GetTranscript} />
+                                  <input
+                                    type="text"
+                                    name="uploadTranscript"
+                                    id="uploadTranscript"
+                                    aria-describedby="uploadTranscript"
+                                    placeholder="Upload Transcript"
+                                    readOnly
+                                    value={transcript ? transcript.name : ""}
+                                  />
+                                </div>
+                              </div>
+                              
+                              <button type="submit" className={'send-btn'}>
+                                Request​ Official Letter
+                              </button>
+                              
+                            </form>
                             
-                        </div>
-                        <h2>Submit Application</h2>
-                        <form className="login-form needs-validation" noValidate>
-                          <div className="mb-3">
-                              <textarea
-                                type="text"
-                                name="note"
-                                className="form-control"
-                                id="note"
-                                aria-describedby="Note"
-                                placeholder="Optional Note"
-                                required
-                                value={Note}
-                                onChange={(e) => setNote(e.target.value)}
-                              />
-                          </div>
-                          <div className="mb-3">
-                            <div className="form-control">
-                            <UploadButton buttonText={"Browse"} />
-                              <input
-                                type="text"
-                                name="uploadTranscript"
-                                id="uploadTranscript"
-                                aria-describedby="uploadTranscript"
-                                placeholder="Upload Transcript"
-                                readOnly
-                                
-                              />
-                            </div>
-                          </div>
-                          <div className="btns">
-                          {isFormDisabled() && <p className="disabled-text">{displayText}</p>}
-                            <button type="submit" className="send-btn" disabled={isFormDisabled() || disabled}>
-                                Submit
-                            </button>
-                            
-                          </div>
-                        </form>
+                        </div> 
                         </div>
                     </div>
                 </div>

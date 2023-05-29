@@ -10,8 +10,9 @@ function Coordinator(props){
     const db = getFirestore();
     // get reference to jobOffers collection
     const applicationsRef = collection(db, 'applications');
+    const requestsRef = collection(db, 'request');
     const [docsArray, setdocsArray] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [RequestsArray, setRequestsArray] = useState([]);
     useEffect(() => {
         const getMaps = async() => {
         // loop through all documents in the collection
@@ -64,6 +65,15 @@ function Coordinator(props){
           setdocsArray(TempList);
         //   setLoading(false);
         });
+        const qReqests = query(requestsRef);
+        getDocs(qReqests).then((querySnapshot) => {
+            let TempList = [];
+            querySnapshot.forEach((doc, index) => {
+            const data = doc.data();
+            TempList.push(data);
+            });
+            setRequestsArray(TempList);
+        });
 }
     getMaps();
 }, []);
@@ -71,7 +81,7 @@ function Coordinator(props){
     const [seeAll, seeAllToggle] = useState('');
     const [seeHide, SeeHideToggle] = useState("See All Requests")
     if(docsArray){
-        const renderjobs = docsArray.map((doc, index) => {
+        const renderFormRequests = docsArray.map((doc, index) => {
             return (
                 <div className="box-request" key={index}>
                 <h2 id="jobOffer1">
@@ -81,7 +91,19 @@ function Coordinator(props){
             </div>
                 
             );
-        });  
+        });
+        
+        const renderLetterRequests = RequestsArray.map((doc, index) => {
+            return (
+                <div className="box-request" key={index}>
+                <h2 id="jobOffer1">
+                {doc.firstname} {doc.surname} has sent an Official Letter Request
+                </h2>
+                <Link to={"/proceed"} onClick={() => passProceedObj(doc)}><button className="custom-btn apply-now" data-doc-id="">Proceed</button></Link>
+            </div>
+                
+            );
+        }); 
         
         
     function seeAllToggler(){
@@ -103,68 +125,34 @@ function Coordinator(props){
         <NavBar props={props} NavLocation={'dashboard'}/>
         <main>
             <section id="dashBoard">
-            <section className="applyforjob" id="applyForJob">
-                    <div className="container text-center">
-                    <div className="row">
-                    <div className="col-12">
-                    <h1>Pending Student Requests</h1>
-                    <div className={"boxs-request " + (seeAll? 'active' : '')} id="boxsRequest">
-                        {renderjobs}
-                    {/* {loading ? (
-                        <p>Loading...</p>
-                    ) : (
-                        docsArray.map((doc, index) => (
-                        <div className="box-request" key={index}>
-                            <h2 id="jobOffer1">
-                            {doc.firstname} {doc.surname} has sent an Internship Form application
-                            </h2>
-                            <button className="custom-btn apply-now" data-doc-id="">Proceed</button>
+                <section className="applyforjob" id="applyForJob">
+                        <div className="container text-center">
+                        <div className="row">
+                        <div className="col-12">
+                        <h1>Pending Form Requests</h1>
+                        <div className={"boxs-request " + (seeAll? 'active' : '')} id="boxsRequest">
+                            {renderFormRequests}
                         </div>
-                    ))
-                    )}                   */}
-                    </div>
-                    <span className="btn sub" id="seeAll" onClick={seeAllToggler}>{seeHide}</span>
-                    </div>
-                    </div>
-                    </div>
-                </section>
-                </section>
-            {/* </section>
-            <section className="file" id="fileUpload">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-md-12">
-                            <div className="pdf-file__wrapper">
-                                <img
-                                    src="images/file-pdf-regular.svg"
-                                    alt="pdf icon"
-                                />
-                            </div>
-                            <div className="buttons__wrapper">
-                                <button className="approve_btn">
-                                    Sign & Approve
-                                </button>
-                                <button className="disapprove_btn">
-                                    Disapprove & Send Back
-                                </button>
-                            </div>
-                            <div className="card--wrapper">
-                                <h1>Why is it rejected?</h1>
-                                <textarea
-                                    name="rejection cause"
-                                    id="rejection-explaination"
-                                    cols="30"
-                                    rows="10"
-                                    placeholder="Type the rejection reason...."
-                                ></textarea>
-                                <button className="send-rejetion_btn">
-                                    Send back to student
-                                </button>
-                            </div>
+                        <span className="btn sub" id="seeAll" onClick={seeAllToggler}>{seeHide}</span>
                         </div>
-                    </div>
-                </div>
-            </section> */}
+                        </div>
+                        </div>
+                </section>
+                <section className="applyforjob" id="applyForJob">
+                        <div className="container text-center">
+                        <div className="row">
+                        <div className="col-12">
+                        <h1>Pending Official Letter Requests</h1>
+                        <div className={"boxs-request " + (seeAll? 'active' : '')} id="boxsRequest">
+                            {renderLetterRequests}
+                        </div>
+                        <span className="btn sub" id="seeAll" onClick={seeAllToggler}>{seeHide}</span>
+                        </div>
+                        </div>
+                        </div>
+                </section>
+            </section>
+            
         </main>
         </div>
     );
