@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import UploadButton from "./uploadButton";
 import { ref, getDownloadURL, uploadBytesResumable, deleteObject } from "firebase/storage";
 import { storage } from "./fireStorage";
-import { getFirestore, collection, getDocs, getDoc, query, setDoc, updateDoc, doc, addDoc } from "firebase/firestore";
+import { getFirestore, collection, getDocs, getDoc, query, setDoc, updateDoc, doc, addDoc, where } from "firebase/firestore";
 
 //include Main Css & sCss file
 import "../css/main.css";
@@ -14,6 +14,7 @@ function Student(props){
 
     
     const [transcript, UploadedTranscriptHandle] = useState("");
+    const [LetterUrl, SetLetterUrl] = useState("");
 
     useEffect(() => {
         props.internshipCollect(props.userInfo.login);
@@ -21,6 +22,18 @@ function Student(props){
     
 
     const db = getFirestore();
+    
+    async function getUrl(){
+    const usersCollection = collection(db, "users");
+    const querySnapshot = await getDocs(query(usersCollection, where("email", "==", props.userInfo.login.email)));
+
+    querySnapshot.forEach(async (userDoc) => {
+        const userData = userDoc.data();
+        SetLetterUrl(userData.letter);
+    });
+    }
+    getUrl();
+
     const internshipsRef = collection(db, 'internships')
     const qInternships = query(internshipsRef);
     getDocs(qInternships).then((querySnapshot) => {
@@ -107,7 +120,7 @@ function Student(props){
            
         }
 
-    const downloadFile = (event) => {
+    const downloadFormTemplate = (event) => {
         const storageRef = ref(storage, 'internship/template/form-template.pdf');
         event.preventDefault();
         getDownloadURL(storageRef)
@@ -139,6 +152,30 @@ function Student(props){
             console.log('Error getting download URL:', error);
             });
         };
+
+    const downloadOfficialLetter = (event) => {
+            event.preventDefault();
+            let url = LetterUrl;
+        
+            const xhr = new XMLHttpRequest();
+            xhr.responseType = "blob";
+            xhr.onload = function(event){
+            const blob = xhr.response;
+            const blobUrl = window.URL.createObjectURL(blob);
+        
+            const a = document.createElement('a');
+            a.href = blobUrl;
+            a.download = "official-letter.pdf";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        
+            window.URL.revokeObjectURL(blobUrl);
+            };
+            xhr.open("GET", url);
+            xhr.send();
+        };
+        
 
 
     
@@ -201,7 +238,10 @@ function Student(props){
                         <div className="col-md-12">
                        
                         <div className="btns">
-                            <a onClick={downloadFile} className="statsBtn">Download​ Form Temp​late<i className="fa-solid fa-upload"></i></a>
+                            <a onClick={downloadFormTemplate} className="statsBtn">Download​ Form Temp​late<i className="fa-solid fa-upload"></i></a>
+                            {LetterUrl &&  
+                               <a onClick={downloadOfficialLetter} className="statsBtn">Download​ Official Letter<i className="fa-solid fa-upload"></i></a>
+                            }
                             <h2>Request​ Official Letter</h2>
                             <form  className="login-form needs-validation" noValidate onSubmit={HandleFileSubmit}>
                               <div className="mb-3">

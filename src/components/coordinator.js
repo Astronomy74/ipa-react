@@ -69,8 +69,16 @@ function Coordinator(props){
         getDocs(qReqests).then((querySnapshot) => {
             let TempList = [];
             querySnapshot.forEach((doc, index) => {
+            const dataId = doc.id;
             const data = doc.data();
-            TempList.push(data);
+            if(!data.handled){
+            const Item = {
+                data: data,
+                id: dataId
+            }
+            TempList.push(Item);
+            }
+
             });
             setRequestsArray(TempList);
         });
@@ -80,7 +88,7 @@ function Coordinator(props){
 
     const [seeAll, seeAllToggle] = useState('');
     const [seeHide, SeeHideToggle] = useState("See All Requests")
-    if(docsArray){
+    if(docsArray && RequestsArray){
         const renderFormRequests = docsArray.map((doc, index) => {
             return (
                 <div className="box-request" key={index}>
@@ -97,7 +105,7 @@ function Coordinator(props){
             return (
                 <div className="box-request" key={index}>
                 <h2 id="jobOffer1">
-                {doc.firstname} {doc.surname} has sent an Official Letter Request
+                {doc.data.firstname} {doc.data.surname} has sent an Official Letter Request
                 </h2>
                 <Link to={"/proceed"} onClick={() => passProceedObj(doc)}><button className="custom-btn apply-now" data-doc-id="">Proceed</button></Link>
             </div>
