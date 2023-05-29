@@ -6,6 +6,7 @@ import { storage } from "./fireStorage";
 function FormProcess(props) {
     const url = props.request.form;
     const navigate = useNavigate();
+    const [popUp, setPopUp] = useState("");
 
     const handleDisapprove = async () => {
         const db = getFirestore();
@@ -17,6 +18,7 @@ function FormProcess(props) {
         const applicationData = applicationSnapshot.data();
         applicationData[internship].status = "rejected";
         await updateDoc(getApplication, applicationData);
+        navigate('/career-dashboard');
     }
     const handleApprove = async () => {
         const db = getFirestore();
@@ -30,6 +32,15 @@ function FormProcess(props) {
         await updateDoc(getApplication, applicationData);
         navigate('/career-dashboard');
     }
+
+    function popUpToggle(){
+        if(!popUp){
+            setPopUp(true);
+        }else{
+            setPopUp(false);
+        }
+    }
+
     return(
         <div>
             <main>
@@ -49,11 +60,11 @@ function FormProcess(props) {
                                 <button onClick={handleApprove} className="approve_btn">
                                     Approve
                                 </button>
-                                <button onClick={handleDisapprove} className="disapprove_btn">
-                                    Disapprove
+                                <button onClick={popUpToggle} className="disapprove_btn">
+                                    Reject
                                 </button>
                             </div>
-                            <div className="card--wrapper">
+                            <div className={"card--wrapper " + (popUp ? "open" : "")}>
                                 <h1>Why is it rejected?</h1>
                                 <textarea
                                     name="rejection cause"
@@ -62,7 +73,7 @@ function FormProcess(props) {
                                     rows="10"
                                     placeholder="Type the rejection reason...."
                                 ></textarea>
-                                <button className="send-rejetion_btn">
+                                <button onClick={handleDisapprove} className="send-rejetion_btn">
                                     Send back to student
                                 </button>
                             </div>
