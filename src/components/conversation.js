@@ -98,8 +98,7 @@ function Conversation(props){
       getEmailFromFirestore();
     }, []);
 
-
-
+   
     const handleSubmit = async (e) => {
       e.preventDefault();
       
@@ -110,7 +109,7 @@ function Conversation(props){
     
    
     ///////////// Handle Message Submit /////////////
-
+      
     const submitMessage = async (folderName ,attachmentLink, attachmentName) => {
      
       const messageData = { // this is the structure I'm using, a map type field in the database
@@ -119,10 +118,11 @@ function Conversation(props){
             message: Message, // gets Message from the form box
             attachmentName: attachmentName || '',
             attachmentLink: attachmentLink || '',
-            sender: props.userInfo.login.email
+            sender: props.userInfo.login.email,
+            senderFirstName: props.userInfo.login.firstname,
+            senderSurname: props.userInfo.login.surname,
           };    
   
-      
       try {
         const conversationCollectionRef = collection(db, 'conversations');
         // every entry will have participants, so we can fetch correctly
@@ -130,11 +130,41 @@ function Conversation(props){
         if(props.userInfo.login.userType === "student"){
           Participants = [props.userInfo.login.email, coordinatorInfo.email];
           messageData.receiver = coordinatorInfo.email;
+          messageData.receiverFirstName = coordinatorInfo.name;
+          messageData.receiverSurname = coordinatorInfo.surname;
         }else{
-          Participants = [props.userInfo.login.email, Contact];
-          messageData.receiver = Contact;
+          if(lastItem === 'new'){
+          Participants = [props.userInfo.login.email, Contact.email];
+          messageData.receiver = Contact.email;
+          messageData.receiverFirstName = Contact.name;
+          messageData.receiverSurname = Contact.surname;
+          }else{
+          
+          const usersCollection = collection(db, "users");
+          const qEmail = query(usersCollection, where("email", "==", Recipient));
+          getDocs(qEmail)
+          .then((querySnapshot) => {
+              if (querySnapshot.size > 0) { // fetch all the info we'll need later
+              const firstname = querySnapshot.docs[0].data().name;
+              const surname = querySnapshot.docs[0].data().surname;
+              const email = querySnapshot.docs[0].data().email;
+
+              
+              Participants = [props.userInfo.login.email, email];
+              messageData.receiver = email;
+              messageData.receiverFirstName = firstname;
+              messageData.receiverSurname = surname;
+            }
+          })
+          .catch((error) => {
+              console.log("Error getting documents: ", error); // if fetching documents failed
+          });
+
+          
+          }
+
         }
-        console.log(Participants)   
+        
         
         // If it's a new message
         if(lastItem === 'new'){
@@ -158,6 +188,7 @@ function Conversation(props){
               lastactivity: serverTimestamp()
             });
           }
+          navigate('/messages');
         }
         else {
           // if it's not a new message 
@@ -183,7 +214,7 @@ function Conversation(props){
       } catch (error) {
         console.error('error submitting message:', error);
       }
-      navigate('/messages');
+     
     }
     
     // Handle Attachment
@@ -294,6 +325,7 @@ function Conversation(props){
       }, [UpdateDetect]);
   
       if(conversation){
+
         const renderConversations = conversation.sort((a, b) => a.timestamp.toDate() - b.timestamp.toDate()) // Sort by timestamp
           .map((entry) => {
             const msgDate = entry.timestamp.toDate();
@@ -339,7 +371,7 @@ function Conversation(props){
                             {box.title}
                             </span>
                         </Link> */}
-                        <span>{entry.sender} at </span>
+                        <span>{entry.sender} {entry.senderFirstName} {entry.senderSurname}at </span>
                         <span>{formattedTime}, {formattedDate}</span>
                         <div>
                           <div>
@@ -386,12 +418,12 @@ function Conversation(props){
                                     aria-label="Default select example"
                                     name="contactType"
                                     className="form-control"
-                                    onChange={(e) => setContact(e.target.value)}
+                                    onChange={(e) => setContact(JSON.parse(e.target.options[e.target.selectedIndex].value))}
                                     required
                                   >
                                     <option value="">{NewMsgContact}</option>
                                     {StudentsInfo.map((student, index) => (
-                                      <option key={index} value={student.email}>
+                                      <option key={index} value={JSON.stringify({ email: student.email, name: student.name, surname: student.surname })}>
                                         {student.email}
                                       </option>
                                     ))}

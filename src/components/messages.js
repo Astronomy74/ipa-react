@@ -26,10 +26,42 @@ function Messages(props){
             conversationObj.id = conversationId;
             conversationObj.msg = conversation;
             conversationObj.lastactivity = lastactivity;
+
+            const conversationData = doc.data();
+
+            const msgData = Object.values(conversationData).find(obj => {
+            const keys = Object.keys(obj);
+            return (
+                !keys.includes('lastactivity') &&
+                !keys.includes('participants') &&
+                !keys.includes('subject') &&
+                obj !== conversationData.lastactivity &&
+                obj !== conversationData.participants &&
+                obj !== conversationData.subject
+            );
+            });
+
+            
+            if(msgData.receiver !== props.userInfo.login.email){
+                let participant = {
+                    email: msgData.receiver,
+                    name: msgData.receiverFirstName,
+                    surname: msgData.receiverSurname,
+                }
+                conversationObj.participant = participant;
+            }else{
+                let participant = {
+                    email: msgData.sender,
+                    name: msgData.senderFirstName,
+                    surname: msgData.senderSurname,
+                }
+                conversationObj.participant = participant;
+            }
+            
+
             conversationList.push(conversationObj);
         });
         conversationList.sort((a, b) => b.lastactivity - a.lastactivity);
-        console.log(conversationList);
         setConversations(conversationList);
 
     })
@@ -39,17 +71,11 @@ function Messages(props){
     }, []);
 
     const renderConversations = conversations.map((entry, index) => {
-        let participant;
-        for(let i = 0; i < entry.msg.participants.length; i++){
-            if(entry.msg.participants[i] !== props.userInfo.login.email){
-                participant = entry.msg.participants[i];
-            }
-        }
+        
         return(
             <div className="box" key={index}>
                 <div className="box-title">
-                    {}
-                    <span>{participant}</span>
+                    {entry.participant && <span>{entry.participant.email} {entry.participant.name} {entry.participant.surname}</span>}
                 </div>
                 <div className="box-title">
                     <Link to={`/conversation/${entry.id}`}>
