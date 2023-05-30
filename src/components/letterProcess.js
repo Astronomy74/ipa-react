@@ -1,4 +1,4 @@
-import { getFirestore, collection, getDocs, getDoc, updateDoc, doc, deleteDoc, where, query } from "firebase/firestore";
+import { getFirestore, collection, getDocs, getDoc, updateDoc, doc, deleteDoc, where, query, serverTimestamp, addDoc } from "firebase/firestore";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import { storage } from "./fireStorage";
@@ -10,15 +10,42 @@ function LetterProcess(props) {
     const studentEmail = props.request.data.studentEmail;
     const navigate = useNavigate();
     const [Letter, UploadedLetterHandle] = useState("");
+    const [popUp, setPopUp] = useState("");
+    const [Message, setMessage] = useState('');
+    const timestamp = new Date(); // Get current timestamp
+    const formattedDate = timestamp.toISOString(); // Format timestamp as a string
 
-    const handleDisapprove = async () => {
-        const db = getFirestore();
-        const requestssRef = collection(db, "request");
-        const getRequest = doc(requestssRef, props.request.id);
+    const db = getFirestore();
 
-        await deleteDoc(getRequest);
-        navigate('/career-dashboard');
+    const handleDisapprove = async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        if (form.checkValidity()) {
+            const messageData = { // this is the structure I'm using, a map type field in the database
+                timestamp: serverTimestamp(), // firebase timestamp function
+                isRead: false, // for notifications later
+                message: Message, // gets Message from the form box
+                sender: props.userInfo.login.email,
+                attachmentLink: "",
+                attachmentName: "",
+                receiver: props.request.data.studentEmail 
+              }; 
+              const conversationCollectionRef = collection(db, 'conversations');
+              const Participants = [props.userInfo.login.email, props.request.data.studentEmail];
+              await addDoc(conversationCollectionRef, {
+                subject: "Official Letter Request Rejected",
+                [formattedDate]: messageData,
+                participants: Participants,
+                lastactivity: serverTimestamp()
+              });
+
+            const requestssRef = collection(db, "request");
+            const getRequest = doc(requestssRef, props.request.id);
+
+            await deleteDoc(getRequest);
+            navigate('/career-dashboard');
     }
+}
     const handleApprove = async () => {
         if(Letter){
             const db = getFirestore();
@@ -66,6 +93,17 @@ function LetterProcess(props) {
     function GetLetter(file) {
         UploadedLetterHandle(file);
     }
+
+    function popUpToggle(){
+        if(!popUp){
+            setPopUp(true);
+        }else{
+            setPopUp(false);
+        }
+    }
+    function popUpClose(){
+        setPopUp(false);
+    }
    
     return(
         <div>
@@ -90,21 +128,31 @@ function LetterProcess(props) {
                                 </button>
                                 }
                                
-                                <button onClick={handleDisapprove} className="disapprove_btn">
+                                <button onClick={popUpToggle} className="disapprove_btn">
                                     Reject
                                 </button>
                             </div>
-                            <div className="card--wrapper">
+                            <div className={"card--wrapper " + (popUp ? "open" : "")}>
+                            <form className="login-form needs-validation" onSubmit={handleDisapprove}>
                                 <h1>Why is it rejected?</h1>
-                                <textarea
-                                    name="rejection cause"
-                                    id="rejection-explaination"
-                                    cols="30"
-                                    rows="10"
+                                <div className="mb-3">
+                                <textArea
+                                    type="text"
+                                    name="message"
+                                    className="form-control"
+                                    id="message"
                                     placeholder="Type the rejection reason...."
-                                ></textarea>
-                                <button className="send-rejetion_btn">
-                                    Send back to student
+                                    required
+                                    value={Message}
+                                    onChange={(e) => setMessage(e.target.value)}
+                                />
+                                </div>
+                                <button type="submit" className="send-rejetion_btn">
+                                    Send
+                                </button>
+                                </form>
+                                <button onClick={popUpClose} className="send-rejetion_btn">
+                                    Cancel
                                 </button>
                             </div>
                         </div>

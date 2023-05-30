@@ -182,6 +182,19 @@ function Student(props){
     function GetTranscript(file) {
         UploadedTranscriptHandle(file);
         }
+
+        // const isDocExist = async () => {
+        //     const documentRef = doc(applicationsRef, props.userInfo.login.email);
+        //     const documentSnapshot = await getDoc(documentRef);
+        //     if (documentSnapshot.exists()) {
+        //         const documentData = documentSnapshot.data();
+        //         const mapObject1 = documentData["Internship-1"];
+        //         const mapObject2 = documentData["Internship-2"];
+        //         SetApplicationStatus1(mapObject1.status);
+        //         SetApplicationStatus2(mapObject2.status);
+        //     }
+        // }
+        // isDocExist();
     
 
 
