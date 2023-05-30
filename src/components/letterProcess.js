@@ -6,6 +6,8 @@ import { ref, getDownloadURL, uploadBytesResumable, deleteObject } from "firebas
 import UploadButton from "./uploadButton";
 
 function LetterProcess(props) {
+
+
     const url = props.request.data.transcript;
     const studentEmail = props.request.data.studentEmail;
     const navigate = useNavigate();
