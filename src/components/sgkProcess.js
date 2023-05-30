@@ -15,7 +15,7 @@ function SgkProcess(props) {
 
     const uploadFileAndChangeStatus = async () => {
         // Upload file to Firebase Storage
-        const storageRef = ref(storage, `internship/${props.request.studentEmail}/${props.request.internship}/${props.request.studentEmail}-sgk`);
+        const storageRef = ref(storage, `internship/${props.request.studentEmail}/${props.request.internship}/${props.request.studentEmail}-sgk.pdf`);
         const uploadTask = uploadBytesResumable(storageRef, file);
       
         uploadTask.on(

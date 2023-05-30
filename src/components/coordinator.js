@@ -100,7 +100,6 @@ function Coordinator(props){
                 
             );
         });
-        
         const renderLetterRequests = RequestsArray.map((doc, index) => {
             return (
                 <div className="box-request" key={index}>

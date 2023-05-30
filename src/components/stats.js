@@ -24,6 +24,8 @@ function StudentStats(props){
   const [disabled, setDisabled] = useState(false);
   const [docExist, setDocExist] = useState(false);
   const [displayText, setDisplayText] = useState("");
+  const [downloadURL, setDownloadURL] = useState('');
+  const [fileExists, setFileExists] = useState(false);
   
   function GetForm(file) {
     UploadedFormHandle(file);
@@ -174,6 +176,46 @@ function StudentStats(props){
       );
   }
 
+  const filePath = `internship/${props.userInfo.login.email}/${lastItem}/${props.userInfo.login.email}-sgk.pdf`;
+
+  const checkFileExistence = async () => {
+    const fileRef = ref(storage, filePath);
+    try {
+      const url = await getDownloadURL(fileRef);
+      setDownloadURL(url)
+      setFileExists(true);
+    } catch (error) {
+      console.error('Error checking file existence:', error);
+    }
+  };
+
+  const handleDownloadButtonClick = (event) => {
+    event.preventDefault();
+    let url = downloadURL;
+
+    const xhr = new XMLHttpRequest();
+    xhr.responseType = "blob";
+    xhr.onload = function(event){
+    const blob = xhr.response;
+    const blobUrl = window.URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = blobUrl;
+    a.download = "sgk-insurance.pdf";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    window.URL.revokeObjectURL(blobUrl);
+    };
+    xhr.open("GET", url);
+    xhr.send();
+  };
+
+  useEffect(() => {
+    checkFileExistence();
+  }, []);
+
 
 
   useEffect(() => {
@@ -196,6 +238,8 @@ function StudentStats(props){
           setDisplayText("")
         }
       }
+
+
     };
     isDocExist();
   }, [lastItem]);
@@ -314,7 +358,11 @@ function StudentStats(props){
                             
                           </div>
                         </form>
-                        
+                        <div>
+                          {fileExists && (
+                            <button onClick={handleDownloadButtonClick}>Download SGK Insurance</button>
+                          )}
+                        </div>
                     </div>
                 </div>
         </main>
