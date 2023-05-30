@@ -34,11 +34,11 @@ function NavBar(props) {
         // iterate through the map objects
         for (const messageId in conversationData) {
           const message = conversationData[messageId];
-          
+          try{
           if (message.isRead === false && message.receiver === props.props.userInfo.login.email) {
             // logic for if an unread message is found goes here
             setHasUnreadMessages(true);
-          }
+          }} catch (error) {console.log('Message is null')}
         }
       });
       
