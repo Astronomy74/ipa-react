@@ -130,6 +130,7 @@ function StudentStats(props){
         }
         
         console.log("Document inserted/updated successfully.");
+        window.location.reload();
       } catch (error) {
         console.error("Error inserting/updating document:", error);
       }

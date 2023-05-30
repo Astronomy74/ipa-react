@@ -9,6 +9,8 @@ import '../sass/stas.scss'
 
 function Messages(props){
     const [conversations, setConversations] = useState([]);
+    const [unreadMessages, addUnreadMessages] = useState([]);
+    const [fontWeight, setFontWeight] = useState("normal");
 
     useEffect(() => {
     const db = getFirestore();
@@ -70,7 +72,47 @@ function Messages(props){
     });
     }, []);
 
-    const renderConversations = conversations.map((entry, index) => {
+    async function fetchUnreadMessages() {
+        try {
+          const db = getFirestore();
+          const conversationsRef = collection(db, 'conversations');
+          
+          // query to find document where participant is logged in user
+          const q = query(conversationsRef, where('participants', 'array-contains', props.userInfo.login.email));
+          const querySnapshot = await getDocs(q);
+          
+          querySnapshot.forEach((doc) => {
+            const conversationData = doc.data();
+            const conversationId = doc.id;
+            
+            // iterate through the map objects
+            for (const messageId in conversationData) {
+              const message = conversationData[messageId];
+              
+              if (message.isRead === false && message.receiver === props.userInfo.login.email) {
+                // logic for if an unread message is found goes here
+                addUnreadMessages(conversationId);
+              }
+            }
+          });
+          
+        } catch (error) {
+          console.error('Error fetching unread messages:', error);
+          throw error;
+        }
+      }
+      fetchUnreadMessages()
+
+
+    let font = "normal"
+      const renderConversations = conversations.map((entry, index) => {
+
+        if(unreadMessages.includes(entry.id)){
+            font = "bold";
+        }
+        else{
+            font = "normal";
+        }
         
         return(
             <div className="box" key={index}>
@@ -80,7 +122,7 @@ function Messages(props){
                 <div className="box-title">
                     <Link to={`/conversation/${entry.id}`}>
                         <span 
-                        className="internshipLink"
+                        className="internshipLink" style={{ fontWeight: `${font}`, textDecoration: 'none' }}
                         >
                         {entry.msg.subject}
                         </span>

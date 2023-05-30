@@ -6,7 +6,7 @@ import download from 'downloadjs';
 import { ref, listAll, getDownloadURL, uploadBytesResumable, deleteObject } from "firebase/storage";
 import { storage } from "./fireStorage";
 import { Link, useNavigate } from 'react-router-dom';
-import { getFirestore, collection, getDocs, getDoc, query, setDoc, serverTimestamp, where, addDoc, doc } from "firebase/firestore";
+import { getFirestore, collection, getDocs, getDoc, query, setDoc, serverTimestamp, where, addDoc, doc, updateDoc } from "firebase/firestore";
 
 //stats sCss
 import '../sass/stas.scss'
@@ -90,6 +90,19 @@ function Conversation(props){
 
         const recepient = conversationData.participants.find(email => email !== props.userInfo.login.email);
         
+        // notification handling
+        if (conversationData) {
+          // iterate over the nested map objects within conversationData
+          for (const [messageId, message] of Object.entries(conversationData)) {
+            // check if the message is an object and has the isRead field
+            if (typeof message === 'object' && message.hasOwnProperty('isRead')) {
+              // update the isRead field to true
+              conversationData[messageId].isRead = true;
+            }
+          }
+          // update the document with the modified conversationData
+          await setDoc(conversationDocRef, conversationData);
+        }
         
         getRecipient(recepient);
       }
@@ -371,7 +384,7 @@ function Conversation(props){
                             {box.title}
                             </span>
                         </Link> */}
-                        <span>{entry.sender} {entry.senderFirstName} {entry.senderSurname}at </span>
+                        <span>{entry.sender} {entry.senderFirstName} {entry.senderSurname} at </span>
                         <span>{formattedTime}, {formattedDate}</span>
                         <div>
                           <div>
@@ -453,7 +466,7 @@ function Conversation(props){
                                 )}
                               <div className="mb-3">
                               <span>Enter reply:</span>
-                                <input
+                                <textarea
                                   type="text"
                                   name="message"
                                   className="form-control"

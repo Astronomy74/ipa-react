@@ -5,12 +5,50 @@ import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
 import { faBell } from "@fortawesome/free-solid-svg-icons";
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
-import { Link } from 'react-router-dom';
+import { storage } from "./fireStorage";
+import { Link, useNavigate } from 'react-router-dom';
+import { getFirestore, collection, getDocs, getDoc, query, setDoc, serverTimestamp, where, addDoc, doc } from "firebase/firestore";
+
 
 // NavBar style
 import "../css/navBar.css";
 
 function NavBar(props) {
+
+  const [hasUnreadMessages, setHasUnreadMessages] = useState(false);
+
+  useEffect(() => {
+
+  async function fetchUnreadMessages() {
+    try {
+      const db = getFirestore();
+      const conversationsRef = collection(db, 'conversations');
+      
+      // query to find document where participant is logged in user
+      const q = query(conversationsRef, where('participants', 'array-contains', props.props.userInfo.login.email));
+      const querySnapshot = await getDocs(q);
+      
+      querySnapshot.forEach((doc) => {
+        const conversationData = doc.data();
+        
+        // iterate through the map objects
+        for (const messageId in conversationData) {
+          const message = conversationData[messageId];
+          
+          if (message.isRead === false && message.receiver === props.props.userInfo.login.email) {
+            // logic for if an unread message is found goes here
+            setHasUnreadMessages(true);
+          }
+        }
+      });
+      
+    } catch (error) {
+      console.error('Error fetching unread messages:', error);
+      throw error;
+    }
+  }
+  fetchUnreadMessages()
+})
   
   const msgsRef = useRef(null); // define a useRef hook for the msgs element
   const logoutRef = useRef(null);
@@ -121,6 +159,7 @@ function NavBar(props) {
               <li className="nav-item">
                 <span className="nav-link" id="envelope">
                   <FontAwesomeIcon icon={faEnvelope} />
+                  {hasUnreadMessages && <img src="../../images/notification.png" alt="notification" className="unread-badge" />}
                 </span>
                 <div className={"msgs  " + (bellActive ? "active" : "")}>
                   {" "}
