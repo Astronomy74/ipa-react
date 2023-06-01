@@ -7,7 +7,7 @@ import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { storage } from "./fireStorage";
 import { Link, useNavigate } from 'react-router-dom';
-import { getFirestore, collection, getDocs, getDoc, query, setDoc, serverTimestamp, where, addDoc, doc } from "firebase/firestore";
+import { getFirestore, collection, getDocs, getDoc, query, updateDoc, setDoc, serverTimestamp, where, addDoc, doc } from "firebase/firestore";
 
 
 // NavBar style
@@ -16,6 +16,81 @@ import "../css/navBar.css";
 function NavBar(props) {
 
   const [hasUnreadMessages, setHasUnreadMessages] = useState(false);
+  const [hasNotifications, sethasNotifications] = useState(false);
+  const [NotificationsData, setNotificationsData] = useState([]);
+
+
+  useEffect(() => {
+    const db = getFirestore();
+    const notificationsRef = collection(db, 'notifications');
+    const qNotifications = query(notificationsRef);
+    getDocs(qNotifications).then((querySnapshot) => {
+    const documents = querySnapshot.docs;
+    const hasLoginEmail = documents.some((doc) => doc.id === props.props.userInfo.login.email);
+    if(props.props.userInfo.login.userType === "student"){
+      if (hasLoginEmail) {
+          const docRef = doc(notificationsRef, props.props.userInfo.login.email);
+          getDoc(docRef).then((docSnapshot) => {
+            if (docSnapshot.exists()) {
+              const documentData = docSnapshot.data();
+              const notificationsData = [];
+
+              // Get the keys of the documentData object
+              const keys = Object.keys(documentData);
+              const currentTime = new Date();
+
+              // Sort the keys based on the timestamp in each key
+              keys.sort();
+              const lastThreeKeys = keys.slice(-3);
+
+              // Loop over the documents
+              for (const key of lastThreeKeys) {
+                const notification = documentData[key];
+                  if (!notification.isRead) {
+                    sethasNotifications(true);
+                  }
+                  notificationsData.push({
+                    ...notification,
+                    timeDifference: getTimeDifference(key, currentTime),
+                  });    
+                   
+                
+              }
+            const reversedArray = notificationsData.reverse();
+            setNotificationsData(reversedArray);
+            }
+          });
+          
+          // Function to calculate the time difference
+          function getTimeDifference(timestamp, currentTime) {
+            const notificationTime = new Date(timestamp);
+            const timeDifference = currentTime - notificationTime;
+            // Calculate the time difference in minutes
+            const minutes = Math.floor(timeDifference / 60000);
+            // Calculate the time difference in 10-minute intervals
+            const interval = Math.floor(minutes / 10);
+
+            if (minutes < 1) {
+              return `Just Now`;
+            }
+            if (minutes < 10) {
+              return `${minutes} minutes ago`;
+            } else if (minutes < 60) {
+              return `${interval * 10} minutes ago`;
+            } else {
+              const hours = Math.floor(minutes / 60);
+              return `${hours} hours ago`;
+            }
+          }
+          
+
+        } else {
+          const docRef = doc(notificationsRef, props.props.userInfo.login.email);
+          setDoc(docRef, {})
+      }
+    }
+    });
+  }, []);
 
   useEffect(() => {
 
@@ -72,11 +147,57 @@ function NavBar(props) {
   const [bellActive, bellToggle] = useState("");
 
   function toggleBell() {
+    
+    if(hasNotifications){
+      const db = getFirestore();
+      const notificationsRef = collection(db, 'notifications');
+
+      const docRef = doc(notificationsRef, props.props.userInfo.login.email);
+      getDoc(docRef).then((docSnapshot) => {
+        if (docSnapshot.exists()) {
+          const documentData = docSnapshot.data();
+          
+
+
+          for (const key in documentData) {
+            if (documentData.hasOwnProperty(key)) {
+              const notification = documentData[key];
+              // Set isRead to true
+              notification.isRead = true; 
+            }
+          }
+         
+          
+
+          // Update the document with modified data
+          setDoc(docRef, documentData).then(() => {
+            console.log('Notifications updated successfully');
+          }).catch((error) => {
+            console.error('Error updating notifications:', error);
+          });
+        }
+      });
+
+      sethasNotifications(false);
+    }
+    
     if (!bellActive) {
       bellToggle(true);
     } else {
-      bellToggle(false);
+      toggleOff();
     }
+  }
+
+  function toggleOff(){
+    bellToggle(false);
+    let TempNotifications = NotificationsData;
+    let readChange = [];
+    for(let i = 0; i < TempNotifications.length; i++){
+      let tempIndex = TempNotifications[i];
+      tempIndex.isRead = true;
+      readChange.push(tempIndex);
+    }
+    setNotificationsData(readChange);
   }
 
   
@@ -96,14 +217,36 @@ function NavBar(props) {
       pfpToggle(false);
     }
 
-    if(!bellRef.current.contains(props.props.clickTarget)){
-      bellToggle(false);
+    if(props.props.userInfo.login.userType === "student"){
+      if(!bellRef.current.contains(props.props.clickTarget)){
+        bellToggle(false);
+        let TempNotifications = NotificationsData;
+        let readChange = [];
+        for(let i = 0; i < TempNotifications.length; i++){
+          let tempIndex = TempNotifications[i];
+          tempIndex.isRead = true;
+          readChange.push(tempIndex);
+        }
+        setNotificationsData(readChange);
+      }
     }
+
+    
 
   }
 }, [props.props.clickTarget]);
 
-
+  
+  const renderNotifications = NotificationsData.map((item, index) => {
+    const fontWeight = item.isRead ? "normal" : "bold";
+    return(
+        
+      <span className="msg" id="sendMessage" key={index} style={{ fontWeight }}>
+        {item.timeDifference}: {item.notification}
+      </span>
+       
+    );
+  });
 
   return (
     <div>
@@ -155,29 +298,30 @@ function NavBar(props) {
               </ul>
             </div>
             <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-              <Link to={`/messages`}>
-              <li className="nav-item">
-                <span className="nav-link" id="envelope">
-                  <FontAwesomeIcon icon={faEnvelope} />
-                  {hasUnreadMessages && <img src="../../images/notification.png" alt="notification" className="unread-badge" />}
-                </span>
-                <div className={"msgs  " + (bellActive ? "active" : "")}>
-                  {" "}
-                  {/* pass the msgsRef to the ref attribute */}
+            {((props.props.userInfo.login.userType === "student" || props.props.userInfo.login.userType === "coordinator") && (
+                <Link to={`/messages`}>
+                <li className="nav-item">
+                  <span className="nav-link" id="envelope">
+                    <FontAwesomeIcon icon={faEnvelope} />
+                    {hasUnreadMessages && <img src="../../images/notification.png" alt="notification" className="unread-badge" />}
+                  </span>
                   
-                  <div>
-                    <span className="msg" id="sendMessage">
-                      Send Message
-                    </span>
-                  </div>
-                </div>
-              </li>
-              </Link>
-              <li className="nav-item bell" id="bell" ref={bellRef}>
-                <span className="nav-link" onClick={toggleBell}>
-                  <FontAwesomeIcon icon={faBell} />
-                </span>
-              </li>
+                </li>
+                </Link>
+              ))}
+              
+              {props.props.userInfo.login.userType === "student" &&
+                <li className="nav-item bell" id="bell" ref={bellRef}>
+                  <span className="nav-link" onClick={toggleBell}>
+                    <FontAwesomeIcon icon={faBell} />
+                    {hasNotifications && <img src="../../images/notification.png" alt="notification" className="unread-badge" />}
+                    <div className={"msgs  " + (bellActive ? "active" : "")}>
+                    
+                      {renderNotifications}
+                    
+                    </div>
+                  </span>
+                </li>}
             </ul>
 
             <div className="user-info" ref={logoutRef} onClick={togglePfp}>

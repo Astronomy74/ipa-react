@@ -1,4 +1,4 @@
-import { getFirestore, collection, getDocs, getDoc, updateDoc, doc, serverTimestamp, addDoc } from "firebase/firestore";
+import { getFirestore, collection, query, getDocs, setDoc, getDoc, updateDoc, doc, serverTimestamp, addDoc } from "firebase/firestore";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import { storage } from "./fireStorage";
@@ -7,15 +7,24 @@ function FormProcess(props) {
     const url = props.request.form;
     const navigate = useNavigate();
     const [popUp, setPopUp] = useState("");
+    const [formPopUp, setFormPopUp] = useState("");
     const [Message, setMessage] = useState('');
-    const timestamp = new Date(); // Get current timestamp
-    const formattedDate = timestamp.toISOString(); // Format timestamp as a string
+
+    // form filling states
+    const [Jobtitle, setJobtitle] = useState('');
+    const [Company, setCompany] = useState('');
+    const [Duration, setDuration] = useState('');
+    const [Year, setYear] = useState('');
+    
+
 
     const db = getFirestore();
-
+    console.log(props.request)
     const handleDisapprove = async (e) => {
         e.preventDefault();
         const form = e.target;
+        const timestamp = new Date(); // Get current timestamp
+        const formattedDate = timestamp.toISOString(); // Format timestamp as a string
         if (form.checkValidity()) {
             // Form is valid, process the submission
 
@@ -46,10 +55,31 @@ function FormProcess(props) {
         applicationData[internship].status = "rejected";
         await updateDoc(getApplication, applicationData);
         
+
+        const notificationsRef = collection(db, "notifications");
+        const getNotification = doc(notificationsRef, props.request.studentEmail);
+        const querySnapshot = await getDoc(query(getNotification));
+        const notificationsnData = querySnapshot.data();
+        const addedDoc = {
+            isRead: false,
+            notification: "Your " + props.request.internship + " Form Has Been Rejected"
+          };
+
+        const updatedConversationData = {
+        ...notificationsnData, // retrieve the items in the conversation
+        [formattedDate]: addedDoc, // and here it adds to the properties
+        };
+    
+        await setDoc(getNotification, updatedConversationData);
+        
+
         navigate('/career-dashboard');
     }
 }
-    const handleApprove = async () => {
+    const handleApprove = async (e) => {
+        e.preventDefault();
+        const timestamp = new Date(); // Get current timestamp
+        const formattedDate = timestamp.toISOString(); // Format timestamp as a string
         const db = getFirestore();
         const internship = props.request.internship;
         const applicationsRef = collection(db, "applications");
@@ -57,8 +87,35 @@ function FormProcess(props) {
 
         const applicationSnapshot = await getDoc(getApplication);
         const applicationData = applicationSnapshot.data();
+        
+            
         applicationData[internship].status = "processing";
-        await updateDoc(getApplication, applicationData);
+        applicationData[internship].jobtitle = Jobtitle;
+        applicationData[internship].company = Company;
+        applicationData[internship].duration = Duration;
+        applicationData[internship].year = Year;
+        
+        console.log(applicationData)
+        await updateDoc(getApplication, applicationData);  
+
+
+        const notificationsRef = collection(db, "notifications");
+        const getNotification = doc(notificationsRef, props.request.studentEmail);
+        const querySnapshot = await getDoc(query(getNotification));
+        const notificationsnData = querySnapshot.data();
+        const addedDoc = {
+            isRead: false,
+            notification: "Your " + props.request.internship + " Form Is Now Being Proccessed"
+          };
+
+        const updatedConversationData = {
+        ...notificationsnData, // retrieve the items in the conversation
+        [formattedDate]: addedDoc, // and here it adds to the properties
+        };
+    
+        await setDoc(getNotification, updatedConversationData);
+            
+
         navigate('/career-dashboard');
     }
 
@@ -71,6 +128,17 @@ function FormProcess(props) {
     }
     function popUpClose(){
         setPopUp(false);
+    }
+
+    function formPopUpToggle(){
+        if(!formPopUp){
+            setFormPopUp(true);
+        }else{
+            setFormPopUp(false);
+        }
+    }
+    function formPopUpClose(){
+        setFormPopUp(false);
     }
 
     return(
@@ -89,7 +157,7 @@ function FormProcess(props) {
                             />
                             </div>
                             <div className="buttons__wrapper">
-                                <button onClick={handleApprove} className="approve_btn">
+                                <button onClick={formPopUpToggle} className="approve_btn">
                                     Approve
                                 </button>
                                 <button onClick={popUpToggle} className="disapprove_btn">
@@ -101,7 +169,7 @@ function FormProcess(props) {
                                 <form className="login-form needs-validation" onSubmit={handleDisapprove}>
                                 <h1>Why is it rejected?</h1>
                                 <div className="mb-3">
-                                <textArea
+                                <textarea
                                     type="text"
                                     name="message"
                                     className="form-control"
@@ -117,6 +185,73 @@ function FormProcess(props) {
                                 </button>
                                 </form>
                                 <button onClick={popUpClose} className="send-rejetion_btn">
+                                    Cancel
+                                </button>
+                            </div>
+
+                            {/* form filling below */}
+                            <div className={"card--wrapper " + (formPopUp ? "open" : "")}>
+                            
+                                <form className="login-form needs-validation" onSubmit={handleApprove}>
+                                <h1>Form Information</h1>
+                                <div className="mb-3">
+                                <input
+                                    type="text"
+                                    name="jobtitle"
+                                    className="form-control"
+                                    id="jobtitle"
+                                    aria-describedby="jobtitle"
+                                    placeholder="Job Title"
+                                    required
+                                    value={Jobtitle}
+                                    onChange={(e) => setJobtitle(e.target.value)}
+                                />
+                                </div>
+                                <div className="mb-3">
+                                <input
+                                    type="text"
+                                    name="company"
+                                    className="form-control"
+                                    id="company"
+                                    aria-describedby="company"
+                                    placeholder="Company"
+                                    required
+                                    value={Company}
+                                    onChange={(e) => setCompany(e.target.value)}
+                                />
+                                </div>
+                                <div className="mb-3">
+                                <input
+                                    type="text"
+                                    name="duration"
+                                    className="form-control"
+                                    id="duration"
+                                    aria-describedby="duration"
+                                    placeholder="Duration"
+                                    required
+                                    value={Duration}
+                                    onChange={(e) => setDuration(e.target.value)}
+                                />
+                                </div>
+                                <div className="mb-3">
+                                <input
+                                    type="text"
+                                    name="year"
+                                    className="form-control"
+                                    id="year"
+                                    aria-describedby="year"
+                                    placeholder="Year"
+                                    required
+                                    value={Year}
+                                    onChange={(e) => setYear(e.target.value)}
+                                />
+                                </div>
+                                
+                                <button type="submit" className="send-rejetion_btn">
+                                    Send
+                                </button>
+                                </form>
+                                <button onClick={formPopUpClose} className="send-rejetion_btn">
                                     Cancel
                                 </button>
                             </div>

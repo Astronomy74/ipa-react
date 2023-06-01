@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 
 
 
@@ -11,6 +11,8 @@ function UploadButton(props){
     props.filePass(file);
   };
 
+
+
   return (
     <span>
       <input
@@ -18,7 +20,7 @@ function UploadButton(props){
         className="file-upload__input"
         type="file"
         multiple
-        accept=".pdf" 
+        accept={props.allowAll ? '*' : '.pdf'}
         style={{ display: 'none' }}
         onChange={handleFileUpload}
       />

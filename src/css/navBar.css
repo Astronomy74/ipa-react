@@ -45,25 +45,27 @@ nav.navbar.noTransparrent {
 }
 
 .msgs {
+  right: 0;
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  position: relative;
+  position: absolute;
 }
 
 #seeMessage {
   margin-top: 48px;
 }
 
-span.msg {
-  position: absolute;
+.msgs span.msg {
+  
   right: 0;
-  width: 150px;
+  width: 300px;
   text-align: center;
   color: black;
   background-color: #c2c2c2;
   padding: 5px 7px;
+  font-size: 15px;
   transform: translateY(10px);
   border-radius: 3px;
   display: none;

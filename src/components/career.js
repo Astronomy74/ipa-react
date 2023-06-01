@@ -19,11 +19,12 @@ function Career(props){
           let TempList = [];
           querySnapshot.forEach((doc, index) => {
             const data = doc.data();
-            if(data.hasOwnProperty("Internship-1") && data["Internship-1"].status === "processing"){
-                const internshipData = data["Internship-1"];
+            const StudentEmail = doc.id;
+            if(data.hasOwnProperty("Internship1") && data["Internship1"].status === "processing"){
+                const internshipData = data["Internship1"];
                 const form = internshipData.form;
                 const note = internshipData.note;
-                const studentEmail = internshipData.studentEmail;
+                const studentEmail = StudentEmail;
                 const transcript = internshipData.transcript;
                 const firstname = internshipData.firstname;
                 const surname = internshipData.surname;
@@ -34,16 +35,16 @@ function Career(props){
                     transcript: transcript,
                     firstname: firstname,
                     surname: surname,
-                    internship: "Internship-1"
+                    internship: "Internship1"
                 }
                 TempList.push(docObj);
                 
             }
-            if(data.hasOwnProperty("Internship-2") && data["Internship-2"].status === "processing"){
-                const internshipData = data["Internship-2"];
+            if(data.hasOwnProperty("Internship2") && data["Internship2"].status === "processing"){
+                const internshipData = data["Internship2"];
                 const form = internshipData.form;
                 const note = internshipData.note;
-                const studentEmail = internshipData.studentEmail;
+                const studentEmail = StudentEmail;
                 const transcript = internshipData.transcript;
                 const firstname = internshipData.firstname;
                 const surname = internshipData.surname;
@@ -54,7 +55,7 @@ function Career(props){
                     transcript: transcript,
                     firstname: firstname,
                     surname: surname,
-                    internship: "Internship-2"
+                    internship: "Internship2"
                 }
                 TempList.push(docObj);
                 

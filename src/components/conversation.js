@@ -26,6 +26,7 @@ function Conversation(props){
     const [StudentsInfo, setStudents] = useState([]);
     const [Recipient, getRecipient] = useState([]);
     const [NewMsgContact, setNewMsgContact] = useState("Contact");
+    
 
 
     const db = getFirestore();
@@ -36,7 +37,6 @@ function Conversation(props){
     const getEmailFromFirestore = async () => {
 
       if(props.userInfo.login.userType === "student"){
-
         const q = query(
           collection(db, 'users'),
           where('userType', '==', 'coordinator'),
@@ -479,7 +479,7 @@ function Conversation(props){
                               </div>
                               {/* Your other JSX code */}
                               <div className="btns">
-                              <UploadButton passedClass={"statsBtn"} buttonText={"Upload Attachment"} filePass={GetAttachment} />
+                              <UploadButton allowAll passedClass={"statsBtn"} buttonText={"Upload Attachment"} filePass={GetAttachment} />
                               {Attachment && <span>{Attachment.name}</span>}
                               <button type="submit" className="send-btn">
                                 Send Message
