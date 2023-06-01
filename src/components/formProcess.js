@@ -19,7 +19,7 @@ function FormProcess(props) {
 
 
     const db = getFirestore();
-    console.log(props.request)
+   
     const handleDisapprove = async (e) => {
         e.preventDefault();
         const form = e.target;
@@ -155,6 +155,9 @@ function FormProcess(props) {
                                 width="150%"
                                 height="500px"
                             />
+                            </div>
+                            <div>
+                                <span>{props.request.note}</span>
                             </div>
                             <div className="buttons__wrapper">
                                 <button onClick={formPopUpToggle} className="approve_btn">
