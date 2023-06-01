@@ -14,7 +14,7 @@
 	}
 }
 .statsContainer {
-	padding-top: 100px;
+	padding-top: 60px;
 	min-height: calc(100vh - 65px);
 	.app {
 		h1 {
@@ -49,27 +49,27 @@
 	.intern-btn.active {
 		background-color: $background-color_stats;
 	}
-	.btns {
-		margin-top: 100px;
-	}
-	.statsBtn {
-		background-color: $background-color_stats;
-		border-radius: 15px;
-		display: inline-block;
-		cursor: pointer;
-		color: $white-color;
-		font-family: $font-family_1;
-		font-size: 15px;
-		font-weight: bold;
-		padding: 15px 24px;
-		text-decoration: none;
-		min-width: 250px;
-		margin-right: 15px;
-		&:hover {
-			background-color: $background-color_stats_2;
-			color: $white-color;
-		}
-	}
+	// .btns {
+	// 	margin-top: 100px;
+	// }
+	// .statsBtn {
+	// 	background-color: $background-color_stats;
+	// 	border-radius: 15px;
+	// 	display: inline-block;
+	// 	cursor: pointer;
+	// 	color: $white-color;
+	// 	font-family: $font-family_1;
+	// 	font-size: 15px;
+	// 	font-weight: bold;
+	// 	padding: 15px 24px;
+	// 	text-decoration: none;
+	// 	min-width: 250px;
+	// 	margin-right: 15px;
+	// 	&:hover {
+	// 		background-color: $background-color_stats_2;
+	// 		color: $white-color;
+	// 	}
+	// }
 	.statsBtn.disabled {
 		cursor: not-allowed;
 		opacity: 0.6;
@@ -146,17 +146,17 @@
 			padding: 0 10px;
 		}
 	}
-	.statsContainer {
-		.btns {
-			display: flex;
-			flex-wrap: wrap;
-			justify-content: space-between;
-			.statsBtn {
-				margin-top: 15px;
-				margin: 15px 50px 0;
-			}
-		}
-	}
+	// .statsContainer {
+	// 	.btns {
+	// 		display: flex;
+	// 		flex-wrap: wrap;
+	// 		justify-content: space-between;
+	// 		.statsBtn {
+	// 			margin-top: 15px;
+	// 			margin: 15px 50px 0;
+	// 		}
+	// 	}
+	// }
 }
 @media (width < 768px) {
 	.statsContainer {
@@ -179,13 +179,13 @@
 				border-radius: 0;
 			}
 		}
-		.btns {
-			display: flex;
-			flex-wrap: wrap;
-			justify-content: space-between;
-			align-content: center;
-			flex-direction: column;
-		}
+		// .btns {
+		// 	display: flex;
+		// 	flex-wrap: wrap;
+		// 	justify-content: space-between;
+		// 	align-content: center;
+		// 	flex-direction: column;
+		// }
 		.btns-top {
 			display: flex;
 			flex-wrap: wrap;

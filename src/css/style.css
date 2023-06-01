@@ -81,19 +81,41 @@ main .container .row.align-content-center {
 .container .row .login a.half-width {
   width: 40%;
 }
+
+ 
+
+
 .container .row .login .form-control {
-  /* background-color: var(--main-color); */
-  text-align: left;
+  background-color: var(--main-color);
+  
   border-radius: 0.625rem;
+  width: 200px;
+}
+ 
+
+
+
+ 
+form.login-form.form-control-css {
+  /* width: 35%; */
+  /* margin: auto; */
+  margin: 1px;
+  left: 0;
 }
 
 form.login-form {
   width: 35%;
   margin: auto;
 }
+ 
 form button.send-btn {
   border-style: solid;
-  height: 3.75rem;
+  height: 45px;
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  padding: 5px;
 }
 
 form button.send-btn.disabled {
@@ -132,4 +154,9 @@ form button.send-btn.disabled {
   .container .row .login button {
     padding: 0.1875rem 0.3125rem;
   }
+}
+
+.cont-center{
+  align-items: center;
+  justify-content: center;
 }

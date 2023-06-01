@@ -371,3 +371,96 @@ section.see-msg .container h1 {
   text-align: start;
 }
 /* end   See Msg  */
+
+
+
+/* my part sara start */
+.myBox{
+  background-color: #F1F6F9;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  width: 450px;
+  height: 500px;
+  color: #000;
+  border-radius: 15px; 
+  margin: 10px;
+}
+ 
+span.internshipLink{
+  font-weight: bold;
+  color: #000;
+  font-size: 35px;
+  
+ 
+}
+span.internshipLink:hover{
+    color: #569DAA;
+}
+.box-title{
+  text-align: center;
+  padding: 20px;
+}
+.a-boxtitle{
+  text-decoration: none;
+}
+
+ 
+span.internshipLink:link { text-decoration: none; }
+span.internshipLink:visited { text-decoration: none; }
+span.internshipLinkspan.internshipLink:hover { text-decoration: none; }
+a:active { text-decoration: none; }
+
+
+.div-outer-inboxes{
+ padding: 25px;
+ border-bottom: 1px #B7B7B7 solid;
+}
+.inner-inbox-title{
+ font-size: 18px;
+ font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+#dashBoard .welcome-MESG{
+  text-align: center;
+}
+.welcome-MESG{
+  margin: 100px 50px 0px 50px ;
+}
+.btn-down-temp{
+  padding: 13px 20px;
+  background-color: #F1F6F9;
+  text-decoration: none;
+  color: #444444;
+  border-radius: 9px;
+  border: 1px solid #444444;
+  margin: 5px 10px;
+} 
+.btn-down-letter{
+    padding: 13px 20px;
+    background-color: #444444;
+    text-decoration: none;
+    color: #F1F6F9;
+    border-radius: 9px;
+    margin: 5px 10px;
+}
+.uploadTranscript-input{
+display: none;
+  
+}
+.browse-title{
+ border: none;
+ text-align: center;
+ 
+}
+.col-request{
+  /* align-items: start; */
+ 
+}
+ .container-fluid-req-downbtsn{
+  /* padding: 3px 100px; */
+ }
+ .col-brows{
+  align-items: start;
+ }
+.reqOff{
+  margin: 30px ;
+}
+/* my part sara end */

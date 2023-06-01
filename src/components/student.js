@@ -217,9 +217,11 @@ function Student(props){
         
         const renderBoxes = Internships.map((box, index) => {
             return(
-                <div className="box" key={index}>
+             
+              
+                <div className="box myBox" key={index}>
                         <div className="box-title">
-                            <Link to={`/student-dashboard/stats/${box.title.replace(/\s/g, "-")}`}>
+                            <Link className="a-boxtitle" to={`/student-dashboard/stats/${box.title.replace(/\s/g, "-")}`}>
                                 <span 
                                 className="internshipLink"
                                 data-json="data/internship.json"
@@ -228,22 +230,24 @@ function Student(props){
                                 </span>
                             </Link>
                         </div>
-                        <div className="year">
-                            <span className="inbox">Year: {box.year}</span>
+                        <div className="year div-outer-inboxes">
+                            <span className="inbox inner-inbox-title">Year: {box.year}</span>
                         </div>
-                        <div className="company">
-                            <span className="inbox">Company: {box.company}</span>
+                        <div className="company div-outer-inboxes">
+                            <span className="inbox inner-inbox-title">Company: {box.company}</span>
                         </div>
-                        <div className="job-title">
-                            <span className="inbox">Job Title: {box.jobtitle}</span>
+                        <div className="job-title div-outer-inboxes">
+                            <span className="inbox inner-inbox-title">Job Title: {box.jobtitle}</span>
                         </div>
-                        <div className="duration">
-                            <span className="inbox">Duration: {box.duration}</span>
+                        <div className="duration div-outer-inboxes">
+                            <span className="inbox inner-inbox-title">Duration: {box.duration}</span>
                         </div>
-                        <div className="status">
-                            <span className="inbox">Status: {box.status}</span>
+                        <div className="status div-outer-inboxes">
+                            <span className="inbox inner-inbox-title">Status: {box.status}</span>
                         </div>
                         </div>
+                        
+                        
             );
         });
 
@@ -255,24 +259,26 @@ function Student(props){
                 <main>
                 <section id="dashBoard">
                     <div className="dashboard">
-                    <h1>Welcome {props.userInfo.login ? props.userInfo.login.firstname + ' ' + props.userInfo.login.surname : ''}</h1>
-                    <div className="container">
+                    <h1 className="welcome-MESG">Welcome {props.userInfo.login ? props.userInfo.login.firstname + ' ' + props.userInfo.login.surname : ''}</h1>
+                    <div className="container cont-center"  >
                         {renderBoxes}
                     </div>
                     <div className="statsContainer text-center">
-                        <div className="col-md-12">
-                       
-                        <div className="btns">
-                            <a onClick={downloadFormTemplate} className="statsBtn">Download​ Form Temp​late<i className="fa-solid fa-upload"></i></a>
+                        
+                       <div className="container-fluid-req-downbtsn"> 
+                        <div className="btns ">
+                            <a onClick={downloadFormTemplate} className="statsBtn btn-down-temp">Download​ Form Temp​late<i className="fa-solid fa-upload"></i></a>
                             {LetterUrl &&  
-                               <a onClick={downloadOfficialLetter} className="statsBtn">Download​ Official Letter<i className="fa-solid fa-upload"></i></a>
+                               <a onClick={downloadOfficialLetter} className="statsBtn btn-down-letter">Download​ Official Letter<i className="fa-solid fa-upload"></i></a>
                             }
-                            <h2>Request​ Official Letter</h2>
+                            <h2 className="reqOff">Request​ Official Letter</h2>
                             <form  className="login-form needs-validation" noValidate onSubmit={HandleFileSubmit}>
-                              <div className="mb-3">
-                                <div className="form-control">
-                                <UploadButton buttonText={"Browse"} filePass={GetTranscript} />
+                            
+                             
+                                <div className="form-control form-control-css" >
+                                <UploadButton className="browse-title" buttonText={"Browse"} filePass={GetTranscript} />
                                   <input
+                                  className="uploadTranscript-input"
                                     type="text"
                                     name="uploadTranscript"
                                     id="uploadTranscript"
@@ -282,21 +288,28 @@ function Student(props){
                                     value={transcript ? transcript.name : ""}
                                   />
                                 </div>
-                              </div>
+                                 
                               
-                              <button type="submit" className={'send-btn'}>
+                              
+                           
+                              <button type="submit" className={'send-btn'} style={{ margin: "20px 0px"}}>
                                 Request​ Official Letter
                               </button>
-                              
+                          
+                             
                             </form>
                             
-                        </div> 
+                            
+                            </div>
+                        </div>
                         </div>
                     </div>
-                </div>
+                    
+            
                 </section>
                 </main>
             </div>
+            
         );
         
     }

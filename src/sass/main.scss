@@ -13,53 +13,53 @@ body {
     margin-inline: auto;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
+    // justify-content: space-around;
     align-items: center;
     min-height: calc(100vh - 7.8125rem);
-    .box {
-      padding-block: 0.625rem;
-      margin-block: 0.9375rem;
-      background-color: $background-color_1;
-      border-radius: 0.625rem;
-      min-width: 17.5rem;
-      box-shadow: 0.125rem 0.125rem 0.125rem 0.125rem #b1b0b0;
-      font-size: 0.75rem;
-      > div {
-        padding: 0.625rem;
-        transition: 0.3s;
-        &:not(.box-title) {
-          &:hover {
-            padding-left: 0.9375rem;
-          }
-        }
-        &:not(:last-child) {
-          border-bottom: 0.125rem #ffffff solid;
-        }
-      }
-      a {
-        color: $white-color;
-        text-decoration: none;
-        &:visited {
-          color: $light-gray-color;
-        }
-        &:hover {
-          transition: 0.3s;
-          font-size: 1.05em;
-        }
-      }
-      .box-title {
-        display: flex;
-        justify-content: space-between;
-        font-size: 1.125rem;
-        color: $white-color;
-        font-weight: 600;
-      }
-    }
+    // .box {
+    //   padding-block: 0.625rem;
+    //   margin-block: 0.9375rem;
+    //   background-color: $background-color_1;
+    //   border-radius: 0.625rem;
+    //   min-width: 17.5rem;
+    //   box-shadow: 0.125rem 0.125rem 0.125rem 0.125rem #b1b0b0;
+    //   font-size: 0.75rem;
+    //   > div {
+    //     padding: 0.625rem;
+    //     transition: 0.3s;
+    //     &:not(.box-title) {
+    //       &:hover {
+    //         padding-left: 0.9375rem;
+    //       }
+    //     }
+    //     &:not(:last-child) {
+    //       border-bottom: 0.125rem #ffffff solid;
+    //     }
+    //   }
+    //   a {
+    //     color: $white-color;
+    //     text-decoration: none;
+    //     &:visited {
+    //       color: $light-gray-color;
+    //     }
+    //     &:hover {
+    //       transition: 0.3s;
+    //       font-size: 1.05em;
+    //     }
+    //   }
+    //   .box-title {
+    //     display: flex;
+    //     justify-content: space-between;
+    //     font-size: 1.125rem;
+    //     color: $white-color;
+    //     font-weight: 600;
+    //   }
+    // }
   }
   padding-block: 3.75rem;
 }
 .inbox {
-  color: $white-color;
+  // color: $white-color;
 }
 @media (width < 62rem) {
   .navbar-nav {
@@ -153,6 +153,7 @@ body {
   }
   .box-request {
     @include box-request($main-color, $background-color_boxRequest);
+    border: 1px solid #BDCDD6;
   }
   h2 {
     font-size: 1.25rem;
