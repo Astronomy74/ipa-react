@@ -52,7 +52,7 @@ function LetterProcess(props) {
                 const notificationsnData = querySnapshot.data();
                 const addedDoc = {
                     isRead: false,
-                    notification: "Your Official Letter Request for " + props.request.data.internship + " Has Been Rejected"
+                    notification: "Your Official Letter Request Has Been Rejected"
                   };
         
                 const updatedConversationData = {
@@ -91,7 +91,7 @@ function LetterProcess(props) {
                 const notificationsnData = querrySnapshot.data();
                 const addedDoc = {
                     isRead: false,
-                    notification: "Your Official Letter Request for " + props.request.data.internship +  " Has Been Approved"
+                    notification: "Your Official Letter Request Has Been Approved"
                   };
         
                 const updatedConversationData = {

@@ -152,8 +152,9 @@ function StudentStats(props){
     if(!form || !transcript){
       return;
     }
+    const currentInternship = lastItem.replace(/-/g, "");
     async function insertDatabase(formurl, transcripturl){
-      const currentInternship = lastItem.replace(/-/g, "");
+      
       const applicationData = {
         concluded: false,
         form: formurl,
@@ -195,8 +196,8 @@ function StudentStats(props){
     }
       const formextention = form.name.split('.').pop().toLowerCase();
       const transcriptextention = transcript.name.split('.').pop().toLowerCase();
-      const formRef = ref(storage, `internship/${props.userInfo.login.email}/${lastItem}/${props.userInfo.login.email}-${"form"}.${formextention}`);
-      const transcriptRef = ref(storage, `internship/${props.userInfo.login.email}/${lastItem}/${props.userInfo.login.email}-${"transcript"}.${transcriptextention}`);
+      const formRef = ref(storage, `internship/${props.userInfo.login.email}/${currentInternship}/${props.userInfo.login.email}-${"form"}.${formextention}`);
+      const transcriptRef = ref(storage, `internship/${props.userInfo.login.email}/${currentInternship}/${props.userInfo.login.email}-${"transcript"}.${transcriptextention}`);
       const uploadForm = uploadBytesResumable(formRef, eval(form));
       const uploadTranscript = uploadBytesResumable(transcriptRef, eval(transcript));
       uploadForm.on(

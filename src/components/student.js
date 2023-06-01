@@ -53,6 +53,10 @@ function Student(props){
         });
       } else {
         const newDocRef = doc(internshipsRef, props.userInfo.login.email);
+        const firstname = props.userInfo.login.firstname;
+        const surname = props.userInfo.login.surname;
+        console.log(firstname)
+        console.log(surname)
         const doc1Id = "Internship1";
         const doc2Id = "Internship2";
         const doc1Data = {
@@ -62,7 +66,9 @@ function Student(props){
         letter: "",
         status: "",
         title: "Internship 1",
-        year: ""
+        year: "",
+        firstname: firstname,
+        surname: surname,
         };
         const doc2Data = {
         company: "",
@@ -71,7 +77,9 @@ function Student(props){
         letter: "",
         status: "",
         title: "Internship 2",
-        year: ""
+        year: "",
+        firstname: firstname,
+        surname: surname,
         };
         const updates = {};
         updates[doc1Id] = doc1Data;
