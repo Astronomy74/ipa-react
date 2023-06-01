@@ -1,0 +1,101 @@
+@import "./variables";
+@import "./mixins";
+
+.container {
+    width: 100vw;
+    padding: 0;
+    margin-left: 0;
+
+    >.row {
+        width: 100%;
+        padding: 0;
+        margin-left: 0;
+
+        >div {
+            width: 100%;
+            height: auto;
+
+            .login {
+                width: 100%;
+                height: auto;
+                display: flex;
+
+                .sidebar-wrapper {
+                    flex: 1;
+                    margin-right: 2rem;
+
+                    >h1 {
+                        text-align: center;
+                        font-size: 1.5rem;
+                        font-weight: bolder;
+                    }
+
+                    >a {
+                        width: 100%;
+                        text-decoration: none;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+
+                        >button {
+                            @include button($main-color, $secondary-color, $light-gray-color);
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                            align-items: center;
+                            padding: 1.5rem;
+                            font-size: 0.5rem;
+                            min-width: 100%;
+                        }
+                    }
+
+                }
+
+                .content-wrapper {
+                    flex: 3;
+
+                    >h1 {
+                        text-align: left;
+                        font-size: 1.5rem;
+                        font-weight: bolder;
+                    }
+
+                    >.box {
+                        width: 100%;
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: flex-start;
+                        align-items: center;
+                        margin-bottom: 1rem;
+                        border-bottom: solid 1px black;
+
+                        >.user {
+                            padding: 0.5rem;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                            align-items: center;
+                            border-right: solid 1px black;
+
+                        }
+
+                        >.message {
+                            min-width: 1fr;
+
+                            >a {
+                                text-decoration: none;
+                            }
+                        }
+                    }
+                }
+
+
+
+
+
+
+            }
+        }
+    }
+}

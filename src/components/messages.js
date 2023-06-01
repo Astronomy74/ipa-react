@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 //stats sCss
 import '../sass/stas.scss'
-
+import '../sass/inbox.scss'
 
 function Messages(props){
     const [conversations, setConversations] = useState([]);
@@ -116,10 +116,10 @@ function Messages(props){
         
         return(
             <div className="box" key={index}>
-                <div className="box-title">
-                    {entry.participant && <span>{entry.participant.email} {entry.participant.name} {entry.participant.surname}</span>}
+                <div className="box-title user">
+                    {entry.participant && <span><div>{entry.participant.name} {entry.participant.surname}</div><div>{entry.participant.email}</div></span>}
                 </div>
-                <div className="box-title">
+                <div className="box-title message">
                     <Link to={`/conversation/${entry.id}`}>
                         <span 
                         className="internshipLink" style={{ fontWeight: `${font}`, textDecoration: 'none' }}
@@ -139,16 +139,23 @@ function Messages(props){
           <div className="container text-center">
             <div className="row align-content-center">
                 <div className="col-md-12">
+
                     <div className="login">
+                        <div className="sidebar-wrapper">
                         <h1>Messages</h1>
                         <Link className="new-msg" to={`/conversation/new`}>
                             <button className="send-btn">
                                 New Message
                             </button>
                         </Link>
-                        {renderConversations}
                         </div>
+                        <div className="content-wrapper">
+                            <h1>Incomming Messages</h1>
+                            {renderConversations}
+
                         </div>
+                    </div>
+                </div>
                 
                   </div>
               </div>
