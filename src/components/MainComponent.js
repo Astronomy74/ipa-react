@@ -199,7 +199,7 @@ class Main extends Component {
                             element={
                                 Object.keys(LoginInfo.login).length !== 0 ? (
                                     LoginInfo.login.userType === "career" ? (
-                                        <CareerProceed loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
+                                        <CareerProceed logout={logout} loginCollect={loginInfoCollect} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
                                     ) : (
                                         <Navigate to={`/${LoginInfo.login.userType}-dashboard`} replace />
 
