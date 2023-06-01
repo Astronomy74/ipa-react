@@ -15,7 +15,7 @@ function Student(props){
     
     const [transcript, UploadedTranscriptHandle] = useState("");
     const [LetterUrl, SetLetterUrl] = useState("");
-    const [Internships, setInternships] = useState("");
+    const [Internships, setInternships] = useState([]);
    
 
    
@@ -77,6 +77,8 @@ function Student(props){
         updates[doc1Id] = doc1Data;
         updates[doc2Id] = doc2Data;
         setDoc(newDocRef, updates);
+        const tempDoc = [doc1Data, doc2Data]
+        setInternships(tempDoc);
     }
     });
     }, []);
@@ -209,7 +211,7 @@ function Student(props){
     
 
 
-    if(Internships){
+ 
          
 
         
@@ -296,7 +298,7 @@ function Student(props){
                 </main>
             </div>
         );
-        }
+        
     }
     
 
