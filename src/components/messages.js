@@ -140,7 +140,7 @@ function Messages(props){
             <div className="row align-content-center">
                 <div className="col-md-12">
 
-                    <div className="login">
+                    <div className="login login-wrapper">
                         <div className="sidebar-wrapper">
                         <h1>Messages</h1>
                         <Link className="new-msg" to={`/conversation/new`}>
