@@ -292,7 +292,7 @@ function Student(props){
                                 </div>
                               </div>
                               
-                              <button type="submit" className={'send-btn'}>
+                              <button type="submit" className={`send-btn ${LetterUrl ? 'disabled' : ''}`} disabled={LetterUrl}>
                                 Request​ Official Letter
                               </button>
                               
