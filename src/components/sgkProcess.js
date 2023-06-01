@@ -1,4 +1,4 @@
-import { getFirestore, collection, getDocs, getDoc, updateDoc, doc, query, where } from "firebase/firestore";
+import { getFirestore, collection, setDoc, getDocs, getDoc, updateDoc, doc, query, where } from "firebase/firestore";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import { storage } from "./fireStorage";
@@ -53,6 +53,28 @@ function SgkProcess(props) {
               await updateDoc(doc(usersRef, documentId), {
                 letter: downloadURL.toString()
               });
+
+              const timestamp = new Date(); // Get current timestamp
+              const formattedDate = timestamp.toISOString(); // Format timestamp as a string
+          
+
+
+                const notificationsRef = collection(db, "notifications");
+                const getNotification = doc(notificationsRef, props.request.studentEmail);
+                const querrySnapshot = await getDoc(query(getNotification));
+                const notificationsnData = querrySnapshot.data();
+                const addedDoc = {
+                    isRead: false,
+                    notification: "Your SGK Document for " + props.request.internship + " Has Been Recieved"
+                  };
+        
+                const updatedConversationData = {
+                ...notificationsnData, // retrieve the items in the conversation
+                [formattedDate]: addedDoc, // and here it adds to the properties
+                };
+            
+                await setDoc(getNotification, updatedConversationData);
+
               // Display success message or handle the success as needed
               navigate('/career-dashboard');
             } catch (error) {

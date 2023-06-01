@@ -14,18 +14,17 @@ import '../sass/stas.scss'
 function StudentStats(props){
 
   const lastItem = useLocation().pathname.split("/").pop();
-  const [InternShip, getInternShip] = useState("");
+  const [InternShip, getInternShip] = useState([]);
   const [form, UploadedFormHandle] = useState("");
   const [transcript, UploadedTranscriptHandle] = useState("");
   const [progress, setProgress] = useState(0);
   const compRef = useRef(null);
-  const [coordinatorInfo, setCoordinatorInfo] = useState('');
   const [Note, setNote] = useState('');
-  const [disabled, setDisabled] = useState(false);
   const [docExist, setDocExist] = useState(false);
   const [displayText, setDisplayText] = useState("");
   const [downloadURL, setDownloadURL] = useState('');
   const [fileExists, setFileExists] = useState(false);
+  const [InternShips, setInternShips] = useState([]);
   
   function GetForm(file) {
     UploadedFormHandle(file);
@@ -36,19 +35,82 @@ function StudentStats(props){
   }
 
   const navigate = useNavigate();
+  const db = getFirestore();
+  const applicationsRef = collection(db, "applications");
 
+ 
   useEffect(() => {
-    props.internshipCollect(props.userInfo.login);
-    let internshipTemp;
-    for(let i = 0; i < props.internshipInfo.internshipList.length; i++){
-      let internship = props.internshipInfo.internshipList[i];
-      if(internship.title === lastItem.replace(/-/g, " ")){
-        internshipTemp = internship;
+    setFileExists(false);
+    setDocExist(false);
+    const qInternships = query(applicationsRef);
+    
+    getDocs(qInternships).then((querySnapshot) => {
+    const documents = querySnapshot.docs;
+    const hasLoginEmail = documents.some((doc) => doc.id === props.userInfo.login.email);
+    if (hasLoginEmail) {
+        const docRef = doc(applicationsRef, props.userInfo.login.email);
+        getDoc(docRef).then((docSnapshot) => {
+          if (docSnapshot.exists()) {
+            const documentData = docSnapshot.data();
+            const internshipsObject = documentData;
+            const internship1 = internshipsObject["Internship1"];
+            const internship2 = internshipsObject["Internship2"];
+            const internshipsArray = [internship1, internship2];
+            setInternShips(internshipsArray)
+            
+           
+              for(let i = 0; i < internshipsArray.length; i++){
+                let internship = internshipsArray[i];
+                
+                if(internship.title === lastItem.replace(/-/g, " ")){
+                  let id = "Internship" + (i + 1);
+                  getInternShip(internship);
+                  UploadedFormHandle("");
+                  UploadedTranscriptHandle("");
+
+
+                  if (internship.status === "processing" || internship.status === "pending") {
+                    setDocExist(true);
+                    setDisplayText("You already have an application in process");
+                    setFileExists(false); 
+                  }
+                  if (internship && (internship.status === "accepted")){
+                    setDocExist(true);
+                    setDisplayText("Your application is already accepted");
+                    const filePath = `internship/${props.userInfo.login.email}/${id}/${props.userInfo.login.email}-sgk.pdf`;
+                  
+                    const checkFileExistence = async () => {
+                      const fileRef = ref(storage, filePath);
+                      try {
+                        const url = await getDownloadURL(fileRef);
+                        setDownloadURL(url)
+                        setFileExists(true);
+                      } catch (error) {
+                        console.error('Error checking file existence:', error);
+                        
+                      }
+                    };
+                    checkFileExistence();
+                  }
+
+                  if(!internship.status) {
+                    setDocExist(false);
+                    setDisplayText("")
+                    setFileExists(false);
+                  }
+                  
+                }
+              }
+            
+          }
+        });
       }
-    }
-    getInternShip(internshipTemp);
-    UploadedFormHandle("");
-    UploadedTranscriptHandle("");
+    });
+    
+    
+    
+    
+    
     
 
     const handleKeyDown = (event) => {
@@ -83,57 +145,53 @@ function StudentStats(props){
 
   
 
-  const db = getFirestore();
-  const applicationsRef = collection(db, "applications");
-
-
+  
+  
   const HandleFileSubmit = async (e) => {
     e.preventDefault();
     if(!form || !transcript){
       return;
     }
     async function insertDatabase(formurl, transcripturl){
+      const currentInternship = lastItem.replace(/-/g, "");
       const applicationData = {
-        studentEmail: props.userInfo.login.email,
         concluded: false,
         form: formurl,
         insured: false,
         status: "pending",
         transcript: transcripturl,
         note: Note,
-        firstname: props.userInfo.login.firstname,
-        surname: props.userInfo.login.surname
       };
       const docId = props.userInfo.login.email;
       const docRef = doc(applicationsRef, docId);
       try {
         const docSnapshot = await getDoc(docRef);
-    
+
         if (docSnapshot.exists()) {
           // Document already exists, update the existing map object
           const existingData = docSnapshot.data();
-          const newData = {
-            ...existingData,
-            [lastItem]: applicationData,
-            lastactivity: serverTimestamp()
-          };
-    
-          await setDoc(docRef, newData);
-        } else {
-          // Document doesn't exist, create a new one with the map object
-          const dataToUpdate = {
-            [lastItem]: applicationData,
-            lastactivity: serverTimestamp()
-          };
-    
-          await setDoc(docRef, dataToUpdate);
+            
+
+            // Find the internship object that matches currentInternship and update it with applicationData
+            
+              existingData[currentInternship] = {
+                ...existingData[currentInternship],
+                ...applicationData,
+              };
+           
+
+            // Update the lastactivity field
+            existingData.lastactivity = serverTimestamp();
+
+            await setDoc(docRef, existingData);
+            setDocExist(true);
+            setDisplayText("Your Application Has Been Submitted");
+          }
+
+          console.log("Document inserted/updated successfully.");
+        } catch (error) {
+          console.error("Error inserting/updating document:", error);
         }
-        
-        console.log("Document inserted/updated successfully.");
-        window.location.reload();
-      } catch (error) {
-        console.error("Error inserting/updating document:", error);
-      }
     }
       const formextention = form.name.split('.').pop().toLowerCase();
       const transcriptextention = transcript.name.split('.').pop().toLowerCase();
@@ -177,18 +235,7 @@ function StudentStats(props){
       );
   }
 
-  const filePath = `internship/${props.userInfo.login.email}/${lastItem}/${props.userInfo.login.email}-sgk.pdf`;
-
-  const checkFileExistence = async () => {
-    const fileRef = ref(storage, filePath);
-    try {
-      const url = await getDownloadURL(fileRef);
-      setDownloadURL(url)
-      setFileExists(true);
-    } catch (error) {
-      console.error('Error checking file existence:', error);
-    }
-  };
+  
 
   const handleDownloadButtonClick = (event) => {
     event.preventDefault();
@@ -213,44 +260,14 @@ function StudentStats(props){
     xhr.send();
   };
 
-  useEffect(() => {
-    checkFileExistence();
-  }, []);
 
-
-
-  useEffect(() => {
-    const isDocExist = async () => {
-      const documentRef = doc(applicationsRef, props.userInfo.login.email);
-      const documentSnapshot = await getDoc(documentRef);
-      if (documentSnapshot.exists()) {
-        const documentData = documentSnapshot.data();
-        const mapObject = documentData[lastItem];
-      
-        if (mapObject && (mapObject.status === "processing" || mapObject.status === "pending")) {
-          setDocExist(true);
-          setDisplayText("You already have an application in process");
-        }
-        else if (mapObject && (mapObject.status === "accepted")){
-          setDocExist(true);
-          setDisplayText("Your application is already accepted")
-        }else {
-          setDocExist(false);
-          setDisplayText("")
-        }
-      }
-
-
-    };
-    isDocExist();
-  }, [lastItem]);
+  if(InternShips){
+   
   
-
-  if(props.internshipInfo.internshipList){
-    const internshipBtns = props.internshipInfo.internshipList.map((btn, index) => {
+    const internshipBtns = InternShips.map((btn, index) => {
       return(
         <div className="btns-top text" key={index}>
-            <Link to={`/student-dashboard/stats/${btn.title.replace(/\s/g, "-")}`}><span className={"intern-btn " + (InternShip.title == btn.title ? 'active' : '')} id="button1" data-json="../data/internship.json">{btn.title}</span></Link>
+            <Link to={`/student-dashboard/stats/${btn.title.replace(/\s/g, "-")}`}><span className={"intern-btn " + (btn.title === InternShip.title ? 'active' : '')} id="button1" data-json="../data/internship.json">{btn.title}</span></Link>
         </div>
       )
     });
@@ -353,24 +370,25 @@ function StudentStats(props){
                           </div>
                           <div className="btns">
                           {docExist && <p className="disabled-text">{displayText}</p>}
-                            <button type="submit" className={`send-btn ${docExist ? 'disabled' : ''}`} disabled={docExist || disabled}>
+                            <button type="submit" className={`send-btn ${docExist ? 'disabled' : ''}`} disabled={docExist}>
                                 Submit
                             </button>
                             
                           </div>
                         </form>
                         <div>
-                          {fileExists && (
+                          {fileExists && 
                             <button onClick={handleDownloadButtonClick}>Download SGK Insurance</button>
-                          )}
+                          }
                         </div>
                     </div>
                 </div>
         </main>
     );
+    }
   }
   
-}
+
 
 export default StudentStats;
 

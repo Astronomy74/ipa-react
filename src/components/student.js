@@ -15,14 +15,14 @@ function Student(props){
     
     const [transcript, UploadedTranscriptHandle] = useState("");
     const [LetterUrl, SetLetterUrl] = useState("");
+    const [Internships, setInternships] = useState("");
+   
 
-    useEffect(() => {
-        props.internshipCollect(props.userInfo.login);
-    }, []);
-    
+   
 
     const db = getFirestore();
     
+    useEffect(() => {
     async function getUrl(){
     const usersCollection = collection(db, "users");
     const querySnapshot = await getDocs(query(usersCollection, where("email", "==", props.userInfo.login.email)));
@@ -34,41 +34,52 @@ function Student(props){
     }
     getUrl();
 
-    const internshipsRef = collection(db, 'internships')
+    const internshipsRef = collection(db, 'applications');
     const qInternships = query(internshipsRef);
     getDocs(qInternships).then((querySnapshot) => {
-        const documents = querySnapshot.docs;
-        const hasLoginEmail = documents.some((doc) => doc.id === props.userInfo.login.email);
-        if (!hasLoginEmail) {
-            const newDocRef = doc(internshipsRef, props.userInfo.login.email);
-            setDoc(newDocRef, {})
-            const subcollectionRef = collection(newDocRef, "all-internships");
-            const doc1Id = "internship1";
-            const doc2Id = "internship2";
-            const doc1Data = {
-                company: "",
-                duration: "",
-                jobtitle: "",
-                letter: "",
-                status: "",
-                title: "Internship 1",
-                year: ""
-            };
-            const doc2Data = {
-                company: "",
-                duration: "",
-                jobtitle: "",
-                letter: "",
-                status: "",
-                title: "Internship 2",
-                year: ""
-            };
-            const doc1Ref = doc(subcollectionRef, doc1Id);
-            const doc2Ref = doc(subcollectionRef, doc2Id);
-            setDoc(doc1Ref, doc1Data)
-            setDoc(doc2Ref, doc2Data)
-
-        }});
+    const documents = querySnapshot.docs;
+    const hasLoginEmail = documents.some((doc) => doc.id === props.userInfo.login.email);
+    if (hasLoginEmail) {
+        const docRef = doc(internshipsRef, props.userInfo.login.email);
+        getDoc(docRef).then((docSnapshot) => {
+          if (docSnapshot.exists()) {
+            const documentData = docSnapshot.data();
+            const internshipsObject = documentData;
+            const internship1 = internshipsObject["Internship1"];
+            const internship2 = internshipsObject["Internship2"];
+            const internshipsArray = [internship1, internship2];
+            setInternships(internshipsArray);
+          }
+        });
+      } else {
+        const newDocRef = doc(internshipsRef, props.userInfo.login.email);
+        const doc1Id = "Internship1";
+        const doc2Id = "Internship2";
+        const doc1Data = {
+        company: "",
+        duration: "",
+        jobtitle: "",
+        letter: "",
+        status: "",
+        title: "Internship 1",
+        year: ""
+        };
+        const doc2Data = {
+        company: "",
+        duration: "",
+        jobtitle: "",
+        letter: "",
+        status: "",
+        title: "Internship 2",
+        year: ""
+        };
+        const updates = {};
+        updates[doc1Id] = doc1Data;
+        updates[doc2Id] = doc2Data;
+        setDoc(newDocRef, updates);
+    }
+    });
+    }, []);
 
     const requestsRef = collection(db, 'request')
 
@@ -198,12 +209,11 @@ function Student(props){
     
 
 
-    
+    if(Internships){
          
 
-    if (Object.keys(props.internshipInfo.internshipList).length !== 0){
         
-        const renderBoxes = props.internshipInfo.internshipList.map((box, index) => {
+        const renderBoxes = Internships.map((box, index) => {
             return(
                 <div className="box" key={index}>
                         <div className="box-title">
@@ -286,9 +296,9 @@ function Student(props){
                 </main>
             </div>
         );
+        }
     }
     
 
-}
 
 export default Student;

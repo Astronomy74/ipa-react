@@ -13,7 +13,7 @@ import AnnounceJobs from './announceJobs';
 import Proceed from './proceed';
 import CareerProceed from './careerProceed'
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { collectUserInfo, collectInternship, logoutFunc } from '../redux/ActionCreators';
+import { collectUserInfo, logoutFunc } from '../redux/ActionCreators';
 import { connect } from 'react-redux';
 
 
@@ -23,13 +23,11 @@ const msgAccess = ["student", "coordinator"]
 const mapStateToProps = state => {
     return {
       LoginInfo: state.StoreLogin,
-      InternshipInfo: state.StoreInternship,
     }
 }
 
 const mapDispatchToProps = (dispatch) => ({
     loginInfoCollect: (login) => dispatch(collectUserInfo(login)),
-    internshipCollect: (login) => dispatch(collectInternship(login)),
     logout: () => dispatch(logoutFunc()),
 });
 
@@ -81,7 +79,7 @@ class Main extends Component {
                             element={
                                 Object.keys(LoginInfo.login).length !== 0 ? (
                                     LoginInfo.login.userType === "student" ? (
-                                      <Student logout={logout} loginCollect={loginInfoCollect} internshipCollect={internshipCollect} internshipInfo={InternshipInfo} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
+                                      <Student logout={logout} loginCollect={loginInfoCollect}  internshipInfo={InternshipInfo} userInfo={LoginInfo} clickTarget={this.state.eventTarget} />
                                     ) : (
                                         <Navigate to={`/${LoginInfo.login.userType}-dashboard`} replace />
 
@@ -111,7 +109,7 @@ class Main extends Component {
                             element={
                                 Object.keys(LoginInfo.login).length !== 0 ? (
                                     LoginInfo.login.userType === "student" ? (
-                                      <StudentStats logout={logout} loginCollect={loginInfoCollect} userInfo={LoginInfo} internshipCollect={internshipCollect} internshipInfo={InternshipInfo} />
+                                      <StudentStats logout={logout} loginCollect={loginInfoCollect} userInfo={LoginInfo} internshipInfo={InternshipInfo} />
                                     ) : (
                                         <Navigate to={`/${LoginInfo.login.userType}-dashboard`} replace />
 

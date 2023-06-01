@@ -1,4 +1,4 @@
-import { getFirestore, collection, getDocs, getDoc, updateDoc, doc, deleteDoc, where, query, serverTimestamp, addDoc } from "firebase/firestore";
+import { getFirestore, collection, getDocs, getDoc, setDoc, updateDoc, doc, deleteDoc, where, query, serverTimestamp, addDoc } from "firebase/firestore";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import { storage } from "./fireStorage";
@@ -41,6 +41,23 @@ function LetterProcess(props) {
                 lastactivity: serverTimestamp()
               });
 
+
+                const notificationsRef = collection(db, "notifications");
+                const getNotification = doc(notificationsRef, props.request.studentEmail);
+                const querySnapshot = await getDoc(query(getNotification));
+                const notificationsnData = querySnapshot.data();
+                const addedDoc = {
+                    isRead: false,
+                    notification: "Your Official Letter Request for " + props.request.internship + " Has Been Rejected"
+                  };
+        
+                const updatedConversationData = {
+                ...notificationsnData, // retrieve the items in the conversation
+                [formattedDate]: addedDoc, // and here it adds to the properties
+                };
+            
+                await setDoc(getNotification, updatedConversationData);
+
             const requestssRef = collection(db, "request");
             const getRequest = doc(requestssRef, props.request.id);
 
@@ -61,6 +78,25 @@ function LetterProcess(props) {
                   userData.letter = letterUrl;
                   await updateDoc(userDoc.ref, userData);
                 });
+
+               
+
+                const notificationsRef = collection(db, "notifications");
+                const getNotification = doc(notificationsRef, props.request.studentEmail);
+                const querrySnapshot = await getDoc(query(getNotification));
+                const notificationsnData = querrySnapshot.data();
+                const addedDoc = {
+                    isRead: false,
+                    notification: "Your Official Letter Request for " + props.request.internship +  " Has Been Approved"
+                  };
+        
+                const updatedConversationData = {
+                ...notificationsnData, // retrieve the items in the conversation
+                [formattedDate]: addedDoc, // and here it adds to the properties
+                };
+            
+                await setDoc(getNotification, updatedConversationData);
+
 
                 const requestssRef = collection(db, "request");
                 const getRequest = doc(requestssRef, props.request.id);
