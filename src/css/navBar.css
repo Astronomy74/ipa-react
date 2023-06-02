@@ -14,6 +14,7 @@ nav.navbar .navbar-nav .nav-item .nav-link {
   line-height: 40px;
   padding: 0 14px;
   transition: all 0.5s ease;
+  cursor: pointer;
 }
 
 nav.navbar.noTransparrent .nav-item .nav-link {
@@ -45,7 +46,6 @@ nav.navbar.noTransparrent {
 }
 
 .msgs {
-  right: 0;
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -57,18 +57,33 @@ nav.navbar.noTransparrent {
   margin-top: 48px;
 }
 
+.msg-time {
+  padding-inline-start: 80px;
+}
+.msg-time svg {
+  padding-right: 5px;
+}
+
 .msgs span.msg {
-  
   right: 0;
   width: 300px;
   text-align: center;
   color: black;
-  background-color: #c2c2c2;
+  background-color: #ffffff;
   padding: 5px 7px;
   font-size: 15px;
   transform: translateY(10px);
   border-radius: 3px;
   display: none;
+}
+
+/**** Comment Coder below  *****/
+.msgs .msg:first-child {
+  color: red;
+}
+
+.msgs span.msg:not(:first-child) {
+  border-top: 1px solid rgba(128, 128, 128, 0.5);
 }
 
 .msgs.active span.msg {
@@ -105,24 +120,30 @@ nav.navbar.noTransparrent {
   align-items: center;
   position: relative;
 }
+.pfp-image img {
+  object-fit: cover;
+  width: 100%;
+  border-radius: 50%;
+  max-width: 40px;
+  height: 40px;
+  margin-left: 1rem;
+}
 
-.pfp-info span {
+.pfp-span {
   position: absolute;
   bottom: 0;
   right: 0;
   width: 60px;
-  transform: translate(13px, 25px);
-  color: black;
-  background-color: white;
+  transform: translate(15px, 70px);
   padding: 3px 5px;
-  transform: translate(15px, 35px);
   border-radius: 3px;
-  background-color: #c2c2c2;
-  display: none;
+  opacity: 0;
+  transition: 0.5s ease-in;
 }
 .pfp-span.active {
-  display: block;
   cursor: pointer;
+  transform: translate(15px, 90px);
+  opacity: 1;
 }
 
 .container.not {
@@ -159,4 +180,72 @@ nav.navbar.noTransparrent {
   text-decoration: none;
   padding: 2rem 0 10px;
   color: black;
+}
+
+/*******************/
+.logoutBtn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 45px;
+  height: 45px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition-duration: 0.3s;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
+  background-color: rgb(255, 65, 65);
+}
+
+/* plus sign */
+.logoutBtn .sign {
+  width: 100%;
+  transition-duration: 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logoutBtn .sign svg {
+  width: 17px;
+}
+
+.logoutBtn .sign svg path {
+  fill: white;
+}
+/* text */
+.logoutBtn .text {
+  position: absolute;
+  right: 0%;
+  width: 0%;
+  opacity: 0;
+  color: white;
+  font-size: 1.2em;
+  font-weight: 600;
+  transition-duration: 0.3s;
+}
+/* hover effect on button width */
+.logoutBtn:hover {
+  width: 125px;
+  border-radius: 40px;
+  transition-duration: 0.3s;
+}
+
+.logoutBtn:hover .sign {
+  width: 30%;
+  transition-duration: 0.3s;
+  padding-left: 20px;
+}
+/* hover effect button's text */
+.logoutBtn:hover .text {
+  opacity: 1;
+  width: 70%;
+  transition-duration: 0.3s;
+  padding-right: 10px;
+}
+/* button click effect*/
+.logoutBtn:active {
+  transform: translate(2px, 2px);
 }
