@@ -136,7 +136,7 @@ function Messages(props){
   return(
       <main>
           <NavBar props={props}/>
-          <div className="container text-center">
+          <div className="container container-massages text-center">
             <div className="row align-content-center">
                 <div className="col-md-12">
 
