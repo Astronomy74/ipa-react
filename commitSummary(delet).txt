@@ -1,0 +1,15 @@
+installed include Media sass 
+
+
+sass
+**
+add New sass file => admin.scss
+solve override in inbox.scss
+
+
+js files
+**
+message.js  added a new className => container-massages
+
+admin.js    added a new structure without deleting old one or comment it ,
+tried all function and firebase and it worked  => container-admin
