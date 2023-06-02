@@ -65,7 +65,6 @@ main .container .row.align-content-center {
   width: 100%;
   border-width: 0.1875rem;
   margin-top: 0.9375rem;
-  padding: 1rem;
   border-radius: 0.9375rem;
   font-size: 1.25rem;
   font-weight: 600;
@@ -89,7 +88,6 @@ main .container .row.align-content-center {
   background-color: var(--main-color);
   
   border-radius: 0.625rem;
-  width: 200px;
 }
  
 

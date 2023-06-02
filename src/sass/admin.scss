@@ -1,6 +1,5 @@
 @import "./variables";
 @import "./mixins";
-@import "../../node_modules/include-media/dist/include-media";
 
 .container.container-admin {
   display: flex;
@@ -23,9 +22,7 @@
       border-radius: 5px;
       transition: 1s ease-in-out;
       padding: 50px 30px 0;
-      @include media(">tablet", "<=LGdesktop") {
-        // min-width: 300px;
-      }
+      
       .left-side {
         background-color: $white-color;
         border-radius: 5px;
