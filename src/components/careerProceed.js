@@ -5,7 +5,7 @@ import SgkProcess from "./sgkProcess";
 function CareerProceed(props) {
     const storedData = localStorage.getItem('request');
     const parsedData = JSON.parse(storedData);
-    console.log(parsedData);
+    console.log(props);
 
     return(
         <div>

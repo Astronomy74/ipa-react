@@ -32,7 +32,7 @@ function Coordinator(props){
                 const surname = internshipData.surname;
                 let docObj = {
                     form: form,
-                    note: "",
+                    note: note,
                     studentEmail: studentEmail,
                     transcript: transcript,
                     firstname: firstname,

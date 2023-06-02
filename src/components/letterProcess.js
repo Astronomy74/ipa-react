@@ -30,7 +30,7 @@ function LetterProcess(props) {
                 sender: props.userInfo.login.email,
                 attachmentLink: "",
                 attachmentName: "",
-                receiver: props.request.data.studentEmail 
+                receiver: props.request.data.studentEmail
               }; 
               const conversationCollectionRef = collection(db, 'conversations');
               const Participants = [props.userInfo.login.email, props.request.data.studentEmail];
@@ -43,12 +43,16 @@ function LetterProcess(props) {
 
 
                 const notificationsRef = collection(db, "notifications");
-                const getNotification = doc(notificationsRef, props.request.studentEmail);
+                console.log(notificationsRef);
+                console.log(props.request.data.studentEmail)
+                
+                const getNotification = doc(notificationsRef, props.request.data.studentEmail);
+                
                 const querySnapshot = await getDoc(query(getNotification));
                 const notificationsnData = querySnapshot.data();
                 const addedDoc = {
                     isRead: false,
-                    notification: "Your Official Letter Request for " + props.request.internship + " Has Been Rejected"
+                    notification: "Your Official Letter Request Has Been Rejected"
                   };
         
                 const updatedConversationData = {
@@ -71,7 +75,7 @@ function LetterProcess(props) {
 
             async function insertDatabase(letterUrl){
                 const usersCollection = collection(db, "users");
-                const querySnapshot = await getDocs(query(usersCollection, where("email", "==", studentEmail)));
+                const querySnapshot = await getDocs(query(usersCollection, where("email", "==", props.request.data.studentEmail)));
   
                 querySnapshot.forEach(async (userDoc) => {
                   const userData = userDoc.data();
@@ -82,12 +86,12 @@ function LetterProcess(props) {
                
 
                 const notificationsRef = collection(db, "notifications");
-                const getNotification = doc(notificationsRef, props.request.studentEmail);
+                const getNotification = doc(notificationsRef, props.request.data.studentEmail);
                 const querrySnapshot = await getDoc(query(getNotification));
                 const notificationsnData = querrySnapshot.data();
                 const addedDoc = {
                     isRead: false,
-                    notification: "Your Official Letter Request for " + props.request.internship +  " Has Been Approved"
+                    notification: "Your Official Letter Request Has Been Approved"
                   };
         
                 const updatedConversationData = {
@@ -106,7 +110,7 @@ function LetterProcess(props) {
             }
 
             const Letterextention = Letter.name.split('.').pop().toLowerCase();
-            const letterRef = ref(storage, `letters/${studentEmail}/${studentEmail}-${"letter"}.${Letterextention}`);
+            const letterRef = ref(storage, `letters/${props.request.data.studentEmail}/${props.request.data.studentEmail}-${"letter"}.${Letterextention}`);
             const uploadLetter = uploadBytesResumable(letterRef, eval(Letter));
             
             uploadLetter.on(
@@ -174,7 +178,7 @@ function LetterProcess(props) {
                             <form className="login-form needs-validation" onSubmit={handleDisapprove}>
                                 <h1>Why is it rejected?</h1>
                                 <div className="mb-3">
-                                <textArea
+                                <textarea
                                     type="text"
                                     name="message"
                                     className="form-control"
